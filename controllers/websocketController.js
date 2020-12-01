@@ -17,6 +17,7 @@ module.exports = (io, user, messageToId) => {
       }
     }).then(user => {
       if(user) {
+
         //online user
         io.emit('online', {
           id: user.id,
@@ -33,42 +34,43 @@ module.exports = (io, user, messageToId) => {
     
         // listen for chat message
         socket.on('publicMessage', (msg) => {
-          PublicChat.create({
-            UserId: user.id,
-            message: msg
-          })
-          // broadcast to everyone
-          io.emit('publicMessage', {
-            id: user.id,
-            username: user.name,
-            account: user.account,
-            avatar: user.avatar,
-            message: msg,
-            time: time(new Date())
-          })
-          console.log(msg)
+          if (msg) {
+            PublicChat.create({
+              UserId: user.id,
+              message: msg
+            })
+            // broadcast to everyone
+            io.emit('publicMessage', {
+              id: user.id,
+              username: user.name,
+              account: user.account,
+              avatar: user.avatar,
+              message: msg,
+              time: time(new Date())
+            })
+          }
         })
-    
+        
         // room
-        socket.on('joinRoom', ({ messageToId, msg }) => {
-          console.log('----------------')
-          console.log(messageToId)
-          console.log(user.id)
-          PrivateChat.create({
-            sendId: user.id,
-            receiveId: messageToId,
-            msg: msg
-          })
-          //const roomId = messageToId || user.id.toString() 
-          socket.join(messageToId || user.id.toString())
-          io.to(user.id.toString()).to(messageToId).emit('privateMessage', {
-            id: user.id,
-            username: user.name,
-            account: user.account,
-            avatar: user.avatar,
-            message: msg,
-            time: time(new Date())
-          })
+        socket.on('joinRoom', ({ receiveId, msg }) => {
+          if (msg) {
+            PrivateChat.create({
+              UserId: user.id,
+              receiveId: receiveId,
+              message: msg
+            })
+            socket.join(receiveId || user.id.toString())
+            io.to(user.id.toString()).to(receiveId).emit('privateMessage', {
+              id: user.id,
+              username: user.name,
+              account: user.account,
+              avatar: user.avatar,
+              message: msg,
+              time: time(new Date())
+            })
+          }
+          
+          
     
           //io.to(messageToId).emit('alert')
         })

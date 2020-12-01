@@ -12,14 +12,27 @@
   <div class="title">
     <p>歷史訊息</p>
   </div>
-    <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
+  <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
+  {{#each users}}
+  <div class="user-list">
+    <a href="/message/{{this.id}}">
+    <div class="flex-container">
+      <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
+      <div class="flex-container">
+        <p>{{this.name}}</p>
+        <font class="text-muted"> @{{this.account}}</font>
+      </div>
+    </div>
+    </a>
+  </div>
+  {{/each}}
   <div>
   </div>
   {{/if}}
 </div>
 
 {{!-- Right side --}}
-<div class="col" style="height: 88vh">
+<div class="col-6" style="height: 88vh">
   <div class="title">
     {{#if public}}
     <p>公開聊天室</p>      
@@ -47,7 +60,7 @@
       </div>
       <div>
         <div class="receive-message">
-          {{this.msg}}
+          {{this.message}}
         </div>
         <div class="time text-muted">{{time this.createdAt}}</div>
       </div>

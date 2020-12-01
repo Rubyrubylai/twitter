@@ -2,33 +2,36 @@ var socket = io()
 
 const chatForm = document.getElementById('chat-form')
 const chatMessages = document.getElementById('chat-messages')
+const selector = document.querySelector('.selector')
 
+if (selector.value === 'public') {
 //online user
-socket.on('online', (data) => {
-  appendUserData(data)
-})
-  
-function appendUserData(data) {
-  const u = document.getElementById('user-list')
-  let htmlString 
-  htmlString = `
-    <div class="flex-container">
-      <div class="mr-2">
-        <a href="/users/${data.id}/tweets">
-          <img src="${data.avatar}" alt="user avatar" class="user-avatar"
-            style="border-radius: 50%; height:50px; width: 50px">
-        </a>
+  socket.on('online', (data) => {
+    appendUserData(data)
+  })
+    
+  function appendUserData(data) {
+    const u = document.getElementById('user-list')
+    let htmlString 
+    htmlString = `
+      <div class="flex-container">
+        <div class="mr-2">
+          <a href="/users/${data.id}/tweets">
+            <img src="${data.avatar}" alt="user avatar" class="user-avatar"
+              style="border-radius: 50%; height:50px; width: 50px">
+          </a>
+        </div>
+        <div style="display: flex; align-items: center">
+          <a href="/users/${data.id}/tweets" style="text-decoration:none; color:black"><strong>${data.username}</strong></a>
+          <font class="text-muted"> @${data.account}</font>
+        </div>
       </div>
-      <div style="display: flex; align-items: center">
-        <a href="/users/${data.id}/tweets" style="text-decoration:none; color:black"><strong>${data.username}</strong></a>
-        <font class="text-muted"> @${data.account}</font>
-      </div>
-    </div>
-  `
-  var div = document.createElement('div')
-  div.className = 'list-group-item'
-  div.innerHTML = htmlString
-  u.appendChild(div)
+    `
+    var div = document.createElement('div')
+    div.className = 'list-group-item'
+    div.innerHTML = htmlString
+    u.appendChild(div)
+  }
 }
 
 //send message
@@ -36,15 +39,18 @@ chatForm.addEventListener('submit', e => {
   e.preventDefault()
   const msg = e.target.message.value
 
-  const selector = document.querySelector('.selector')
+  
   if (selector.value === 'public') {
     //public message
     socket.emit('publicMessage', msg)
+    console.log('aaaaaaaaa')
+    console.log(e.preventDefault())
+    
   }
   else {
     //private message
-    const messageToId = window.location.pathname.split('/')[2]
-    socket.emit('joinRoom', { messageToId, msg })
+    const receiveId = window.location.pathname.split('/')[2]
+    socket.emit('joinRoom', { receiveId, msg })
   }
   //clear inputs
   e.target.elements.message.value = ''
@@ -72,7 +78,6 @@ socket.on('publicMessage', (data) => {
 //private message
 socket.on('privateMessage', (data) => {
   appendData(data)
-  console.log(data)
 
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
