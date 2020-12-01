@@ -25,10 +25,10 @@ function appendUserData(data) {
       </div>
     </div>
   `
-  var li = document.createElement('li')
-  li.className = 'list-group-item'
-  li.innerHTML = htmlString
-  u.appendChild(li)
+  var div = document.createElement('div')
+  div.className = 'list-group-item'
+  div.innerHTML = htmlString
+  u.appendChild(div)
 }
 
 //send message
@@ -56,7 +56,7 @@ privateMessage.addEventListener('click', e => {
   const messageToId = window.location.pathname.split('/')[2]
   console.log('cccc')
   console.log(messageToId)
-  socket.emit('joinRoom', {messageToId, msg})
+  socket.emit('joinRoom', { messageToId, msg })
 })
 
 //public message
