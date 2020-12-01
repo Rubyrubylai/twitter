@@ -19,7 +19,7 @@ module.exports = (io, user, messageToId) => {
 
       }
       else {
-        io.emit('message', {
+        io.emit('online', {
           id: user.id,
           username: user.name,
           account: user.account,
@@ -33,13 +33,14 @@ module.exports = (io, user, messageToId) => {
         })
     
         // listen for chat message
-        socket.on('chatMessage', (msg) => {
-          console.log(msg)
+        socket.on('publicMessage', (msg) => {
+          
           Message.create({
             messageFromId: user.id,
             message: msg
           })
-          io.emit('chatMessage', {
+          // broadcast to everyone
+          io.emit('publicMessage', {
             id: user.id,
             username: user.name,
             account: user.account,
@@ -47,6 +48,7 @@ module.exports = (io, user, messageToId) => {
             message: msg,
             time: time(new Date())
           })
+          console.log(msg)
         })
     
         // room

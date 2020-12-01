@@ -4,7 +4,7 @@ const chatForm = document.getElementById('chat-form')
 const chatMessages = document.getElementById('chat-messages')
 
 //online user
-socket.on('message', (data) => {
+socket.on('online', (data) => {
   appendUserData(data)
 })
   
@@ -34,12 +34,12 @@ function appendUserData(data) {
 //send message
 chatForm.addEventListener('submit', e => {
   e.preventDefault()
-  const msg = e.target.elements.message.value
+  const msg = e.target.message.value
 
   const selector = document.querySelector('.selector')
   if (selector.value === 'public') {
     //public message
-    socket.emit('chatMessage', msg)
+    socket.emit('publicMessage', msg)
   }
   else {
     //private message
@@ -50,22 +50,24 @@ chatForm.addEventListener('submit', e => {
   e.target.elements.message.value = ''
 })
 
-const privateMessage = document.body.getElementById('private-message')
-privateMessage.addEventListener('click', e => {
-  //private message
-  const messageToId = window.location.pathname.split('/')[2]
-  console.log('cccc')
-  console.log(messageToId)
-  socket.emit('joinRoom', { messageToId, msg })
-})
-
 //public message
-socket.on('chatMessage', (data) => {
+socket.on('publicMessage', (data) => {
   appendData(data)
-  console.log(data)
+  
   //scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
+
+// const privateMessage = document.body.getElementById('private-message')
+// privateMessage.addEventListener('click', e => {
+//   //private message
+//   const messageToId = window.location.pathname.split('/')[2]
+//   console.log('cccc')
+//   console.log(messageToId)
+//   socket.emit('joinRoom', { messageToId, msg })
+// })
+
+
 
 //private message
 socket.on('privateMessage', (data) => {
@@ -81,29 +83,29 @@ function appendData(data) {
   let htmlString
   if (Number(data.id) === Number(loginUserId)) {
     htmlString = `
-      <div class="m-2">
-        <section style="background-color:coral; float: right; width:270px; border-radius:20px; padding:6px; float:right;">
+      <div class="send-messages">
+        <div>
+          <div class="send-message">
           ${data.message}
-        </section>
-        <font class="text-muted" size="2px" style="float: right;">${data.time}</font>
-        <div class="clearfix"></div>
+          </div>
+          <div class="time text-muted">${data.time}</div> 
+        </div> 
       </div>
     `
   } 
   else {
     htmlString = `
-    <div class="flex-container m-2">
+    <div class="receive-messages">
       <div>
-        <img src="${data.avatar}" class="user-avatar" style="margin-right:4px;">
+        <img src="${data.avatar}" class="user-avatar">
       </div>
       <div>
-      <section style="background-color:lightgrey; float: right; width:270px; border-radius:20px; padding:6px;">
+        <div class="receive-message">
         ${data.message}
-      </section>
-        
-      <font class="text-muted" size="2px">${data.time}</font>
+        </div>
+        <div class="time text-muted">${data.time}</div>
+      </div>
     </div>
-
     `
   }
   el.appendChild((document.createElement('div'))).innerHTML = htmlString
