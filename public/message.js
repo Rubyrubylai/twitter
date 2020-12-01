@@ -34,6 +34,12 @@ if (selector.value === 'public') {
   }
 }
 
+//join the room when enter private message page
+const receiveId = window.location.pathname.split('/')[2]
+if (selector.value === 'private') {
+  socket.emit('joinRoom', { receiveId })
+}
+
 //send message
 chatForm.addEventListener('submit', e => {
   e.preventDefault()
@@ -42,15 +48,11 @@ chatForm.addEventListener('submit', e => {
   
   if (selector.value === 'public') {
     //public message
-    socket.emit('publicMessage', msg)
-    console.log('aaaaaaaaa')
-    console.log(e.preventDefault())
-    
+    socket.emit('publicMessage', msg)   
   }
   else {
     //private message
-    const receiveId = window.location.pathname.split('/')[2]
-    socket.emit('joinRoom', { receiveId, msg })
+    socket.emit('privateMessage', { receiveId, msg })
   }
   //clear inputs
   e.target.elements.message.value = ''
@@ -63,6 +65,7 @@ socket.on('publicMessage', (data) => {
   //scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
+
 
 // const privateMessage = document.body.getElementById('private-message')
 // privateMessage.addEventListener('click', e => {

@@ -52,14 +52,17 @@ module.exports = (io, user, messageToId) => {
         })
         
         // room
-        socket.on('joinRoom', ({ receiveId, msg }) => {
+        socket.on('joinRoom', ({ receiveId }) => [
+          socket.join(receiveId || user.id.toString())
+        ])
+
+        socket.on('privateMessage', ({ receiveId, msg }) => {
           if (msg) {
             PrivateChat.create({
               UserId: user.id,
               receiveId: receiveId,
               message: msg
             })
-            socket.join(receiveId || user.id.toString())
             io.to(user.id.toString()).to(receiveId).emit('privateMessage', {
               id: user.id,
               username: user.name,
