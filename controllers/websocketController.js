@@ -1,6 +1,7 @@
 const time = require('../config/handlebars-helpers').time
 const db = require('../models')
-const Message = db.Message
+const PublicChat = db.PublicChat
+const PrivateChat = db.PrivateChat
 const User = db.User
 
 
@@ -15,10 +16,8 @@ module.exports = (io, user, messageToId) => {
         id: socket.request.session.passport ? socket.request.session.passport.user : null
       }
     }).then(user => {
-      if(!user) {
-
-      }
-      else {
+      if(user) {
+        //online user
         io.emit('online', {
           id: user.id,
           username: user.name,
@@ -34,9 +33,8 @@ module.exports = (io, user, messageToId) => {
     
         // listen for chat message
         socket.on('publicMessage', (msg) => {
-          
-          Message.create({
-            messageFromId: user.id,
+          PublicChat.create({
+            UserId: user.id,
             message: msg
           })
           // broadcast to everyone
@@ -53,11 +51,13 @@ module.exports = (io, user, messageToId) => {
     
         // room
         socket.on('joinRoom', ({ messageToId, msg }) => {
+          console.log('----------------')
           console.log(messageToId)
-          Message.create({
-            messageFromId: user.id,
-            messageToId: messageToId,
-            message: msg
+          console.log(user.id)
+          PrivateChat.create({
+            sendId: user.id,
+            receiveId: messageToId,
+            msg: msg
           })
           //const roomId = messageToId || user.id.toString() 
           socket.join(messageToId || user.id.toString())

@@ -58,25 +58,6 @@ io.use((socket, next) => {
 
 require('./controllers/websocketController')(io)
 
-
-// run when a client connects
-// io.on('connection', (socket) => {
-//   const currentUser = socket.request.session
-//   console.log(currentUser.avatar)
-//   console.log('a user connected')
-//   socket.on('disconnect', () => {
-//     console.log('user disconnected')
-//   })
-
-//   // listen for chat message
-//   socket.on('chatMessage', (msg) => {
-//     io.emit('chatMessage', msg)
-//     console.log('message: ' + msg)
-//   })
-// })
-
-
-
 server.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 require('./routes')(app, passport, io)

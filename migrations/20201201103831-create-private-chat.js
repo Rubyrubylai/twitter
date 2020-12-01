@@ -1,21 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Messages', {
+    return queryInterface.createTable('PrivateChats', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
+      sendId: {
+        type: Sequelize.INTEGER
+      },
+      receiveId: {
+        type: Sequelize.INTEGER
+      },
       message: {
-        type: Sequelize.STRING
-      },
-      messageFromId: {
-        type: Sequelize.INTEGER
-      },
-      messageToId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,
@@ -28,6 +28,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Messages');
+    return queryInterface.dropTable('PrivateChats');
   }
 };

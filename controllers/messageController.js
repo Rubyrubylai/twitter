@@ -1,36 +1,30 @@
 const db = require('../models')
 const User = db.User
-const Message = db.Message
-const { Op } = require("sequelize")
-const time = require('../config/handlebars-helpers').time
+const PublicChat = db.PublicChat
+const PrivateChat = db.PrivateChat
 
 const messageController = {
   getMessage: (req, res) => {
-    Message.findAll({
+    PublicChat.findAll({
       raw: true,
       nest: true
-    }).then(messages => {
+    }).then(publicChat => {
       let public = true
       const loginUser = req.user
-      return res.render('chat', { messages, loginUser, public })
+      return res.render('chat', { messages: publicChat, loginUser, public })
     })
   },
 
   getPrivateMessage: (req, res) => {
-    console.log(req.user.id)
-    console.log(req.params.userId)
-    Message.findAll({
-      where: {
-        [Op.or]: [
-          { messageToId: req.user.id,
-          messageFromId: req.params.userId },
-          { messageToId: req.params.userId,
-            messageFromId: req.user.id }
-        ]
-      }
-    }).then(messages =>{
+    PrivateChat.findAll({
+      
+        include: [ User ]
+      
+    }).then(privateChat =>{
+
+      console.log(privateChat)
       const loginUser = req.user
-      return res.render('chat', { messages, loginUser })
+      return res.render('chat', { messages: privateChat, loginUser })
     })
   }
 }

@@ -44,7 +44,7 @@ chatForm.addEventListener('submit', e => {
   else {
     //private message
     const messageToId = window.location.pathname.split('/')[2]
-    socket.emit('joinRoom', {messageToId, msg})
+    socket.emit('joinRoom', { messageToId, msg })
   }
   //clear inputs
   e.target.elements.message.value = ''

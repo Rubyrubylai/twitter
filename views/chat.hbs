@@ -1,13 +1,21 @@
 {{!-- Center --}}
 <div class="col online-user">
+  {{#if public}}
   <div class="title">
     <p>上線使用者</p>
   </div>
-    <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
-    <div id="user-list">
+  <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
+  <div id="user-list">
 
-    </div>
-  
+  </div>
+  {{else}}
+  <div class="title">
+    <p>歷史訊息</p>
+  </div>
+    <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
+  <div>
+  </div>
+  {{/if}}
 </div>
 
 {{!-- Right side --}}
@@ -23,7 +31,7 @@
   </div>
   <div class="flex-container chat-messages" id="chat-messages">
     {{#each messages}}
-    {{#ifCond ../loginUser.id this.messageFromId}}
+    {{#ifCond ../loginUser.id this.UserId}}
     <div class="send-messages">
       <div>
         <div class="send-message">
@@ -39,7 +47,7 @@
       </div>
       <div>
         <div class="receive-message">
-          {{this.message}}
+          {{this.msg}}
         </div>
         <div class="time text-muted">{{time this.createdAt}}</div>
       </div>
