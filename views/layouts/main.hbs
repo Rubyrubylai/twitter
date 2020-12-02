@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <input type="hidden" id="userId" value="{{user.id}}">
   <div class="mx-4">
     {{> alert}}
     <div class="row justify-content-md-center">
@@ -43,8 +44,8 @@
                 <a href="/message" class="list-group-item border-0" style="color:black;">
                   <h6><i class="fas fa-comments m-2"></i>公開聊天室</h6>
                 </a>
-                <a href="/message/{{user.id}}" id="private-message" class="list-group-item border-0" style="color: black;">
-                  <h6><i class="fas fa-envelope fa-lg m-2"></i>私人訊息</h6>
+                <a href="/message/{{user.id}}" class="list-group-item border-0" style="color: black;">
+                  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
                 </a>
                 <a href="/users/{{user.id}}/tweets" class="list-group-item border-0" style="color: black;">
                   <h6><i class="fa fa-user fa-lg m-2"></i>個人資料</h6>

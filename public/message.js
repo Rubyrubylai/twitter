@@ -3,42 +3,42 @@ var socket = io()
 const chatForm = document.getElementById('chat-form')
 const chatMessages = document.getElementById('chat-messages')
 const selector = document.querySelector('.selector')
-
-if (selector.value === 'public') {
-//online user
-  socket.on('online', (data) => {
-    appendUserData(data)
-  })
-    
-  function appendUserData(data) {
-    const u = document.getElementById('user-list')
-    let htmlString 
-    htmlString = `
-      <div class="flex-container">
-        <div class="mr-2">
-          <a href="/users/${data.id}/tweets">
-            <img src="${data.avatar}" alt="user avatar" class="user-avatar"
-              style="border-radius: 50%; height:50px; width: 50px">
-          </a>
-        </div>
-        <div style="display: flex; align-items: center">
-          <a href="/users/${data.id}/tweets" style="text-decoration:none; color:black"><strong>${data.username}</strong></a>
-          <font class="text-muted"> @${data.account}</font>
-        </div>
-      </div>
-    `
-    var div = document.createElement('div')
-    div.className = 'list-group-item'
-    div.innerHTML = htmlString
-    u.appendChild(div)
-  }
-}
+const userId = document.getElementById('userId')
 
 //join the room when enter private message page
 const receiveId = window.location.pathname.split('/')[2]
-if (selector.value === 'private') {
-  socket.emit('joinRoom', { receiveId })
-}
+socket.emit('joinRoom', { receiveId })
+
+console.log('-----------')
+console.log(userId.value)
+//alert
+socket.on('alert', (data) => {
+  if (data.receiveId === userId.value) {
+    const privateIcon = document.getElementById('private-icon')
+  
+    let htmlString = `
+    <font size="4" color="red">${data.count}</font>
+    `
+    privateIcon.innerHTML = htmlString
+  }
+  
+})
+
+// if (selector.value === 'public') {
+// //online user
+//   socket.on('online', (data) => {
+//     appendUserData(data)
+//   })
+
+  // socket.on('offline', (id) => {
+  //   console.log('AAAAAAAAAaaaaa')
+  //   const user = document.getElementById(id.toString())
+  //   console.log(user)
+    
+  //   user.remove()
+  
+  // })
+// }
 
 //send message
 chatForm.addEventListener('submit', e => {
@@ -67,23 +67,38 @@ socket.on('publicMessage', (data) => {
 })
 
 
-// const privateMessage = document.body.getElementById('private-message')
-// privateMessage.addEventListener('click', e => {
-//   //private message
-//   const messageToId = window.location.pathname.split('/')[2]
-//   console.log('cccc')
-//   console.log(messageToId)
-//   socket.emit('joinRoom', { messageToId, msg })
-// })
-
-
-
 //private message
 socket.on('privateMessage', (data) => {
   appendData(data)
 
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
+
+
+
+  
+function appendUserData(data) {
+  const u = document.getElementById('user-list')
+  let htmlString 
+  htmlString = `
+    <div class="flex-container" id="${data.id}">
+      <div class="mr-2">
+        <a href="/users/${data.id}/tweets">
+          <img src="${data.avatar}" alt="user avatar" class="user-avatar"
+            style="border-radius: 50%; height:50px; width: 50px">
+        </a>
+      </div>
+      <div style="display: flex; align-items: center">
+        <a href="/users/${data.id}/tweets" style="text-decoration:none; color:black"><strong>${data.username}</strong></a>
+        <font class="text-muted"> @${data.account}</font>
+      </div>
+    </div>
+  `
+  var div = document.createElement('div')
+  div.className = 'list-group-item'
+  div.innerHTML = htmlString
+  u.appendChild(div)
+}
 
 function appendData(data) {
   const loginUserId = document.getElementById('loginUserId').value
@@ -118,13 +133,3 @@ function appendData(data) {
   }
   el.appendChild((document.createElement('div'))).innerHTML = htmlString
 }
-
-// //alert
-// socket.on('alert', () => {
-//   const privateMessage = document.getElementById('private-message')
-//   let htmlString = `
-//   <div style="border:4px red solid;border-radius:2px;" ></div>
-//   `
-//   console.log(htmlString)
-//   privateMessage.appendChild((document.createElement('div'))).innerHTML = htmlString
-// })

@@ -8,6 +8,7 @@ const User = db.User
 module.exports = (io, user, messageToId) => {
   io.on('connection', (socket) => {
     const currentUser = socket.request.session
+
     console.log('a user connected')
 
     // announce user online
@@ -25,11 +26,12 @@ module.exports = (io, user, messageToId) => {
           account: user.account,
           avatar: user.avatar
         })
-  
+
         // run when user disconnects
         socket.on('disconnect', () => {
+          
+          io.emit('offline', { id: user.id })
           console.log('user disconnected')
-          io.emit('message')
         })
     
         // listen for chat message
@@ -50,20 +52,25 @@ module.exports = (io, user, messageToId) => {
             })
           }
         })
+
         
         // room
-        socket.on('joinRoom', ({ receiveId }) => [
-          socket.join(receiveId || user.id.toString())
-        ])
+        socket.on('joinRoom', ({ receiveId }) => {
+          socket.join(receiveId+user.id.toString() || user.id.toString()+receiveId) 
+          console.log('JIONNN' +receiveId)
+        })
+        
 
         socket.on('privateMessage', ({ receiveId, msg }) => {
+          let count = 0
           if (msg) {
+            count += 1
             PrivateChat.create({
               UserId: user.id,
               receiveId: receiveId,
               message: msg
             })
-            io.to(user.id.toString()).to(receiveId).emit('privateMessage', {
+            io.to(receiveId+user.id.toString()).to(user.id.toString()+receiveId).emit('privateMessage', {
               id: user.id,
               username: user.name,
               account: user.account,
@@ -71,12 +78,16 @@ module.exports = (io, user, messageToId) => {
               message: msg,
               time: time(new Date())
             })
-          }
-          
-          
-    
-          //io.to(messageToId).emit('alert')
+            io.emit('alert', {
+              count,
+              receiveId
+            })
+            
+          } 
         })
+        
+        
+        //console.log(count)
       }
     }) 
   })
