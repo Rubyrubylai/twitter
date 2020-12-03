@@ -26,24 +26,25 @@ socket.on('alert', (data) => {
     `
     privateIcon.innerHTML = htmlString
   }
-  
 })
 
-// if (selector.value === 'public') {
-// //online user
-//   socket.on('online', (data) => {
-//     appendUserData(data)
-//   })
 
-  // socket.on('offline', (id) => {
-  //   console.log('AAAAAAAAAaaaaa')
-  //   const user = document.getElementById(id.toString())
-  //   console.log(user)
+
+if (selector.value === 'public') {
+//online user
+  socket.on('online', (data) => {
+    appendUserData(data)
+  })
+
+  socket.on('offline', (id) => {
+    console.log('AAAAAAAAAaaaaa')
+    const user = document.getElementById(id.toString())
+    console.log(user)
     
-  //   user.remove()
+    user.remove()
   
-  // })
-// }
+  })
+}
 
 //send message
 chatForm.addEventListener('submit', e => {
@@ -56,6 +57,10 @@ chatForm.addEventListener('submit', e => {
     socket.emit('publicMessage', msg)   
   }
   else {
+    // const unreadCount = document.getElementById('unread-count')
+    // console.log('unread-------')
+    // console.log(unreadCount)
+    // console.log(unreadCount.innerHTML)
     //private message
     socket.emit('privateMessage', { receiveId, msg })
   }
@@ -66,7 +71,7 @@ chatForm.addEventListener('submit', e => {
 //public message
 socket.on('publicMessage', (data) => {
   appendData(data)
-  
+
   //scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
@@ -75,7 +80,7 @@ socket.on('publicMessage', (data) => {
 chatForm.addEventListener('click', (e) => {
   userId = user.value
   let htmlString = `
-  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></div></i>私人訊息</h6>
+  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
   `
   privateIcon.innerHTML = htmlString
   socket.emit('read', { userId, receiveId })

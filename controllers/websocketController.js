@@ -3,7 +3,7 @@ const db = require('../models')
 const PublicChat = db.PublicChat
 const PrivateChat = db.PrivateChat
 const User = db.User
-
+const { Op } = require('sequelize')
 
 module.exports = (io, user, messageToId) => {
   io.on('connection', (socket) => {
@@ -58,31 +58,43 @@ module.exports = (io, user, messageToId) => {
         socket.on('joinRoom', ({ receiveId }) => {
           socket.join(receiveId+user.id.toString() || user.id.toString()+receiveId) 
         })
-        
 
+        
         socket.on('privateMessage', ({ receiveId, msg }) => {
-          let count = 0
-          if (msg) {
-            count += 1
-            PrivateChat.create({
-              UserId: user.id,
-              receiveId: receiveId,
-              message: msg,
-              unread: true
-            })
-            io.to(receiveId+user.id.toString()).to(user.id.toString()+receiveId).emit('privateMessage', {
-              id: user.id,
-              username: user.name,
-              account: user.account,
-              avatar: user.avatar,
-              message: msg,
-              time: time(new Date())
-            })
-            io.emit('alert', {
-              count,
-              receiveId
-            })
-          } 
+          PrivateChat.findAll({
+            raw: true,
+            nest: true,
+            where: {
+              [Op.and]: [
+                { receiveId: receiveId },
+                { unread: true },
+              ]
+            }
+          }).then(privateChat => {
+            let count = privateChat.length
+            if (msg) {
+              count ++
+              PrivateChat.create({
+                UserId: user.id,
+                receiveId: receiveId,
+                message: msg,
+                unread: true
+              })
+              io.to(receiveId+user.id.toString()).to(user.id.toString()+receiveId).emit('privateMessage', {
+                id: user.id,
+                username: user.name,
+                account: user.account,
+                avatar: user.avatar,
+                message: msg,
+                time: time(new Date())
+              })
+              io.emit('alert', {
+                count,
+                receiveId
+              })
+            } 
+          })
+          
         })
 
         //read
