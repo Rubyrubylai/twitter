@@ -3,21 +3,26 @@ var socket = io()
 const chatForm = document.getElementById('chat-form')
 const chatMessages = document.getElementById('chat-messages')
 const selector = document.querySelector('.selector')
-const userId = document.getElementById('userId')
+const user = document.getElementById('userId')
+const privateIcon = document.getElementById('private-icon')
 
-//join the room when enter private message page
+// console.log(userList)
+// userList.addEventListener('click', e => {
+//   socket.emit('read', msg)   
+//   console.log('aaaaaaaaaa')
+//   e.preventDefault()
+// })
+
+//join the room in the beginning
 const receiveId = window.location.pathname.split('/')[2]
 socket.emit('joinRoom', { receiveId })
 
-console.log('-----------')
-console.log(userId.value)
 //alert
 socket.on('alert', (data) => {
-  if (data.receiveId === userId.value) {
-    const privateIcon = document.getElementById('private-icon')
-  
+  //the alert will only show on the receiver page
+  if (data.receiveId === user.value) {
     let htmlString = `
-    <font size="4" color="red">${data.count}</font>
+    <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${data.count})</h6>
     `
     privateIcon.innerHTML = htmlString
   }
@@ -66,6 +71,15 @@ socket.on('publicMessage', (data) => {
   chatMessages.scrollTop = chatMessages.scrollHeight
 })
 
+//read
+chatForm.addEventListener('click', (e) => {
+  userId = user.value
+  let htmlString = `
+  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></div></i>私人訊息</h6>
+  `
+  privateIcon.innerHTML = htmlString
+  socket.emit('read', { userId, receiveId })
+})
 
 //private message
 socket.on('privateMessage', (data) => {
@@ -101,10 +115,10 @@ function appendUserData(data) {
 }
 
 function appendData(data) {
-  const loginUserId = document.getElementById('loginUserId').value
+  const userId = user.value
   const el = document.getElementById('chat-messages')
   let htmlString
-  if (Number(data.id) === Number(loginUserId)) {
+  if (Number(data.id) === Number(userId)) {
     htmlString = `
       <div class="send-messages">
         <div>

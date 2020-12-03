@@ -177,3 +177,13 @@
   color:black;
   font-weight: 600;
 }
+
+.red-dot {
+  width:8px;
+  height:8px; 
+  border-radius: 4px;
+  background-color:red; 
+  position:relative; 
+  bottom:18px; 
+  left: 16px;
+}

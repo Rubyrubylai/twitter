@@ -57,7 +57,6 @@ module.exports = (io, user, messageToId) => {
         // room
         socket.on('joinRoom', ({ receiveId }) => {
           socket.join(receiveId+user.id.toString() || user.id.toString()+receiveId) 
-          console.log('JIONNN' +receiveId)
         })
         
 
@@ -68,7 +67,8 @@ module.exports = (io, user, messageToId) => {
             PrivateChat.create({
               UserId: user.id,
               receiveId: receiveId,
-              message: msg
+              message: msg,
+              unread: true
             })
             io.to(receiveId+user.id.toString()).to(user.id.toString()+receiveId).emit('privateMessage', {
               id: user.id,
@@ -82,12 +82,20 @@ module.exports = (io, user, messageToId) => {
               count,
               receiveId
             })
-            
           } 
         })
-        
-        
-        //console.log(count)
+
+        //read
+        socket.on('read', ({ userId, receiveId }) => {
+          PrivateChat.update({ unread: false }, { 
+            where: {
+              UserId: Number(receiveId),
+              receiveId: Number(userId)
+            }
+          })
+          
+        })
+
       }
     }) 
   })

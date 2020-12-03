@@ -3,7 +3,8 @@ module.exports = (sequelize, DataTypes) => {
   const PrivateChat = sequelize.define('PrivateChat', {
     UserId: DataTypes.INTEGER,
     receiveId: DataTypes.INTEGER,
-    message: DataTypes.TEXT
+    message: DataTypes.TEXT,
+    unread: DataTypes.BOOLEAN
   }, {});
   PrivateChat.associate = function(models) {
     PrivateChat.belongsTo(models.User, {

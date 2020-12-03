@@ -119,5 +119,6 @@ module.exports = (app, passport, io) => {
   app.post('/api/signin', userController.apiSignIn)
 
   app.get('/message', authenticated, messageController.getMessage)
+  // app.get('/privateMessage', authenticated, messageController.getPrivateMessages)
   app.get('/message/:userId', authenticated, messageController.getPrivateMessage)
 }

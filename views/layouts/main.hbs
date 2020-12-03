@@ -44,8 +44,12 @@
                 <a href="/message" class="list-group-item border-0" style="color:black;">
                   <h6><i class="fas fa-comments m-2"></i>公開聊天室</h6>
                 </a>
-                <a href="/message/{{user.id}}" class="list-group-item border-0" style="color: black;">
+                <a href="/message/{{user.id}}" class="list-group-item border-0" style="color: black;" id="private-icon">
+                  {{#if unreadMessageCount}}
+                  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 ({{unreadMessageCount}})</h6>
+                  {{else}}
                   <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
+                  {{/if}}
                 </a>
                 <a href="/users/{{user.id}}/tweets" class="list-group-item border-0" style="color: black;">
                   <h6><i class="fa fa-user fa-lg m-2"></i>個人資料</h6>

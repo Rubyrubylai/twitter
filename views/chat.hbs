@@ -4,7 +4,6 @@
   <div class="title">
     <p>上線使用者</p>
   </div>
-  <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
   <div id="user-list">
 
   </div>
@@ -12,9 +11,19 @@
   <div class="title">
     <p>歷史訊息</p>
   </div>
-  <input type="hidden" id="loginUserId" value="{{loginUser.id}}">
   {{#each users}}
   <div class="user-list">
+    {{!-- <form action="/message/{{this.id}}?_method=PUT" method="POST">
+      
+      <button type="submit" class="flex-container" style="border: none; background-color:white">
+        <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
+        <div class="flex-container">
+          <p>{{this.name}}</p>
+          <font class="text-muted"> @{{this.account}}</font>
+        </div>
+      </button>
+      
+    </form> --}}
     <a href="/message/{{this.id}}">
     <div class="flex-container">
       <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
@@ -44,7 +53,7 @@
   </div>
   <div class="flex-container chat-messages" id="chat-messages">
     {{#each messages}}
-    {{#ifCond ../loginUser.id this.UserId}}
+    {{#ifCond ../user.id this.UserId}}
     <div class="send-messages">
       <div>
         <div class="send-message">
@@ -56,7 +65,7 @@
     {{else}}
     <div class="receive-messages">
       <div>
-        <img src="{{../loginUser.avatar}}" class="user-avatar">
+        <img src="{{../user.avatar}}" class="user-avatar">
       </div>
       <div>
         <div class="receive-message">
@@ -70,7 +79,7 @@
   </div>  
   <form action="" id="chat-form">
     <div class="messageArea">
-      <textarea type="text" placeholder="輸入訊息..." class="form-control" id="message" name="message" rows="1"></textarea>
+      <textarea type="text" placeholder="輸入訊息..." class="form-control" id="{{user.id}}" name="message" rows="1"></textarea>
       <button type="submit" class="btn">
         <i class="fas fa-paper-plane"></i>
       </button>
