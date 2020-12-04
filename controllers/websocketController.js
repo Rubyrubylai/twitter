@@ -5,10 +5,9 @@ const PrivateChat = db.PrivateChat
 const User = db.User
 const { Op } = require('sequelize')
 
-module.exports = (io, user, messageToId) => {
+let onlineUsers = []
+module.exports = (io) => {
   io.on('connection', (socket) => {
-    const currentUser = socket.request.session
-
     console.log('a user connected')
 
     // announce user online
@@ -17,24 +16,26 @@ module.exports = (io, user, messageToId) => {
         id: socket.request.session.passport ? socket.request.session.passport.user : null
       }
     }).then(user => {
-      // console.log(user)
+      onlineUsers.push({
+        id: user.id,
+        username: user.name,
+        account: user.account,
+        avatar: user.avatar
+      })
+      let set = new Set()
+      onlineUsers = onlineUsers.filter((item) => !set.has(item.id) ? set.add(item.id) : false)
+      
+      
+
       if(user) {
         // online user
-        io.emit('online', {
-          id: user.id,
-          username: user.name,
-          account: user.account,
-          avatar: user.avatar
-        })
-
-        // online user in chatroom
-        socket.broadcast.emit('onlineUsers', {
-          username: user.name
-        })
+        io.emit('online', onlineUsers )
 
         // run when user disconnects
         socket.on('disconnect', () => {
-          
+          onlineUsers = onlineUsers.filter((item) => item.id !== user.id)
+          console.log('--------online')
+          console.log(onlineUsers)
           io.emit('offline', { id: user.id })
           console.log('user disconnected')
         })

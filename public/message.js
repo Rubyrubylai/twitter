@@ -5,6 +5,7 @@ const chatMessages = document.getElementById('chat-messages')
 const selector = document.querySelector('.selector')
 const user = document.getElementById('userId')
 const privateIcon = document.getElementById('private-icon')
+const userList = document.getElementById('user-list')
 
 //join the room in the beginning
 const receiveId = window.location.pathname.split('/')[2]
@@ -21,32 +22,30 @@ socket.on('alert', (data) => {
   }
 })
 
-socket.on('onlineUsers', (data) => {
-  let htmlString = `
-  <div class="room">${data.username} is online.</div>
-  `
-  chatMessages.innerHTML += htmlString
-})
-
 if (selector.value === 'public') {
+  
 //online user
   socket.on('online', (data) => {
-    appendUserData(data)
+    userList.innerHTML = ''
+    data.forEach(data => {
+      appendUserData(data)
+    })
+    
   })
 
   
 
   socket.on('offline', (data) => {
-    console.log('AAAAAAAAAaaaaa')
-    //console.log('userList'+id.toString())
-    var userList = document.getElementById('user-list')
+    // console.log('AAAAAAAAAaaaaa')
+    // //console.log('userList'+id.toString())
+    
     console.log(userList)
     var user = document.getElementById(`user-${data.id}`).parentNode
     console.log(user)
     userList.removeChild(user)
-    
+
     // e.preventDefault()
-    //user.remove()
+    // user.remove()
   
   })
 }
@@ -102,9 +101,9 @@ socket.on('privateMessage', (data) => {
 
   
 function appendUserData(data) {
-  const u = document.getElementById('user-list')
   let htmlString 
   htmlString = `
+  <div class="list-group-item">
     <div class="flex-container" id="user-${data.id}">
       <div class="mr-2">
         <a href="/users/${data.id}/tweets">
@@ -117,11 +116,9 @@ function appendUserData(data) {
         <font class="text-muted"> @${data.account}</font>
       </div>
     </div>
+  </div>
   `
-  var div = document.createElement('div')
-  div.className = 'list-group-item'
-  div.innerHTML += htmlString
-  u.appendChild(div)
+  userList.innerHTML += htmlString
 }
 
 function appendData(data) {
