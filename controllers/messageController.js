@@ -8,11 +8,12 @@ const messageController = {
   getMessage: (req, res) => {
     PublicChat.findAll({
       raw: true,
-      nest: true
+      nest: true,
+      include: [ User ]
     }).then(publicChat => {
       let public = true
-      const loginUser = req.user
-      return res.render('chat', { messages: publicChat, loginUser, public })
+     
+      return res.render('chat', { messages: publicChat, public })
     })
   },
 
@@ -69,8 +70,10 @@ const messageController = {
           }, {
             UserId: req.user.id,
             receiveId: req.params.userId
-          }]
-        }}).then(privateChat => {
+            }]
+          },
+          include: [{ model: User, as: 'Sender' }]
+        }).then(privateChat => {
           
           
             console.log(privateChat)

@@ -6,13 +6,6 @@ const selector = document.querySelector('.selector')
 const user = document.getElementById('userId')
 const privateIcon = document.getElementById('private-icon')
 
-// console.log(userList)
-// userList.addEventListener('click', e => {
-//   socket.emit('read', msg)   
-//   console.log('aaaaaaaaaa')
-//   e.preventDefault()
-// })
-
 //join the room in the beginning
 const receiveId = window.location.pathname.split('/')[2]
 socket.emit('joinRoom', { receiveId })
@@ -28,7 +21,12 @@ socket.on('alert', (data) => {
   }
 })
 
-
+socket.on('onlineUsers', (data) => {
+  let htmlString = `
+  <div class="room">${data.username} is online.</div>
+  `
+  chatMessages.innerHTML += htmlString
+})
 
 if (selector.value === 'public') {
 //online user
@@ -36,12 +34,19 @@ if (selector.value === 'public') {
     appendUserData(data)
   })
 
-  socket.on('offline', (id) => {
+  
+
+  socket.on('offline', (data) => {
     console.log('AAAAAAAAAaaaaa')
-    const user = document.getElementById(id.toString())
+    //console.log('userList'+id.toString())
+    var userList = document.getElementById('user-list')
+    console.log(userList)
+    var user = document.getElementById(`user-${data.id}`).parentNode
     console.log(user)
+    userList.removeChild(user)
     
-    user.remove()
+    // e.preventDefault()
+    //user.remove()
   
   })
 }
@@ -100,7 +105,7 @@ function appendUserData(data) {
   const u = document.getElementById('user-list')
   let htmlString 
   htmlString = `
-    <div class="flex-container" id="${data.id}">
+    <div class="flex-container" id="user-${data.id}">
       <div class="mr-2">
         <a href="/users/${data.id}/tweets">
           <img src="${data.avatar}" alt="user avatar" class="user-avatar"
@@ -115,13 +120,12 @@ function appendUserData(data) {
   `
   var div = document.createElement('div')
   div.className = 'list-group-item'
-  div.innerHTML = htmlString
+  div.innerHTML += htmlString
   u.appendChild(div)
 }
 
 function appendData(data) {
   const userId = user.value
-  const el = document.getElementById('chat-messages')
   let htmlString
   if (Number(data.id) === Number(userId)) {
     htmlString = `
@@ -150,5 +154,5 @@ function appendData(data) {
     </div>
     `
   }
-  el.appendChild((document.createElement('div'))).innerHTML = htmlString
+  chatMessages.appendChild((document.createElement('div'))).innerHTML = htmlString
 }

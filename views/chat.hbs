@@ -5,7 +5,7 @@
     <p>上線使用者</p>
   </div>
   <div id="user-list">
-
+   
   </div>
   {{else}}
   <div class="title">
@@ -65,7 +65,11 @@
     {{else}}
     <div class="receive-messages">
       <div>
-        <img src="{{../user.avatar}}" class="user-avatar">
+        {{#if ../public}}
+        <img src="{{this.User.avatar}}" class="user-avatar">
+        {{else}}
+        <img src="{{this.Sender.avatar}}" class="user-avatar">
+        {{/if}}
       </div>
       <div>
         <div class="receive-message">

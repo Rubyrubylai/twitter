@@ -17,14 +17,19 @@ module.exports = (io, user, messageToId) => {
         id: socket.request.session.passport ? socket.request.session.passport.user : null
       }
     }).then(user => {
+      // console.log(user)
       if(user) {
-
-        //online user
+        // online user
         io.emit('online', {
           id: user.id,
           username: user.name,
           account: user.account,
           avatar: user.avatar
+        })
+
+        // online user in chatroom
+        socket.broadcast.emit('onlineUsers', {
+          username: user.name
         })
 
         // run when user disconnects
