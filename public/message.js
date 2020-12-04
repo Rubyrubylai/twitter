@@ -36,17 +36,8 @@ if (selector.value === 'public') {
   
 
   socket.on('offline', (data) => {
-    // console.log('AAAAAAAAAaaaaa')
-    // //console.log('userList'+id.toString())
-    
-    console.log(userList)
     var user = document.getElementById(`user-${data.id}`).parentNode
-    console.log(user)
     userList.removeChild(user)
-
-    // e.preventDefault()
-    // user.remove()
-  
   })
 }
 
@@ -61,10 +52,6 @@ chatForm.addEventListener('submit', e => {
     socket.emit('publicMessage', msg)   
   }
   else {
-    // const unreadCount = document.getElementById('unread-count')
-    // console.log('unread-------')
-    // console.log(unreadCount)
-    // console.log(unreadCount.innerHTML)
     //private message
     socket.emit('privateMessage', { receiveId, msg })
   }
