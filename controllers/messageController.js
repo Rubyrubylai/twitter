@@ -3,6 +3,7 @@ const User = db.User
 const PublicChat = db.PublicChat
 const PrivateChat = db.PrivateChat
 const { Op } = require('sequelize')
+const { request } = require('../app')
 
 const messageController = {
   getMessage: (req, res) => {
@@ -38,6 +39,7 @@ const messageController = {
         include: [{ model: User, as: 'Receiver' },
         { model: User, as: 'Sender' }]
       }).then(privateChat => {
+        //未讀訊息
         const unreadMessage = privateChat.filter(p => {
           return p.receiveId === req.user.id && p.unread === 1
         })
@@ -84,6 +86,34 @@ const messageController = {
         
       })
     })    
+  },
+
+  getPrivateMessageCount: (req, res) => {
+    PrivateChat.findAll({
+      raw:true,
+      nest: true,
+      where: {
+        [Op.or]: [
+          { UserId: req.user.id },
+          { receiveId: req.user.id },
+        ]
+      },
+      include: [{ model: User, as: 'Receiver' },
+      { model: User, as: 'Sender' }]
+    }).then(privateChat => {
+      //未讀訊息
+      const unreadMessage = privateChat.filter(p => {
+        return p.receiveId === req.user.id && p.unread === 1
+      })
+      const unreadMessageCount = unreadMessage.length
+    
+      res.send({
+        'success': true,
+        'result': unreadMessageCount,
+        'message': '資料拿取成功'
+      })
+    })
+    
   }
 }
 
