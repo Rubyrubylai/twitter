@@ -104,15 +104,15 @@ const userController = {
     return res.redirect('/signin')
   },
 
-  likeTweet: (req, res) => {
-    Like.create({
-      UserId: helpers.getUser(req).id,
-      TweetId: req.params.tweetId
-    })
-      .then(like => {
-        return res.redirect('back')
-      })
-  },
+  // likeTweet: (req, res) => {
+  //   Like.create({
+  //     UserId: helpers.getUser(req).id,
+  //     TweetId: req.params.tweetId
+  //   })
+  //     .then(like => {
+  //       return res.redirect('back')
+  //     })
+  // },
 
   unlikeTweet: (req, res) => {
     Like.findOne({

@@ -116,7 +116,7 @@ const messageController = {
       }],
       order: [[ 'updatedAt', 'DESC' ]]
     })
-    .then(notices => { 
+    .then(notices => {
       return res.render('notice', { notices })
     })
 

@@ -39,8 +39,8 @@ $('#tweet').submit((e) => {
     socket.emit('tweet', { description, userId })
   }
 })
-  
-// notice subscriber
+
+// notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {
   const noticeList = document.getElementById('notice-list')
 
@@ -52,6 +52,39 @@ socket.on('tweet', (data) => {
     </a>
   </div>
   `
+})
+
+//like a tweet
+$('.like-form').submit((e) => {
+  const tweetId = e.target.tweetId.value
+  const tweetUserId = e.target.tweetUserId.value
+  var likesCount = Number(e.target.likesCount.value) + 1
+  const form = e.target
+  form.innerHTML = `
+  <form action="/tweets/${tweetId}/unlike" method="POST" style="float:left;">
+    <button type="submit" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94);"></i></button>
+    <div style="float:right;">${likesCount}</div>
+  </form>
+  
+  `
+  socket.emit('like', { tweetId, tweetUserId })
+  e.preventDefault()
+})
+  
+socket.on('like', (data) => {  
+  if(data.tweetUserId === user.value) {
+    const noticeList = document.getElementById('notice-list')
+
+    noticeList.innerHTML += `
+    <div class="notice">
+      <a href="/tweets/${data.thingsId}/replies">
+        <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <p class="notice-desc">${data.noticeDescription}</p>
+      </a>
+    </div>
+    `
+  }
+  
 })
 
 //turn on notification

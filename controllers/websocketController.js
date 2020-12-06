@@ -6,6 +6,7 @@ const Tweet = db.Tweet
 const User = db.User
 const Subscribeship = db.Subscribeship
 const Notice = db.Notice
+const Like = db.Like
 const { Op } = require('sequelize')
 
 let onlineUsers = []
@@ -19,7 +20,11 @@ module.exports = (io) => {
         id: socket.request.session.passport ? socket.request.session.passport.user : null
       }
     }).then(user => {
+      
       if(user) {
+        const avatar = user.avatar
+        const userId = user.id
+
         onlineUsers.push({
           id: user.id,
           username: user.name,
@@ -137,7 +142,7 @@ module.exports = (io) => {
         socket.on('tweet', (data) => {
           const userId = data.userId
           const description = data.description
-          const avatar = user.avatar
+          
           
           Tweet.create({
             description,
@@ -161,7 +166,7 @@ module.exports = (io) => {
                     description: noticeDescription,
                     UserId: items.subscriberId,
                     unread: true,
-                    TweetId: tweet.id
+                    thingsId: tweet.id
                   })
                 )
               })
@@ -171,6 +176,29 @@ module.exports = (io) => {
               })
             })
            
+          })
+        })
+
+        //like
+        socket.on('like', (data) => {
+          Like.create({
+            UserId: user.id,
+            TweetId: Number(data.tweetId)
+          })
+          .then(like => {
+            id = Number(userId) - 1
+            const noticeDescription = `User${id}喜歡你的貼文`
+
+            Notice.create({
+              description: noticeDescription,
+              UserId: Number(data.tweetUserId),
+              unread: true,
+              thingsId:  Number(data.tweetId)
+            }).then(notice => {
+              const thingsId = notice.thingsId
+              const tweetUserId = data.tweetUserId
+              io.emit('like', { noticeDescription, avatar, thingsId, tweetUserId })
+            })
           })
         })
 

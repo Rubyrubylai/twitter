@@ -4,7 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     description: DataTypes.TEXT,
     UserId: DataTypes.INTEGER,
     unread: DataTypes.BOOLEAN,
-    TweetId: DataTypes.INTEGER
+    thingsId: DataTypes.INTEGER
   }, {});
   Notice.associate = function(models) {
     Notice.belongsTo(models.User)

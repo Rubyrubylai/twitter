@@ -211,3 +211,8 @@
 .notice a img {
   display: inline-block;
 }
+
+/* tweet */
+.like-form {
+  float: left;
+}
