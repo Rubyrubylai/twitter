@@ -1,0 +1,14 @@
+<div class="col online-user">
+  <div class="title">
+    <p>通知</p>
+  </div>
+  <div id="notice-list"></div>
+  {{#each notices}}
+  <div class="notice">
+    <a href="/tweets/{{this.TweetId}}/replies">
+      <img src="{{this.User.subscribed.avatar}}" alt="user avatar" class="user-avatar">
+      <p class="notice-desc">{{this.description}}</p>
+    </a>
+  </div>
+  {{/each}}
+</div>

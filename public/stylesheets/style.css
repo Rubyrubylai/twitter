@@ -165,14 +165,14 @@
   height: 100vh;
 }
 
-.user-list {
+.user-list, .notice {
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6EcF0;
   flex-direction: row;
 }
 
-.user-list a {
+.user-list a, .notice a {
   text-decoration:none; 
   color:black;
   font-weight: 600;
@@ -194,4 +194,20 @@
   word-break: break-all;
   max-width: 220px;
   padding: 10px;
+}
+
+/* notice */
+.notice-btn {
+  background-color: white;
+  border: none;
+}
+
+.notice-desc {
+  margin-left: 10px; 
+  margin-top: 15px;
+  display: inline-block;
+}
+
+.notice a img {
+  display: inline-block;
 }

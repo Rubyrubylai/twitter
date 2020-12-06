@@ -80,7 +80,7 @@ module.exports = (app, passport, io) => {
 
   //tweet page
   app.get('/tweets', authenticated, tweetController.getTweets)
-  app.post('/tweets', authenticated, tweetController.postTweets)
+  // app.post('/tweets', authenticated, tweetController.postTweets)
   app.get('/tweets/:tweetId/replies', authenticated, tweetController.getReply)
   app.post('/tweets/:tweetId/replies', authenticated, tweetController.postReply)
   app.delete('/tweets/:tweetId', authenticated, tweetController.deleteTweet)
@@ -122,4 +122,5 @@ module.exports = (app, passport, io) => {
   // app.get('/privateMessage', authenticated, messageController.getPrivateMessages)
   app.get('/message/:userId', authenticated, messageController.getPrivateMessage)
   app.get('/privateMessageCount', authenticated, messageController.getPrivateMessageCount)
+  app.get('/notice', authenticated, messageController.getNotice)
 }

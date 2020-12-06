@@ -28,6 +28,17 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.ReplyComment)
     User.hasMany(models.PublicChat)
     User.hasMany(models.PrivateChat)
+    User.belongsToMany(User, {
+      through: models.Subscribeship,
+      foreignKey: 'subscriberId',
+      as: 'subscribed'
+    })
+    User.belongsToMany(User, {
+      through: models.Subscribeship,
+      foreignKey: 'subscribedId',
+      as: 'subscriber'
+    })
+    User.hasMany(models.Notice)
   };
   return User;
 };

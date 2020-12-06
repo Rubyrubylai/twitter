@@ -73,26 +73,29 @@ const tweetController = {
 
   },
 
-  postTweets: (req, res) => {
-    const { description } = req.body
-    if (!description) {
-      req.flash('error_messages', '貼文不得為空白')
-      return res.redirect('/tweets')
-    }
-    if (description.length > 140) {
-      req.flash('error_messages', '貼文字數不得超過140字')
-      return res.redirect('/tweets')
-    }
-    else {
-      Tweet.create({
-        description,
-        UserId: helpers.getUser(req).id
-      })
-        .then(tweet => {
-          return res.redirect('/tweets')
-        })
-    }
-  },
+  // postTweets: (req, res) => {
+  //   const { description } = req.body
+  //   if (!description) {
+  //     req.flash('error_messages', '貼文不得為空白')
+  //     return res.redirect('/tweets')
+  //   }
+  //   if (description.length > 140) {
+  //     req.flash('error_messages', '貼文字數不得超過140字')
+  //     return res.redirect('/tweets')
+  //   }
+  //   else {
+  //     socket.to(helpers.getUser(req).id).emit('notice', {
+  //       userId: helpers.getUser(req).id
+  //     })
+  //     Tweet.create({
+  //       description,
+  //       UserId: helpers.getUser(req).id
+  //     })
+  //       .then(tweet => {
+  //         return res.redirect('/tweets')
+  //       })
+  //   }
+  // },
 
   getReply: (req, res) => {
     Tweet.findByPk(req.params.tweetId,

@@ -5,18 +5,17 @@
       <strong>首頁</strong>
     </li>
     <li class="list-group-item" style="border-bottom-width:8px;">
-      <form action="/tweets" method="POST">
+      <form action="" id="tweet">
         <div class="flex-container">
           <div>
             <img src="{{loginUser.avatar}}" alt="user avatar" class="user-avatar"
               style="border-radius: 50%; height:50px; width: 50px">
           </div>
           <div style="width: 600px;">
-            <textarea placeholder="有什麼新鮮事?" class="form-control" id="description" name="description" rows="3"
-              style="border: none;"></textarea>
+            <textarea placeholder="有什麼新鮮事?" class="form-control"  name="description" rows="3" style="border: none;"></textarea>
           </div>
         </div>
-        <button class="btn btn-create" type="submit" style="border-radius: 18px; width: 60px; float: right;">推文</button>
+        <button  class="btn btn-create" style="border-radius: 18px; width: 60px; float: right;">推文</button>
       </form>
     </li>
     {{#each tweetFollowings}}

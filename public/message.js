@@ -6,6 +6,8 @@ const selector = document.querySelector('.selector')
 const user = document.getElementById('userId')
 const privateIcon = document.getElementById('private-icon')
 const userList = document.getElementById('user-list')
+const noticeBtn = document.querySelector('.notice-btn')
+const noticeId = document.getElementById('noticeId')
 
 //join the room in the beginning
 const receiveId = window.location.pathname.split('/')[2]
@@ -20,6 +22,42 @@ socket.on('alert', (data) => {
     `
     privateIcon.innerHTML = htmlString
   }
+})
+
+//post a tweet
+$('#tweet').submit((e) => {
+  console.log(e.target.description.value)
+  const description = e.target.description.value
+  if (!description) {
+    e.preventDefault()
+  }
+  if (description.length > 140) {
+    e.preventDefault()
+  }
+  else {
+    userId = user.value
+    socket.emit('tweet', { description, userId })
+  }
+})
+  
+// notice subscriber
+socket.on('tweet', (data) => {
+  const noticeList = document.getElementById('notice-list')
+
+  noticeList.innerHTML += `
+  <div class="notice">
+    <a href="/tweets/${data.tweetId}/replies">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+      <p class="notice-desc">${data.noticeDescription}</p>
+    </a>
+  </div>
+  `
+})
+
+//turn on notification
+$('.notice-btn').click((e) => {
+  const room = noticeId.value
+  socket.emit('notice', room)
 })
 
 if (selector.value === 'public') {

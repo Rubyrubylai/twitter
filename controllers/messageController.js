@@ -2,8 +2,9 @@ const db = require('../models')
 const User = db.User
 const PublicChat = db.PublicChat
 const PrivateChat = db.PrivateChat
+const Notice = db.Notice
+const Tweet = db.Tweet
 const { Op } = require('sequelize')
-const { request } = require('../app')
 
 const messageController = {
   getMessage: (req, res) => {
@@ -39,13 +40,6 @@ const messageController = {
         include: [{ model: User, as: 'Receiver' },
         { model: User, as: 'Sender' }]
       }).then(privateChat => {
-        //未讀訊息
-        const unreadMessage = privateChat.filter(p => {
-          return p.receiveId === req.user.id && p.unread === 1
-        })
-        const unreadMessageCount = unreadMessage.length
-
-
         //users that had been chatted before
         const receivers = privateChat.map(p => ({
           ...p.Receiver
@@ -76,14 +70,8 @@ const messageController = {
           },
           include: [{ model: User, as: 'Sender' }]
         }).then(privateChat => {
-          
-          
-            console.log(privateChat)
-            return res.render('chat', { messages: privateChat, users, unreadMessageCount })
-          
-          
-        })
-        
+            return res.render('chat', { messages: privateChat, users })
+        })  
       })
     })    
   },
@@ -113,7 +101,25 @@ const messageController = {
         'message': '資料拿取成功'
       })
     })
-    
+  },
+
+  getNotice: (req, res) => {
+    Notice.findAll({ 
+      raw: true,
+      nest: true,
+      where: {
+        UserId: req.user.id
+      },
+      include: [{ model: User, as: 'User', 
+        include: [{ model: User, as: 'subscribed'
+        }] 
+      }],
+      order: [[ 'updatedAt', 'DESC' ]]
+    })
+    .then(notices => { 
+      return res.render('notice', { notices })
+    })
+
   }
 }
 

@@ -2,7 +2,10 @@ const time = require('../config/handlebars-helpers').time
 const db = require('../models')
 const PublicChat = db.PublicChat
 const PrivateChat = db.PrivateChat
+const Tweet = db.Tweet
 const User = db.User
+const Subscribeship = db.Subscribeship
+const Notice = db.Notice
 const { Op } = require('sequelize')
 
 let onlineUsers = []
@@ -16,18 +19,16 @@ module.exports = (io) => {
         id: socket.request.session.passport ? socket.request.session.passport.user : null
       }
     }).then(user => {
-      onlineUsers.push({
-        id: user.id,
-        username: user.name,
-        account: user.account,
-        avatar: user.avatar
-      })
-      let set = new Set()
-      onlineUsers = onlineUsers.filter((item) => !set.has(item.id) ? set.add(item.id) : false)
-      
-      
-
       if(user) {
+        onlineUsers.push({
+          id: user.id,
+          username: user.name,
+          account: user.account,
+          avatar: user.avatar
+        })
+        let set = new Set()
+        onlineUsers = onlineUsers.filter((item) => !set.has(item.id) ? set.add(item.id) : false)
+
         // online user
         io.emit('online', onlineUsers )
 
@@ -111,7 +112,66 @@ module.exports = (io) => {
               receiveId: Number(userId)
             }
           })
+        })
+
+        //add to the room which user subscribes
+        Subscribeship.findAll({ where: {
+            subscriberId: user.id
+          } 
+        }).then(subscribe => {
+          subscribe.forEach(item => {
+            socket.join(item.subscribedId)
+          })
+        })
+
+        //when receive the notification
+        socket.on('notice', (room) => {
+          Subscribeship.create({
+            subscriberId: user.id,
+            subscribedId: Number(room)            
+          })
+          socket.join(room)
+        })
+
+        //when receive the subscribed post a tweet
+        socket.on('tweet', (data) => {
+          const userId = data.userId
+          const description = data.description
+          const avatar = user.avatar
           
+          Tweet.create({
+            description,
+            UserId: userId
+          }).then(tweet => {
+            Subscribeship.findAll({ 
+              raw: true,
+              nest:true,
+              where: {
+                subscribedId: userId
+              }
+            })
+            .then(subscribeship => {
+              id = Number(userId) - 1
+              const noticeDescription = `User${id}發布了新貼文`
+
+              var results = []
+              subscribeship.forEach(items => {
+                results.push(
+                  Notice.create({
+                    description: noticeDescription,
+                    UserId: items.subscriberId,
+                    unread: true,
+                    TweetId: tweet.id
+                  })
+                )
+              })
+              return Promise.all(results).then(() => {
+                tweetId = tweet.id
+                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId })
+              })
+            })
+           
+          })
         })
 
       }
