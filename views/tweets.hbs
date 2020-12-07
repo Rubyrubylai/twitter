@@ -48,17 +48,22 @@
               <div style="float:left; margin-right:25px;"> {{this.repliesCount}}</div>
             </div>
             {{#if this.isLiked}}
-              <form action="/tweets/{{this.id}}/unlike" method="POST" style="float:left;">
-                <button type="submit" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94);"></i></button>
-                <div style="float:right;"> {{this.likesCount}}</div>
-              </form>
+              {{!-- <form action="/tweets/{{this.id}}/unlike" method="POST" style="float:left;"> --}}
+              <div class="icon">
+                <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94); display:inline-block;"></i></button>
+                <input type="hidden" class="tweetId" value="{{this.id}}">
+                <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
+                <input type="hidden" class="likesCount" value="{{this.likesCount}}">
+                <div style="display: inline-block;"> {{this.likesCount}}</div>
+              </div>
+              {{!-- </form> --}}
               
             {{else}}
               {{!-- <form action="/tweets/{{this.id}}/like" method="POST" style="float:left;"> --}}
-              <form action="" class="like-form">
+              <form class="like-form">
                 <input type="hidden" name="tweetId" value="{{this.id}}">
-                <input type="hidden" name="tweetUserId" value="{{this.user.id}}">
-                <input type="hidden" name="likesCount" value="{{this.likesCount}}">
+                <input type="hidden" class="tweetUserId" name="tweetUserId" value="{{this.user.id}}">
+                <input type="hidden" class="likesCount" name="likesCount" value="{{this.likesCount}}">
                 <input type="hidden" name="type" value="tweet">
                 
                 <button type="submit" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
