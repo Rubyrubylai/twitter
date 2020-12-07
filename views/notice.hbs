@@ -27,6 +27,17 @@
       </div>
     </a>
     {{/if}}
+    {{#if this.ReplyId}}
+    <a href="/tweets/{{this.Reply.TweetId}}/replies">
+      <div class="flex-container">
+        <img src="{{this.Reply.User.avatar}}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>{{this.description}}</span>
+          <font class="text-muted tweet-desc">{{this.Reply.comment}}</font>
+        </div>
+      </div>
+    </a>
+    {{/if}}
   </div>
   {{/each}}
 </div>

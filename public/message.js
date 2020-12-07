@@ -70,6 +70,62 @@ socket.on('like', (data) => {
   }
 })
 
+//post a tweetReply
+$('#reply-form').submit((e) => {
+  console.log(e.target.tweetId.value)
+  console.log(e.target.tweetUserId.value)
+  var comment = e.target.comment.value
+  const tweetId = e.target.tweetId.value
+  const tweetUserId = e.target.tweetUserId.value
+  const avatar = e.target.avatar.value
+  const name = e.target.name.value
+  const account = e.target.account.value
+  const tweetUserName = e.target.tweetUserName.value
+  const time = e.target.time.value
+  const commentNode = document.getElementById('comment')
+
+  if (!comment) {
+    e.preventDefault()
+  }
+  if (comment.length > 100) {
+    e.preventDefault()
+  }
+  else {
+    userId = user.value
+    const tweetReplies = document.getElementById('tweetReplies')
+
+    tweetReplies.innerHTML += `
+    <div class="flex-container mb-2">
+      <div>
+        <a href="/users/${userId}/tweets">
+          <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+        </a>
+      </div>
+      <div>
+        <a href="/users/${userId}/tweets
+        " style="text-decoration:none; color:black"><strong>${name}</strong></a>
+        <font color="grey">@${account} • ${time}</font>
+        <p>
+        ${comment}
+        </p>
+        <font color="grey" size="2px">回覆給</font>
+        <font color="coral" size="2px">@${tweetUserName}</font>
+      </div>
+    </div>
+    `
+    commentNode.value = ''
+    
+    socket.emit('reply', { comment, userId, tweetId, tweetUserId })
+    e.preventDefault()    
+  }
+})
+
+socket.on('reply', (data) => {  
+  if(data.tweetUserId === user.value) {
+    notice(data)
+  }
+})
+
 
 function notice(data) {
   const noticeList = document.getElementById('notice-list')
@@ -81,7 +137,7 @@ function notice(data) {
     <img src="${data.avatar}" alt="user avatar" class="user-avatar">
       <div class="desc flex-container">
         <span>${data.noticeDescription}</span> 
-        <font class="text-muted tweet-desc">${data.tweetDescription}</font>
+        <font class="text-muted tweet-desc">${data.description}</font>
       </div>
     </div>
   </a> 

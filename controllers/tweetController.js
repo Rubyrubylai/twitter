@@ -157,32 +157,34 @@ const tweetController = {
             }
             users = users.slice(0, more)
 
-            return res.render('tweet', { tweet, loginUser, isLikedTweet, tweetReplies, users })
+            const now = new Date()
+
+            return res.render('tweet', { tweet, loginUser, isLikedTweet, tweetReplies, users, now })
           })
       })
   },
 
-  postReply: (req, res) => {
-    const { comment } = req.body
-    if (!comment) {
-      req.flash('error_messages', '留言不得為空白')
-      return res.redirect(`/tweets/${req.params.tweetId}/replies`)
-    }
-    if (comment.length > 100) {
-      req.flash('error_messages', '留言字數不得超過100字')
-      return res.redirect('back')
-    }
-    else {
-      Reply.create({
-        UserId: helpers.getUser(req).id,
-        TweetId: req.params.tweetId,
-        comment
-      })
-        .then(reply => {
-          return res.redirect(`/tweets/${reply.TweetId}/replies`)
-        })
-    }
-  },
+  // postReply: (req, res) => {
+  //   const { comment } = req.body
+  //   if (!comment) {
+  //     req.flash('error_messages', '留言不得為空白')
+  //     return res.redirect(`/tweets/${req.params.tweetId}/replies`)
+  //   }
+  //   if (comment.length > 100) {
+  //     req.flash('error_messages', '留言字數不得超過100字')
+  //     return res.redirect('back')
+  //   }
+  //   else {
+  //     Reply.create({
+  //       UserId: helpers.getUser(req).id,
+  //       TweetId: req.params.tweetId,
+  //       comment
+  //     })
+  //       .then(reply => {
+  //         return res.redirect(`/tweets/${reply.TweetId}/replies`)
+  //       })
+  //   }
+  // },
 
   deleteTweet: (req, res) => {
     Tweet.findByPk(req.params.tweetId)

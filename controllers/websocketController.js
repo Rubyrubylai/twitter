@@ -7,6 +7,7 @@ const User = db.User
 const Subscribeship = db.Subscribeship
 const Notice = db.Notice
 const Like = db.Like
+const Reply = db.Reply
 const { Op } = require('sequelize')
 
 let onlineUsers = []
@@ -158,7 +159,7 @@ module.exports = (io) => {
             .then(subscribeship => {
               id = Number(userId) - 1
               const noticeDescription = `User${id}發布了新貼文`
-              const tweetDescription = tweet.description
+              const description = tweet.description
               var results = []
               subscribeship.forEach(items => {
                 results.push(
@@ -172,7 +173,7 @@ module.exports = (io) => {
               })
               return Promise.all(results).then(() => {
                 const tweetId = tweet.id
-                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId, tweetDescription })
+                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId, description })
               })
             })
            
@@ -201,11 +202,41 @@ module.exports = (io) => {
               const tweetUserId = data.tweetUserId
               Tweet.findByPk(tweetId)
               .then(tweet => {
-                const tweetDescription = tweet.description
-                io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, tweetDescription })
+                const description = tweet.description
+                io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
               })
               
             })
+          })
+        })
+
+        //when receive others reply
+        socket.on('reply', (data) => {
+          const { userId, comment, tweetId, tweetUserId } = data
+
+          Reply.create({
+            UserId: Number(userId),
+            TweetId: Number(tweetId),
+            comment
+          }).then(reply => {
+            id = Number(userId) - 1
+            const noticeDescription = `User${id}回覆你的貼文`
+
+            Notice.create({
+              description: noticeDescription,
+              UserId: Number(tweetUserId),
+              unread: true,
+              ReplyId: reply.id
+            }).then(notice => {
+              // const LikeId = notice.LikeId
+              console.log('=-=========notice')
+              console.log(notice)
+              const description = reply.comment
+                io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
+              
+              
+            })
+           
           })
         })
 

@@ -5,6 +5,7 @@ const PrivateChat = db.PrivateChat
 const Notice = db.Notice
 const Tweet = db.Tweet
 const Like = db.Like
+const Reply = db.Reply
 const { Op } = require('sequelize')
 
 const messageController = {
@@ -116,7 +117,11 @@ const messageController = {
       },
       { model: Like, 
         include: [ User, Tweet ] 
-      }],
+      },
+      { model: Reply, 
+        include: [ User, Tweet ] 
+      }]
+      ,
       order: [[ 'updatedAt', 'DESC' ]]
     })
     .then(notices => { 
