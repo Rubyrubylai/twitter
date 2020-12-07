@@ -183,32 +183,52 @@ module.exports = (io) => {
 
         //like
         socket.on('like', (data) => {
-          const tweetId = Number(data.tweetId)
-          Like.create({
-            UserId: user.id,
-            TweetId: tweetId
-          })
-          .then(like => {
-            id = Number(userId) - 1
+          var { tweetId, tweetUserId, replyId, replyUserId, type } = data
+          id = userId - 1
+          if (type === 'tweet') {
             const noticeDescription = `User${id}喜歡你的貼文`
-
-            Notice.create({
-              description: noticeDescription,
-              UserId: Number(data.tweetUserId),
-              unread: true,
-              LikeId:  like.id
-            }).then(notice => {
-              // const LikeId = notice.LikeId
-              
-              const tweetUserId = data.tweetUserId
-              Tweet.findByPk(tweetId)
-              .then(tweet => {
-                const description = tweet.description
-                io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
-              })
-              
+            Like.create({
+              UserId: user.id,
+              TweetId: tweetId
             })
-          })
+            .then(like => {
+              Notice.create({
+                description: noticeDescription,
+                UserId: tweetUserId,
+                unread: true,
+                LikeId:  like.id
+              }).then(notice => {
+                Tweet.findByPk(tweetId)
+                .then(tweet => {
+                  const description = tweet.description
+                  io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
+                })
+              })
+            })
+          }
+          else {
+            const noticeDescription = `User${id}喜歡你的留言`
+            Like.create({
+              UserId: user.id,
+              ReplyId: replyId
+            })
+            .then(like => {
+              Notice.create({
+                description: noticeDescription,
+                UserId: replyUserId,
+                unread: true,
+                LikeId: like.id
+              }).then(notice => {
+                Reply.findByPk(replyId)
+                .then(reply => {
+                  const description = reply.comment
+                  io.emit('like', { noticeDescription, avatar, tweetId, description, replyUserId, replyId })
+                })
+                
+              })
+            })
+          }
+          
         })
 
         //when receive others reply

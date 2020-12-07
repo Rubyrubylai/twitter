@@ -116,7 +116,7 @@ const messageController = {
         include: [{ model: User }] 
       },
       { model: Like, 
-        include: [ User, Tweet ] 
+        include: [ User, Tweet, Reply ] 
       },
       { model: Reply, 
         include: [ User, Tweet ] 

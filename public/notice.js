@@ -1,0 +1,178 @@
+const noticeBtn = document.querySelector('.notice-btn')
+const noticeId = document.getElementById('noticeId')
+
+//turn on notification
+$('.notice-btn').click((e) => {
+  const room = noticeId.value
+  socket.emit('notice', room)
+})
+
+//post a tweet
+$('#tweet').submit((e) => {
+  console.log(e.target.description.value)
+  const description = e.target.description.value
+  if (!description) {
+    e.preventDefault()
+  }
+  if (description.length > 140) {
+    e.preventDefault()
+  }
+  else {
+    userId = user.value
+    socket.emit('tweet', { description, userId })
+  }
+})
+
+// notice subscriber that the subscriber post a tweet
+socket.on('tweet', (data) => {
+  notice(data)
+  
+})
+
+
+//like a tweet
+$('.like-form').submit((e) => {
+  let tweetId, tweetUserId, replyId, replyUserId
+  const type = e.target.type.value
+  if (type === 'tweet') {
+    tweetId = Number(e.target.tweetId.value)
+    tweetUserId = Number(e.target.tweetUserId.value)
+  }
+  else {
+    tweetId = Number(e.target.tweetId.value)
+    replyId = Number(e.target.replyId.value)
+    replyUserId = Number(e.target.replyUserId.value)
+  }
+  console.log('---------------replyUserId')
+  console.log(tweetId)
+  console.log(tweetUserId)
+  console.log(replyId)
+  console.log(replyUserId)
+  var likesCount = Number(e.target.likesCount.value) + 1
+  const form = e.target
+  form.innerHTML = `
+  <form action="/tweets/${tweetId}/unlike" method="POST" style="float:left;">
+    <button type="submit" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94);"></i></button>
+    <div style="float:right;">${likesCount}</div>
+  </form>
+  
+  `
+  socket.emit('like', { tweetId, tweetUserId, replyId, replyUserId, type })
+  e.preventDefault()
+})
+  
+socket.on('like', (data) => {  
+  console.log('----------like')
+  console.log(data.tweetUserId)
+  if(data.tweetUserId === Number(user.value)) {
+    notice(data)
+  }
+  if(data.replyUserId === Number(user.value)) {
+    notice(data)
+  }
+})
+
+//post a tweetReply
+$('#reply-form').submit((e) => {
+  var comment = e.target.comment.value
+  const tweetId = e.target.tweetId.value
+  const tweetUserId = e.target.tweetUserId.value
+  const avatar = e.target.avatar.value
+  const name = e.target.name.value
+  const account = e.target.account.value
+  const tweetUserName = e.target.tweetUserName.value
+  const time = e.target.time.value
+  const commentNode = document.getElementById('comment')
+
+  if (!comment) {
+    e.preventDefault()
+  }
+  if (comment.length > 100) {
+    e.preventDefault()
+  }
+  else {
+    userId = user.value
+    const tweetReplies = document.getElementById('tweetReplies')
+
+    tweetReplies.innerHTML += `
+    <div class="flex-container mb-2">
+      <div>
+        <a href="/users/${userId}/tweets">
+          <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+        </a>
+      </div>
+      <div>
+        <a href="/users/${userId}/tweets
+        " style="text-decoration:none; color:black"><strong>${name}</strong></a>
+        <font color="grey">@${account} • ${time}</font>
+        <p>
+        ${comment}
+        </p>
+        <font color="grey" size="2px">回覆給</font>
+        <font color="coral" size="2px">@${tweetUserName}</font>
+      </div>
+    </div>
+    `
+    commentNode.value = ''
+    
+    socket.emit('reply', { comment, userId, tweetId, tweetUserId })
+    e.preventDefault()    
+  }
+})
+
+socket.on('reply', (data) => {  
+  if(data.tweetUserId === user.value) {
+    notice(data)
+  }
+})
+
+//follow a tweet
+$('.follow-form').submit((e) => {
+  const followingId = Number(e.target.followingId.value)
+  const form = e.target
+  form.innerHTML = `
+  <form action="/followships/${followingId}?_method=DELETE" method="POST">
+  <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+</form>
+  
+  `
+  socket.emit('follow', followingId)
+  e.preventDefault()
+})
+
+socket.on('follow', (data) => {  
+  if(data.followingId === Number(user.value)) {
+    const noticeList = document.getElementById('notice-list')
+
+    noticeList.innerHTML += `
+    <div class="notice">
+    <a href="/users/${data.followingId}/tweets">
+      <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>${data.noticeDescription}</span> 
+        </div>
+      </div>
+    </a> 
+    </div>
+    `
+  }
+})
+
+function notice(data) {
+  const noticeList = document.getElementById('notice-list')
+
+  noticeList.innerHTML += `
+  <div class="notice">
+  <a href="/tweets/${data.tweetId}/replies">
+    <div class="flex-container">
+    <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+      <div class="desc flex-container">
+        <span>${data.noticeDescription}</span> 
+        <font class="text-muted tweet-desc">${data.description}</font>
+      </div>
+    </div>
+  </a> 
+  </div>
+  `
+}

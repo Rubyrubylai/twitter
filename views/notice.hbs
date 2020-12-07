@@ -22,7 +22,9 @@
         <img src="{{this.Like.User.avatar}}" alt="user avatar" class="user-avatar">
         <div class="desc flex-container">
           <span>{{this.description}}</span>
-          <font class="text-muted tweet-desc">{{this.Like.Tweet.description}}</font>
+          <font class="text-muted tweet-desc">
+            {{this.Like.Tweet.description}}{{this.Like.Reply.comment}}
+          </font>
         </div>
       </div>
     </a>

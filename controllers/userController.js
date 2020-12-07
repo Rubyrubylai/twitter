@@ -129,15 +129,15 @@ const userController = {
       })
   },
 
-  likeReply: (req, res) => {
-    Like.create({
-      UserId: helpers.getUser(req).id,
-      ReplyId: req.params.replyId
-    })
-      .then(like => {
-        return res.redirect('back')
-      })
-  },
+  // likeReply: (req, res) => {
+  //   Like.create({
+  //     UserId: helpers.getUser(req).id,
+  //     ReplyId: req.params.replyId
+  //   })
+  //     .then(like => {
+  //       return res.redirect('back')
+  //     })
+  // },
 
   dislikeReply: (req, res) => {
     Like.findOne({
