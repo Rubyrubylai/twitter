@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     Reply.belongsTo(models.Tweet)
     Reply.hasMany(models.Like)
     Reply.hasMany(models.ReplyComment)
+    // Reply.belongsTo(models.Notice)
   };
   return Reply;
 };

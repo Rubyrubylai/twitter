@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     Like.belongsTo(models.User)
     Like.belongsTo(models.Tweet)
     Like.belongsTo(models.Reply)
+    // Like.belongsTo(models.Notice)
   };
   return Like;
 };

@@ -166,12 +166,12 @@ module.exports = (io) => {
                     description: noticeDescription,
                     UserId: items.subscriberId,
                     unread: true,
-                    thingsId: tweet.id
+                    TweetId: tweet.id
                   })
                 )
               })
               return Promise.all(results).then(() => {
-                tweetId = tweet.id
+                const tweetId = tweet.id
                 socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId })
               })
             })
@@ -193,11 +193,12 @@ module.exports = (io) => {
               description: noticeDescription,
               UserId: Number(data.tweetUserId),
               unread: true,
-              thingsId:  Number(data.tweetId)
+              LikeId:  like.id
             }).then(notice => {
-              const thingsId = notice.thingsId
+              // const LikeId = notice.LikeId
+              const tweetId = data.tweetId
               const tweetUserId = data.tweetUserId
-              io.emit('like', { noticeDescription, avatar, thingsId, tweetUserId })
+              io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId })
             })
           })
         })

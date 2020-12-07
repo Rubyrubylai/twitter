@@ -17,7 +17,13 @@ module.exports = {
       unread: {
         type: Sequelize.BOOLEAN
       },
-      thingsId: {
+      TweetId: {
+        type: Sequelize.INTEGER
+      },
+      LikeId: {
+        type: Sequelize.INTEGER
+      },
+      ReplyId: {
         type: Sequelize.INTEGER
       },
       createdAt: {

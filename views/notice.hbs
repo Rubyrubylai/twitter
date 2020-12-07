@@ -5,10 +5,18 @@
   <div id="notice-list"></div>
   {{#each notices}}
   <div class="notice">
-    <a href="/tweets/{{this.thingsId}}/replies">
-      <img src="{{this.User.subscribed.avatar}}" alt="user avatar" class="user-avatar">
+    {{#if this.TweetId}}
+    <a href="/tweets/{{this.TweetId}}/replies">
+      <img src="{{this.Tweet.User.avatar}}" alt="user avatar" class="user-avatar">
       <p class="notice-desc">{{this.description}}</p>
     </a>
+    {{/if}}
+    {{#if this.LikeId}}
+    <a href="/tweets/{{this.Like.TweetId}}/replies">
+        <img src="{{this.Like.User.avatar}}" alt="user avatar" class="user-avatar">
+        <p class="notice-desc">{{this.description}}</p>
+      </a>
+    {{/if}}
   </div>
   {{/each}}
 </div>

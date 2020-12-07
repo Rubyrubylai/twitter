@@ -77,7 +77,7 @@ socket.on('like', (data) => {
 
     noticeList.innerHTML += `
     <div class="notice">
-      <a href="/tweets/${data.thingsId}/replies">
+      <a href="/tweets/${data.tweetId}/replies">
         <img src="${data.avatar}" alt="user avatar" class="user-avatar">
         <p class="notice-desc">${data.noticeDescription}</p>
       </a>
