@@ -25,7 +25,9 @@
           <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
         </form>
         {{else}}
-        <form action="/followships" method="POST">
+        {{!-- <form action="/followships" method="POST"> --}}
+        <form action="" class="follow-form">
+          <input type="hidden" name="followingId" value="{{this.id}}">
           <button name="id" value="{{this.id}}" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         </form>
         {{/if}}

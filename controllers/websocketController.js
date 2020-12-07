@@ -8,6 +8,7 @@ const Subscribeship = db.Subscribeship
 const Notice = db.Notice
 const Like = db.Like
 const Reply = db.Reply
+const Followship = db.Followship
 const { Op } = require('sequelize')
 
 let onlineUsers = []
@@ -24,7 +25,7 @@ module.exports = (io) => {
       
       if(user) {
         const avatar = user.avatar
-        const userId = user.id
+        const userId = Number(user.id)
 
         onlineUsers.push({
           id: user.id,
@@ -228,15 +229,31 @@ module.exports = (io) => {
               unread: true,
               ReplyId: reply.id
             }).then(notice => {
-              // const LikeId = notice.LikeId
-              console.log('=-=========notice')
-              console.log(notice)
               const description = reply.comment
-                io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
-              
-              
+              io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
             })
            
+          })
+        })
+
+         //follow
+         socket.on('follow', (followingId) => {
+          followingId = Number(followingId)
+          Followship.create({
+            followerId: userId,
+            followingId: followingId
+          })
+          .then(followship => {
+            id = userId - 1
+            const noticeDescription = `User${id}追蹤你`
+
+            Notice.create({
+              description: noticeDescription,
+              UserId: followingId,
+              unread: true
+            }).then(notice => { 
+              io.emit('follow', { noticeDescription, avatar, followingId }) 
+            })
           })
         })
 

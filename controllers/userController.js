@@ -154,21 +154,21 @@ const userController = {
       })
   },
 
-  postFollowing: (req, res) => {
-    if (Number(req.body.id) === Number(helpers.getUser(req).id)) {
-      return res.render('tweets')
-      //return res.redirect('back')
-    }
-    else {
-      Followship.create({
-        followerId: helpers.getUser(req).id,
-        followingId: req.body.id
-      })
-        .then(followship => {
-          return res.redirect('back')
-        })
-    }
-  },
+  // postFollowing: (req, res) => {
+  //   if (Number(req.body.id) === Number(helpers.getUser(req).id)) {
+  //     return res.render('tweets')
+  //     //return res.redirect('back')
+  //   }
+  //   else {
+  //     Followship.create({
+  //       followerId: helpers.getUser(req).id,
+  //       followingId: req.body.id
+  //     })
+  //       .then(followship => {
+  //         return res.redirect('back')
+  //       })
+  //   }
+  // },
 
   deleteFollowing: (req, res) => {
     Followship.findOne({

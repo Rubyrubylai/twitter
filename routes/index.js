@@ -100,7 +100,7 @@ module.exports = (app, passport, io) => {
   app.put('/replies/:replyId', authenticated, replyController.editReply)
 
   //follow
-  app.post('/followships', authenticated, userController.postFollowing)
+  // app.post('/followships', authenticated, userController.postFollowing)
   app.delete('/followships/:userId', authenticated, userController.deleteFollowing)
 
   app.get('/users/settings', authenticated, userController.getUserSettings)

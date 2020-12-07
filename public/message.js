@@ -126,6 +126,38 @@ socket.on('reply', (data) => {
   }
 })
 
+//follow a tweet
+$('.follow-form').submit((e) => {
+  const followingId = Number(e.target.followingId.value)
+  const form = e.target
+  form.innerHTML = `
+  <form action="/followships/${followingId}?_method=DELETE" method="POST">
+  <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+</form>
+  
+  `
+  socket.emit('follow', followingId)
+  e.preventDefault()
+})
+
+socket.on('follow', (data) => {  
+  if(data.followingId === Number(user.value)) {
+    const noticeList = document.getElementById('notice-list')
+
+    noticeList.innerHTML += `
+    <div class="notice">
+    <a href="/users/${data.followingId}/tweets">
+      <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>${data.noticeDescription}</span> 
+        </div>
+      </div>
+    </a> 
+    </div>
+    `
+  }
+})
 
 function notice(data) {
   const noticeList = document.getElementById('notice-list')

@@ -15,8 +15,8 @@
         </div>
       </div>
     </a> 
-    {{/if}}
-    {{#if this.LikeId}}
+ 
+    {{else if this.LikeId}}
     <a href="/tweets/{{this.Like.TweetId}}/replies">
       <div class="flex-container">
         <img src="{{this.Like.User.avatar}}" alt="user avatar" class="user-avatar">
@@ -26,8 +26,8 @@
         </div>
       </div>
     </a>
-    {{/if}}
-    {{#if this.ReplyId}}
+   
+    {{else if this.ReplyId}}
     <a href="/tweets/{{this.Reply.TweetId}}/replies">
       <div class="flex-container">
         <img src="{{this.Reply.User.avatar}}" alt="user avatar" class="user-avatar">
@@ -37,6 +37,16 @@
         </div>
       </div>
     </a>
+  
+    {{else}}
+    <a href="/users/${data.followingId}/tweets">
+      <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>{{this.description}}</span> 
+        </div>
+      </div>
+    </a> 
     {{/if}}
   </div>
   {{/each}}
