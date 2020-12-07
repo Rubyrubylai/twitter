@@ -171,10 +171,12 @@ const userController = {
   // },
 
   deleteFollowing: (req, res) => {
+    console.log('----------------follow')
+    console.log(req.body.followingId)
     Followship.findOne({
       where: {
         followerId: helpers.getUser(req).id,
-        followingId: req.params.userId
+        followingId: req.body.followingId
       }
     })
       .then(followship => {

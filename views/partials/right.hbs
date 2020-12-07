@@ -21,14 +21,17 @@
         {{#ifCond ../loginUser.id this.id}}
         {{else}}
         {{#if this.isFollowing}}
-        <form action="/followships/{{this.id}}?_method=DELETE" method="POST">
-          <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-        </form>
+        {{!-- <form action="/followships/{{this.id}}?_method=DELETE" method="POST"> --}}
+        <div>
+          <input type="hidden" class="followingId" value="{{this.id}}">
+          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+        </div>
+        {{!-- </form> --}}
         {{else}}
         {{!-- <form action="/followships" method="POST"> --}}
-        <form action="" class="follow-form">
+        <form class="follow-form">
           <input type="hidden" name="followingId" value="{{this.id}}">
-          <button name="id" value="{{this.id}}" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+          <button name="id" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         </form>
         {{/if}}
         {{/ifCond}}

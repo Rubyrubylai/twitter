@@ -1,10 +1,8 @@
 function dislike(obj) {
-  console.log($(obj).parent())
   const tweetId = $(obj).siblings('.tweetId').val()
   const icon = document.querySelector('.icon')
   const tweetUserId = $(obj).siblings('.tweetUserId').val()
   const likesCount = $(obj).siblings('.likesCount').val() - 1
-  console.log(tweetId)
   $.ajax({
     method: 'POST',
     url: `/tweets/${tweetId}/unlike`,
@@ -31,18 +29,11 @@ function dislike(obj) {
 }
 
 function dislikeReply(obj) {
-  console.log($(obj).siblings('.tweetId').val())
   const tweetId = $(obj).siblings('.tweetId').val()
   const replyId = $(obj).siblings('.replyId').val()
   const replyUserId = $(obj).siblings('.replyUserId').val()
   const likesCount = $(obj).siblings('.likesCount').val() - 1
   const icon = document.querySelector('.icon')
-  console.log(tweetId)
-  console.log(replyId)
-  console.log(replyUserId)
-  console.log(likesCount)
-  console.log(icon)
-  console.log(`/like/${replyId}/replies`)
   $.ajax({
     method: 'POST',
     url: `/like/${replyId}/replies`,
@@ -61,6 +52,32 @@ function dislikeReply(obj) {
         <div style="font-size:10px; float: right;">${likesCount}</div>
       </form>
       `
+    },
+    error: function() {
+      console.error(err)
+    }
+  })
+  return false
+}
+
+function unfollow(obj) {
+  const followingId = $(obj).siblings('.followingId').val()
+  // const followIcon = document.querySelector('.follow-icon')
+  console.log(followingId)
+  const followIcon = $(obj).parent()
+  console.log($(obj).parent())
+  $.ajax({
+    method: 'POST',
+    url: `/followships/delete`,
+    data: { followingId },
+    dataType: 'text',
+    success: function(response) {
+      followIcon.html(`
+      <form class="follow-form">
+        <input type="hidden" name="followingId" value="${followingId}">
+        <button name="id" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+      </form>
+      `)
     },
     error: function() {
       console.error(err)
