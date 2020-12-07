@@ -110,7 +110,8 @@ const tweetController = {
               { model: ReplyComment, include: [User] }
             ]
           }
-        ]
+        ],
+        order: [['updatedAt', 'DESC']]
       }
     )
       .then(tweet => {

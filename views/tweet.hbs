@@ -85,15 +85,22 @@
               <div style="float: left; font-size:10px; margin-right: 25px;">{{this.ReplyComments.length}}</div>
             </div>
             {{#if this.isLikedReply}}
-              <form action="/like/{{this.id}}/replies?_method=DELETE" method="POST" style="float: left;">
-                <button type="submit" class="btn-push" style="float: left; font-size: 10px;"><i
-                    class="fas fa-heart" style="color: rgb(224, 36, 94); ;"></i></button>
-              </form>
-              <div style="font-size:10px; float: left;">{{this.Likes.length}}</div>
+              {{!-- <form action="/like/{{this.id}}/replies?_method=DELETE" method="POST" style="float: left;"> --}}
+              <div class="icon">
+                <button onclick="dislikeReply(this)" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94); display:inline-block; font-size: 10px;"></i></button>
+                <input type="hidden" class="tweetId" value="{{../tweet.id}}">
+                <input type="hidden" class="replyId" value="{{this.id}}">
+                <input type="hidden" class="replyUserId" value="{{this.User.id}}">
+                <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
+                <div style="display: inline-block;"> {{this.likesCount}}</div>
+                <div style="font-size:10px; display: inline-block;">{{this.Likes.length}}</div>
+              </div>
+              {{!-- </form> --}}
+              
             {{else}}
               {{!-- <form action="/like/{{this.id}}/replies" method="POST" style="float: left;"> --}}
               <form action="" class="like-form">
-                <input type="hidden" name="tweetId" value="{{tweet.id}}">
+                <input type="hidden" name="tweetId" value="{{../tweet.id}}">
                 <input type="hidden" name="replyId" value="{{this.id}}">
                 <input type="hidden" name="replyUserId" value="{{this.User.id}}">
                 <input type="hidden" name="likesCount" value="{{this.Likes.length}}">
