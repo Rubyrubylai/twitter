@@ -7,16 +7,29 @@
   <div class="notice">
     {{#if this.TweetId}}
     <a href="/tweets/{{this.TweetId}}/replies">
+      <div class="flex-container">
       <img src="{{this.Tweet.User.avatar}}" alt="user avatar" class="user-avatar">
-      <p class="notice-desc">{{this.description}}</p>
-    </a>
+        <div class="desc flex-container">
+          <span>{{this.description}}</span> 
+          <font class="text-muted tweet-desc">{{this.Tweet.description}}</font>
+        </div>
+      </div>
+    </a> 
     {{/if}}
     {{#if this.LikeId}}
     <a href="/tweets/{{this.Like.TweetId}}/replies">
+      <div class="flex-container">
         <img src="{{this.Like.User.avatar}}" alt="user avatar" class="user-avatar">
-        <p class="notice-desc">{{this.description}}</p>
-      </a>
+        <div class="desc flex-container">
+          <span>{{this.description}}</span>
+          <font class="text-muted tweet-desc">{{this.Like.Tweet.description}}</font>
+        </div>
+      </div>
+    </a>
     {{/if}}
   </div>
   {{/each}}
 </div>
+
+{{!-- Right side --}}
+{{> right}}

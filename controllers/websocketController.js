@@ -158,7 +158,7 @@ module.exports = (io) => {
             .then(subscribeship => {
               id = Number(userId) - 1
               const noticeDescription = `User${id}發布了新貼文`
-
+              const tweetDescription = tweet.description
               var results = []
               subscribeship.forEach(items => {
                 results.push(
@@ -172,7 +172,7 @@ module.exports = (io) => {
               })
               return Promise.all(results).then(() => {
                 const tweetId = tweet.id
-                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId })
+                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId, tweetDescription })
               })
             })
            
@@ -181,9 +181,10 @@ module.exports = (io) => {
 
         //like
         socket.on('like', (data) => {
+          const tweetId = Number(data.tweetId)
           Like.create({
             UserId: user.id,
-            TweetId: Number(data.tweetId)
+            TweetId: tweetId
           })
           .then(like => {
             id = Number(userId) - 1
@@ -196,9 +197,14 @@ module.exports = (io) => {
               LikeId:  like.id
             }).then(notice => {
               // const LikeId = notice.LikeId
-              const tweetId = data.tweetId
+              
               const tweetUserId = data.tweetUserId
-              io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId })
+              Tweet.findByPk(tweetId)
+              .then(tweet => {
+                const tweetDescription = tweet.description
+                io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, tweetDescription })
+              })
+              
             })
           })
         })

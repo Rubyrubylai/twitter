@@ -165,7 +165,7 @@
   height: 100vh;
 }
 
-.user-list, .notice {
+.user-list, .notice{
   padding-top: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6EcF0;
@@ -202,14 +202,19 @@
   border: none;
 }
 
-.notice-desc {
-  margin-left: 10px; 
-  margin-top: 15px;
-  display: inline-block;
+.notice a img {
+  margin-right: 6px;
 }
 
-.notice a img {
-  display: inline-block;
+.desc {
+  flex-grow: 1;
+  flex-direction: column;
+}
+
+.tweet-desc {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* tweet */

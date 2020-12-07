@@ -42,17 +42,10 @@ $('#tweet').submit((e) => {
 
 // notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {
-  const noticeList = document.getElementById('notice-list')
-
-  noticeList.innerHTML += `
-  <div class="notice">
-    <a href="/tweets/${data.tweetId}/replies">
-      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
-      <p class="notice-desc">${data.noticeDescription}</p>
-    </a>
-  </div>
-  `
+  notice(data)
+  
 })
+
 
 //like a tweet
 $('.like-form').submit((e) => {
@@ -73,19 +66,28 @@ $('.like-form').submit((e) => {
   
 socket.on('like', (data) => {  
   if(data.tweetUserId === user.value) {
-    const noticeList = document.getElementById('notice-list')
-
-    noticeList.innerHTML += `
-    <div class="notice">
-      <a href="/tweets/${data.tweetId}/replies">
-        <img src="${data.avatar}" alt="user avatar" class="user-avatar">
-        <p class="notice-desc">${data.noticeDescription}</p>
-      </a>
-    </div>
-    `
+    notice(data)
   }
-  
 })
+
+
+function notice(data) {
+  const noticeList = document.getElementById('notice-list')
+
+  noticeList.innerHTML += `
+  <div class="notice">
+  <a href="/tweets/${data.tweetId}/replies">
+    <div class="flex-container">
+    <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+      <div class="desc flex-container">
+        <span>${data.noticeDescription}</span> 
+        <font class="text-muted tweet-desc">${data.tweetDescription}</font>
+      </div>
+    </div>
+  </a> 
+  </div>
+  `
+}
 
 //turn on notification
 $('.notice-btn').click((e) => {

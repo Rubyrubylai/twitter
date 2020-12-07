@@ -115,11 +115,12 @@ const messageController = {
         include: [{ model: User }] 
       },
       { model: Like, 
-        include: [{ model: User }] 
+        include: [ User, Tweet ] 
       }],
       order: [[ 'updatedAt', 'DESC' ]]
     })
     .then(notices => { 
+      console.log(notices)
       return res.render('notice', { notices })
     })
 
