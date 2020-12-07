@@ -93,6 +93,7 @@
               </p>
             </div>
           </div>
+          <div id="reply-comments">
           {{#each this.ReplyComments}}
             <div class="flex-container mb-2">
               <div>
@@ -127,14 +128,24 @@
             <!-- pop up edit reply comment message -->
             {{> edit}}
           {{/each}}
+          </div>
           <div class="flex-container">
             <div>
               <img src="{{../loginUser.avatar}}" alt="user avatar" class="user-avatar">
             </div>
             <div style="width: 600px;">
-              <form action="/replies/{{this.id}}" method="POST">
-                <textarea placeholder="推你的回覆" class="form-control" id="comment" name="comment" rows="3"
+              {{!-- <form action="/replies/{{this.id}}" method="POST"> --}}
+              <form action="" id="reply-comment-form">
+                <textarea placeholder="推你的回覆" class="form-control" id="reply-comment" name="comment" rows="3"
                   style="border: none;"></textarea>
+                <input type="hidden" name="tweetId" value="{{../tweet.id}}">
+                <input type="hidden" name="replyId" value="{{this.id}}">
+                <input type="hidden" name="replyUserId" value="{{this.User.id}}">
+                <input type="hidden" name="avatar" value="{{../user.avatar}}">
+                <input type="hidden" name="name" value="{{../user.name}}">
+                <input type="hidden" name="account" value="{{../user.account}}">
+                <input type="hidden" name="replyUserName" value="{{this.User.name}}">
+                <input type="hidden" name="time" value="{{moment now}}">
                 <button class="btn" type="submit"
                   style="border-radius: 18px; background:coral; color:white; width: 60px; float: right;">留言</button>
               </form>

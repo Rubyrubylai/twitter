@@ -95,7 +95,7 @@ module.exports = (app, passport, io) => {
   app.delete('/like/:replyId/replies', authenticated, userController.dislikeReply)
 
   //Reply
-  app.post('/replies/:replyId', authenticated, replyController.postReply)
+  // app.post('/replies/:replyId', authenticated, replyController.postReply)
   app.delete('/replies/:replyId', authenticated, replyController.deleteReply)
   app.put('/replies/:replyId', authenticated, replyController.editReply)
 

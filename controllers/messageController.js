@@ -6,6 +6,7 @@ const Notice = db.Notice
 const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
+const ReplyComment = db.ReplyComment
 const { Op } = require('sequelize')
 
 const messageController = {
@@ -120,8 +121,10 @@ const messageController = {
       },
       { model: Reply, 
         include: [ User, Tweet ] 
-      }]
-      ,
+      },
+      { model: ReplyComment, 
+        include: [ User, Reply ] 
+      }],
       order: [[ 'updatedAt', 'DESC' ]]
     })
     .then(notices => { 

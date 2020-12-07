@@ -9,12 +9,12 @@ $('.notice-btn').click((e) => {
 
 //post a tweet
 $('#tweet').submit((e) => {
-  console.log(e.target.description.value)
   const description = e.target.description.value
-  if (!description) {
+  //console.log(description.length === 0)
+  if (description.length === 0) {
     e.preventDefault()
   }
-  if (description.length > 140) {
+  else if (description.length > 140) {
     e.preventDefault()
   }
   else {
@@ -30,7 +30,7 @@ socket.on('tweet', (data) => {
 })
 
 
-//like a tweet
+//like a tweet or reply
 $('.like-form').submit((e) => {
   let tweetId, tweetUserId, replyId, replyUserId
   const type = e.target.type.value
@@ -43,11 +43,6 @@ $('.like-form').submit((e) => {
     replyId = Number(e.target.replyId.value)
     replyUserId = Number(e.target.replyUserId.value)
   }
-  console.log('---------------replyUserId')
-  console.log(tweetId)
-  console.log(tweetUserId)
-  console.log(replyId)
-  console.log(replyUserId)
   var likesCount = Number(e.target.likesCount.value) + 1
   const form = e.target
   form.innerHTML = `
@@ -62,8 +57,6 @@ $('.like-form').submit((e) => {
 })
   
 socket.on('like', (data) => {  
-  console.log('----------like')
-  console.log(data.tweetUserId)
   if(data.tweetUserId === Number(user.value)) {
     notice(data)
   }
@@ -84,10 +77,10 @@ $('#reply-form').submit((e) => {
   const time = e.target.time.value
   const commentNode = document.getElementById('comment')
 
-  if (!comment) {
+  if (comment.length === 0) {
     e.preventDefault()
   }
-  if (comment.length > 100) {
+  else if (comment.length > 100) {
     e.preventDefault()
   }
   else {
@@ -122,6 +115,63 @@ $('#reply-form').submit((e) => {
 
 socket.on('reply', (data) => {  
   if(data.tweetUserId === user.value) {
+    notice(data)
+  }
+})
+
+//post a replyComment
+$('#reply-comment-form').submit((e) => {
+  console.log(e.target)
+  var comment = e.target.comment.value
+  e.preventDefault()    
+  const tweetId = Number(e.target.tweetId.value)
+  const replyId = Number(e.target.replyId.value)
+  const replyUserId = Number(e.target.replyUserId.value)
+  const avatar = e.target.avatar.value
+  const name = e.target.name.value
+  const account = e.target.account.value
+  const replyUserName = e.target.replyUserName.value
+  const time = e.target.time.value
+  const commentReplyNode = document.getElementById('reply-comment')
+  
+  if (comment.length === 0) {
+    e.preventDefault()
+  }
+  else if (comment.length > 100) {
+    e.preventDefault()
+  }
+  else {
+    userId = user.value
+    const replyComments = document.getElementById('reply-comments')
+
+    replyComments.innerHTML += `
+    <div class="flex-container mb-2">
+      <div>
+        <a href="/users/${userId}/tweets">
+          <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+        </a>
+      </div>
+      <div>
+        <a href="/users/${userId}/tweets
+        " style="text-decoration:none; color:black"><strong>${name}</strong></a>
+        <font color="grey">@${account} • ${time}</font>
+        <p>
+        ${comment}
+        </p>
+        <font color="grey" size="2px">回覆給</font>
+        <font color="coral" size="2px">@${replyUserName}</font>
+      </div>
+    </div>
+    `
+    commentReplyNode.value = ''
+    
+    socket.emit('replyComment', { comment, userId, tweetId, replyId, replyUserId })
+    e.preventDefault()    
+  }
+})
+
+socket.on('replyComment', (data) => {  
+  if(data.replyUserId === Number(user.value)) {
     notice(data)
   }
 })

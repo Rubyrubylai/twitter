@@ -9,6 +9,7 @@ const Notice = db.Notice
 const Like = db.Like
 const Reply = db.Reply
 const Followship = db.Followship
+const ReplyComment = db.ReplyComment
 const { Op } = require('sequelize')
 
 let onlineUsers = []
@@ -255,6 +256,32 @@ module.exports = (io) => {
            
           })
         })
+
+        //when receive others reply comments
+        socket.on('replyComment', (data) => {
+          const { comment, tweetId, replyId, replyUserId } = data
+
+          ReplyComment.create({
+            UserId: userId,
+            ReplyId: replyId,
+            comment
+          }).then(replyComment => {
+            id = userId - 1
+            const noticeDescription = `User${id}回覆你的留言`
+
+            Notice.create({
+              description: noticeDescription,
+              UserId: replyUserId,
+              unread: true,
+              ReplyCommentId: replyComment.id
+            }).then(notice => {
+              const description = replyComment.comment
+              io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
+            })
+           
+          })
+        })
+
 
          //follow
          socket.on('follow', (followingId) => {

@@ -39,6 +39,17 @@
         </div>
       </div>
     </a>
+
+    {{else if this.ReplyCommentId}}
+    <a href="/tweets/{{this.ReplyComment.Reply.TweetId}}/replies">
+      <div class="flex-container">
+        <img src="{{this.ReplyComment.User.avatar}}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>{{this.description}}</span>
+          <font class="text-muted tweet-desc">{{this.ReplyComment.comment}}</font>
+        </div>
+      </div>
+    </a>
   
     {{else}}
     <a href="/users/${data.followingId}/tweets">
