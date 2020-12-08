@@ -240,6 +240,9 @@ module.exports = (io) => {
               ReplyId: replyId
             })
             .then(like => {
+              console.log('-----------like')
+              console.log(replyId)
+              console.log(like)
               if (userId !== replyUserId) {
                 const noticeDescription = `${user.name}喜歡你的留言`
                 Notice.create({

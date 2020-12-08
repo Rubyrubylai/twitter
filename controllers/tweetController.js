@@ -116,7 +116,6 @@ const tweetController = {
       }
     )
       .then(tweet => {
-        console.log(tweet)
         tweet = tweet.toJSON()
         const loginUser = helpers.getUser(req)
 
@@ -129,7 +128,7 @@ const tweetController = {
           isLikedReply: reply.Likes.map(like => like.UserId).includes(loginUser.id)
         }))
 
-        tweetReplies = tweet.Replies.sort((a, b) => {
+        tweetReplies = tweetReplies.sort((a, b) => {
           return b.createdAt - a.createdAt
         })
 
