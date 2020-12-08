@@ -50,6 +50,16 @@
         </div>
       </div>
     </a>
+
+    {{else if this.NotifierId}}
+    <a href="/users/{{this.User.notifier.id}}/tweets">
+      <div class="flex-container">
+        <img src="{{this.User.notifier.avatar}}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>{{this.description}}</span>
+        </div>
+      </div>
+    </a>
   
     {{else}}
     <a href="/users/${data.followingId}/tweets">

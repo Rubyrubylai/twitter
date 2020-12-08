@@ -342,7 +342,8 @@ module.exports = (io) => {
               Notice.create({
                 description: noticeDescription,
                 UserId: followingId,
-                unread: true
+                unread: true,
+                NotifierId: userId
               }).then(notice => { 
                 io.emit('follow', { noticeDescription, avatar, followingId }) 
               })

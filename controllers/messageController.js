@@ -114,7 +114,7 @@ const messageController = {
         UserId: req.user.id
       },
       include: [{ model: Tweet, 
-        include: [{ model: User }] 
+        include: [ User ] 
       },
       { model: Like, 
         include: [ User, Tweet, Reply ] 
@@ -124,12 +124,20 @@ const messageController = {
       },
       { model: ReplyComment, 
         include: [ User, Reply ] 
+      },
+      { model: User, 
+        include: [{ model: User, as: 'notifier'}]
       }],
       order: [[ 'updatedAt', 'DESC' ]]
     })
     .then(notices => { 
-      console.log(notices)
+      //console.log(notices)
+
+
       return res.render('notice', { notices })
+        
+
+      
     })
 
   }

@@ -153,6 +153,8 @@ const userController = {
       }
     })
       .then(like => {
+        console.log('--------------like')
+          console.log(like)
         Notice.destroy({
           where: {
             UserId: req.body.replyUserId,
@@ -160,6 +162,7 @@ const userController = {
           }
         })
         .then(notice => {
+          
           like.destroy()
           .then(like => {
             return res.redirect('back')
@@ -193,10 +196,18 @@ const userController = {
       }
     })
       .then(followship => {
-        followship.destroy()
+        Notice.destroy({
+          where: {
+            UserId: req.body.followingId,
+            NotifierId: helpers.getUser(req).id
+          }
+        })
+        .then(notice => {
+          followship.destroy()
           .then(followship => {
             return res.redirect('back')
           })
+        })
       })
   },
 

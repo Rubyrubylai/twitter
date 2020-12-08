@@ -16,7 +16,7 @@ function dislike(obj) {
         <input type="hidden" name="tweetUserId" value="${tweetUserId}">
         <input type="hidden" name="likesCount" value="${likesCount}">
         <input type="hidden" name="type" value="tweet">
-        <button type="submit" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
+        <button onclick="dislike(this)" type="submit" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
         <div class="count">${likesCount}</div>
       </form>
       `)
@@ -46,7 +46,7 @@ function dislikeReply(obj) {
         <input type="hidden" class="replyId" value="${replyId}">
         <input type="hidden" class="replyUserId" value="${replyUserId}">
         <input type="hidden" class="likesCount" value="${likesCount}">
-        <button class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+        <button onclick="dislikeReply(this)" class="btn-push"><i class="far fa-heart"></i></button>
         <div class="count">${likesCount}</div>
       </div>
       `)

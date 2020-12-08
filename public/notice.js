@@ -193,20 +193,27 @@ $('.follow-form').submit((e) => {
 socket.on('follow', (data) => {  
   if(data.followingId === userId) {
     const noticeList = document.getElementById('notice-list')
-
-    noticeList.innerHTML += `
+    var newNode = document.createElement('div')
+    newNode.className = 'notice'
+    noticeList.innerHTML = `
     <div class="notice">
-    <a href="/users/${data.followingId}/tweets">
-      <div class="flex-container">
-      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
-        <div class="desc flex-container">
-          <span>${data.noticeDescription}</span> 
+      <a href="/users/${data.followingId}/tweets">
+        <div class="flex-container">
+        <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+          <div class="desc flex-container">
+            <span>${data.noticeDescription}</span>
+          </div>
         </div>
-      </div>
-    </a> 
+      </a> 
     </div>
     `
   }
+  if (noticeList.children[0]) {
+    noticeList.insertBefore(newNode, noticeList.children[0])
+  }
+  else {
+    noticeList.appendChild(newNode)
+  } 
 })
 
 function notice(data) {
