@@ -5,13 +5,14 @@
       <strong>首頁</strong>
     </li>
     <li class="list-group-item" style="border-bottom-width:8px;">
-      <form action="" id="tweet">
+      <form id="tweet">
         <div class="flex-container">
           <div>
-            <img src="{{loginUser.avatar}}" alt="user avatar" class="user-avatar"
+            <img src="{{user.avatar}}" alt="user avatar" class="user-avatar"
               style="border-radius: 50%; height:50px; width: 50px">
           </div>
           <div style="width: 600px;">
+            <input type="hidden" name="username" value="{{user.name}}">
             <textarea placeholder="有什麼新鮮事?" class="form-control"  name="description" rows="3" style="border: none;"></textarea>
           </div>
         </div>

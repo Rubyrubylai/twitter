@@ -153,10 +153,19 @@ const userController = {
       }
     })
       .then(like => {
-        like.destroy()
+        Notice.destroy({
+          where: {
+            UserId: req.body.replyUserId,
+            LikeId: like.id
+          }
+        })
+        .then(notice => {
+          like.destroy()
           .then(like => {
             return res.redirect('back')
           })
+        })
+        
       })
   },
 
@@ -177,8 +186,6 @@ const userController = {
   // },
 
   deleteFollowing: (req, res) => {
-    console.log('----------------follow')
-    console.log(req.body.followingId)
     Followship.findOne({
       where: {
         followerId: helpers.getUser(req).id,

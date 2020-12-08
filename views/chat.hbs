@@ -13,17 +13,6 @@
   </div>
   {{#each users}}
   <div class="user-list">
-    {{!-- <form action="/message/{{this.id}}?_method=PUT" method="POST">
-      
-      <button type="submit" class="flex-container" style="border: none; background-color:white">
-        <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
-        <div class="flex-container">
-          <p>{{this.name}}</p>
-          <font class="text-muted"> @{{this.account}}</font>
-        </div>
-      </button>
-      
-    </form> --}}
     <a href="/message/{{this.id}}">
     <div class="flex-container">
       <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
@@ -90,3 +79,4 @@
     </div>
   </form> 
 </div>
+

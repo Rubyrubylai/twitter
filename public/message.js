@@ -1,20 +1,32 @@
 var socket = io()
 
-const chatForm = document.getElementById('chat-form')
 const chatMessages = document.getElementById('chat-messages')
-const selector = document.querySelector('.selector')
-const user = document.getElementById('userId')
 const privateIcon = document.getElementById('private-icon')
 const userList = document.getElementById('user-list')
+const user = document.getElementById('userId')
+const userId = Number(user.value)
 
 //join the room in the beginning
 const receiveId = window.location.pathname.split('/')[2]
 socket.emit('joinRoom', { receiveId })
 
 //alert
+socket.on('alertNotice', (data) => {
+  //the alert will only show on the receiver page
+  console.log('------------data')
+  console.log(data.receiveId)
+  if (data.receiveId === userId) {
+    let htmlString = `
+    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot"></div></i>通知 (${data.count})</h6>
+    `
+    noticeIcon.innerHTML = htmlString
+  }
+})
+
+//alert
 socket.on('alert', (data) => {
   //the alert will only show on the receiver page
-  if (data.receiveId === user.value) {
+  if (data.receiveId === userId) {
     let htmlString = `
     <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${data.count})</h6>
     `
@@ -22,8 +34,8 @@ socket.on('alert', (data) => {
   }
 })
 
-if (selector.value === 'public') {
-  
+
+if ($('.selector').val() === 'public') {
 //online user
   socket.on('online', (data) => {
     userList.innerHTML = ''
@@ -33,8 +45,6 @@ if (selector.value === 'public') {
     
   })
 
-  
-
   socket.on('offline', (data) => {
     var user = document.getElementById(`user-${data.id}`).parentNode
     userList.removeChild(user)
@@ -42,12 +52,12 @@ if (selector.value === 'public') {
 }
 
 //send message
-chatForm.addEventListener('submit', e => {
+$('#chat-form').submit(e => {
   e.preventDefault()
   const msg = e.target.message.value
 
   
-  if (selector.value === 'public') {
+  if ($('.selector').val() === 'public') {
     //public message
     socket.emit('publicMessage', msg)   
   }
@@ -68,8 +78,7 @@ socket.on('publicMessage', (data) => {
 })
 
 //read
-chatForm.addEventListener('click', (e) => {
-  userId = user.value
+$('#chat-form').click(e => {
   let htmlString = `
   <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
   `
@@ -109,7 +118,6 @@ function appendUserData(data) {
 }
 
 function appendData(data) {
-  const userId = user.value
   let htmlString
   if (Number(data.id) === Number(userId)) {
     htmlString = `

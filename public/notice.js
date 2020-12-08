@@ -1,16 +1,17 @@
 const noticeBtn = document.querySelector('.notice-btn')
 const noticeId = document.getElementById('noticeId')
+const noticeIcon = document.getElementById('notice-icon')
 
 //turn on notification
 $('.notice-btn').click((e) => {
-  const room = noticeId.value
+  const room = Number(noticeId.value)
   socket.emit('notice', room)
 })
 
 //post a tweet
 $('#tweet').submit((e) => {
   const description = e.target.description.value
-  //console.log(description.length === 0)
+  const username = e.target.username.value
   if (description.length === 0) {
     e.preventDefault()
   }
@@ -18,8 +19,7 @@ $('#tweet').submit((e) => {
     e.preventDefault()
   }
   else {
-    userId = user.value
-    socket.emit('tweet', { description, userId })
+    socket.emit('tweet', { description, userId, username })
   }
 })
 
@@ -59,10 +59,10 @@ $('.like-form').submit((e) => {
 })
   
 socket.on('like', (data) => {  
-  if(data.tweetUserId === Number(user.value)) {
+  if(data.tweetUserId === userId) {
     notice(data)
   }
-  if(data.replyUserId === Number(user.value)) {
+  if(data.replyUserId === userId) {
     notice(data)
   }
 })
@@ -70,8 +70,8 @@ socket.on('like', (data) => {
 //post a tweetReply
 $('#reply-form').submit((e) => {
   var comment = e.target.comment.value
-  const tweetId = e.target.tweetId.value
-  const tweetUserId = e.target.tweetUserId.value
+  const tweetId = Number(e.target.tweetId.value)
+  const tweetUserId = Number(e.target.tweetUserId.value)
   const avatar = e.target.avatar.value
   const name = e.target.name.value
   const account = e.target.account.value
@@ -86,7 +86,6 @@ $('#reply-form').submit((e) => {
     e.preventDefault()
   }
   else {
-    userId = user.value
     const tweetReplies = document.getElementById('tweetReplies')
 
     tweetReplies.innerHTML += `
@@ -116,7 +115,7 @@ $('#reply-form').submit((e) => {
 })
 
 socket.on('reply', (data) => {  
-  if(data.tweetUserId === user.value) {
+  if(data.tweetUserId === userId) {
     notice(data)
   }
 })
@@ -143,7 +142,6 @@ $('#reply-comment-form').submit((e) => {
     e.preventDefault()
   }
   else {
-    userId = user.value
     const replyComments = document.getElementById('reply-comments')
 
     replyComments.innerHTML += `
@@ -173,7 +171,7 @@ $('#reply-comment-form').submit((e) => {
 })
 
 socket.on('replyComment', (data) => {  
-  if(data.replyUserId === Number(user.value)) {
+  if(data.replyUserId === userId) {
     notice(data)
   }
 })
@@ -193,7 +191,7 @@ $('.follow-form').submit((e) => {
 })
 
 socket.on('follow', (data) => {  
-  if(data.followingId === Number(user.value)) {
+  if(data.followingId === userId) {
     const noticeList = document.getElementById('notice-list')
 
     noticeList.innerHTML += `
@@ -213,9 +211,9 @@ socket.on('follow', (data) => {
 
 function notice(data) {
   const noticeList = document.getElementById('notice-list')
-
-  noticeList.innerHTML += `
-  <div class="notice">
+  var newNode = document.createElement('div')
+  newNode.className = 'notice'
+  newNode.innerHTML = `
   <a href="/tweets/${data.tweetId}/replies">
     <div class="flex-container">
     <img src="${data.avatar}" alt="user avatar" class="user-avatar">
@@ -224,7 +222,12 @@ function notice(data) {
         <font class="text-muted tweet-desc">${data.description}</font>
       </div>
     </div>
-  </a> 
-  </div>
-  `
+  </a> `
+  if (noticeList.children[0]) {
+    noticeList.insertBefore(newNode, noticeList.children[0])
+  }
+  else {
+    noticeList.appendChild(newNode)
+  } 
+  
 }

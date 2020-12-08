@@ -37,7 +37,7 @@ function dislikeReply(obj) {
   $.ajax({
     method: 'POST',
     url: '/replies/dislike',
-    data: { replyId },
+    data: { replyId, replyUserId },
     dataType: 'text',
     success: function(response) {
       icon.html(`

@@ -43,8 +43,6 @@ module.exports = (io) => {
         // run when user disconnects
         socket.on('disconnect', () => {
           onlineUsers = onlineUsers.filter((item) => item.id !== user.id)
-          console.log('--------online')
-          console.log(onlineUsers)
           io.emit('offline', { id: user.id })
           console.log('user disconnected')
         })
@@ -122,6 +120,7 @@ module.exports = (io) => {
           })
         })
 
+
         //add to the room which user subscribes
         Subscribeship.findAll({ where: {
             subscriberId: user.id
@@ -136,16 +135,31 @@ module.exports = (io) => {
         socket.on('notice', (room) => {
           Subscribeship.create({
             subscriberId: user.id,
-            subscribedId: Number(room)            
+            subscribedId: room      
           })
           socket.join(room)
         })
 
-        //when receive the subscribed post a tweet
+        let noticeCount = new Promise((resolve, reject) => {
+          Notice.findAll({
+            raw: true,
+            nest: true,
+            where: {
+              [Op.and]: [
+                { UserId: items.subscriberId },
+                { unread: true },
+              ]
+            }
+          })
+          .then(notice => {
+            let count = notice.length
+            return resolve(count)
+          })
+        })
+        
+        //when receive subscribed post a tweet
         socket.on('tweet', (data) => {
-          const userId = data.userId
-          const description = data.description
-          
+          const { description, username } = data
           
           Tweet.create({
             description,
@@ -159,8 +173,7 @@ module.exports = (io) => {
               }
             })
             .then(subscribeship => {
-              id = Number(userId) - 1
-              const noticeDescription = `User${id}發布了新貼文`
+              const noticeDescription = `${username}發布了新貼文`
               const description = tweet.description
               var results = []
               subscribeship.forEach(items => {
@@ -172,63 +185,84 @@ module.exports = (io) => {
                     TweetId: tweet.id
                   })
                 )
+                noticeCount.then((count) => {
+                  console.log('---------count')
+                  console.log(count)
+                  io.emit('alertNotice', {
+                    count,
+                    receiveId: items.subscriberId
+                  })
+                })
+                
+                
               })
+              
               return Promise.all(results).then(() => {
                 const tweetId = tweet.id
                 socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId, description })
               })
             })
-           
           })
+          
         })
 
         //like
         socket.on('like', (data) => {
           var { tweetId, tweetUserId, replyId, replyUserId, type } = data
-          id = userId - 1
+          //user will not receive the notification by himself
           if (type === 'tweet') {
-            const noticeDescription = `User${id}喜歡你的貼文`
+            const noticeDescription = `${user.name}喜歡你的貼文`
             Like.create({
-              UserId: user.id,
+              UserId: userId,
               TweetId: tweetId
             })
             .then(like => {
-              Notice.create({
-                description: noticeDescription,
-                UserId: tweetUserId,
-                unread: true,
-                LikeId:  like.id
-              }).then(notice => {
-                Tweet.findByPk(tweetId)
-                .then(tweet => {
-                  const description = tweet.description
-                  io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
+              if (userId !== tweetUserId) {
+                Notice.create({
+                  description: noticeDescription,
+                  UserId: tweetUserId,
+                  unread: true,
+                  LikeId:  like.id
+                }).then(notice => {
+                  Tweet.findByPk(tweetId)
+                  .then(tweet => {
+                    const description = tweet.description
+                    io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
+                  })
                 })
-              })
+              }
+              
             })
           }
           else {
-            const noticeDescription = `User${id}喜歡你的留言`
             Like.create({
-              UserId: user.id,
+              UserId: userId,
               ReplyId: replyId
             })
             .then(like => {
-              Notice.create({
-                description: noticeDescription,
-                UserId: replyUserId,
-                unread: true,
-                LikeId: like.id
-              }).then(notice => {
-                Reply.findByPk(replyId)
-                .then(reply => {
-                  const description = reply.comment
-                  io.emit('like', { noticeDescription, avatar, tweetId, description, replyUserId, replyId })
+              if (userId !== replyUserId) {
+                const noticeDescription = `${user.name}喜歡你的留言`
+                Notice.create({
+                  description: noticeDescription,
+                  UserId: replyUserId,
+                  unread: true,
+                  LikeId: like.id
+                }).then(notice => {
+                  Reply.findByPk(replyId)
+                  .then(reply => {
+                    const description = reply.comment
+                    io.emit('like', { noticeDescription, avatar, tweetId, description, replyUserId, replyId })
+                  })
+                  
                 })
-                
-              })
+              }
+              
             })
           }
+          // io.emit('alertNotice', {
+          //   count,
+          //   receiveId
+          // })
           
         })
 
@@ -237,24 +271,29 @@ module.exports = (io) => {
           const { userId, comment, tweetId, tweetUserId } = data
 
           Reply.create({
-            UserId: Number(userId),
-            TweetId: Number(tweetId),
+            UserId: userId,
+            TweetId: tweetId,
             comment
           }).then(reply => {
-            id = Number(userId) - 1
-            const noticeDescription = `User${id}回覆你的貼文`
-
-            Notice.create({
-              description: noticeDescription,
-              UserId: Number(tweetUserId),
-              unread: true,
-              ReplyId: reply.id
-            }).then(notice => {
-              const description = reply.comment
-              io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
-            })
+            if (userId !== tweetUserId) {
+              const noticeDescription = `${user.name}回覆你的貼文`
+              Notice.create({
+                description: noticeDescription,
+                UserId: tweetUserId,
+                unread: true,
+                ReplyId: reply.id
+              }).then(notice => {
+                const description = reply.comment
+                io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
+              })
+            }
+            
            
           })
+          // io.emit('alertNotice', {
+          //   count,
+          //   receiveId
+          // })
         })
 
         //when receive others reply comments
@@ -266,44 +305,52 @@ module.exports = (io) => {
             ReplyId: replyId,
             comment
           }).then(replyComment => {
-            id = userId - 1
-            const noticeDescription = `User${id}回覆你的留言`
-
-            Notice.create({
-              description: noticeDescription,
-              UserId: replyUserId,
-              unread: true,
-              ReplyCommentId: replyComment.id
-            }).then(notice => {
-              const description = replyComment.comment
-              io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
-            })
+            if (userId !== replyUserId) {
+              const noticeDescription = `${user.name}回覆你的留言`
+              Notice.create({
+                description: noticeDescription,
+                UserId: replyUserId,
+                unread: true,
+                ReplyCommentId: replyComment.id
+              }).then(notice => {
+                const description = replyComment.comment
+                io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
+              })
+            }
+            
            
           })
+          // io.emit('alertNotice', {
+          //   count,
+          //   receiveId
+          // })
         })
 
 
          //follow
          socket.on('follow', (followingId) => {
-          followingId = Number(followingId)
           Followship.create({
             followerId: userId,
             followingId: followingId
           })
           .then(followship => {
-            id = userId - 1
-            const noticeDescription = `User${id}追蹤你`
-
-            Notice.create({
-              description: noticeDescription,
-              UserId: followingId,
-              unread: true
-            }).then(notice => { 
-              io.emit('follow', { noticeDescription, avatar, followingId }) 
-            })
+            if (userId !== followingId) {
+              const noticeDescription = `${user.name}正在追蹤你`
+              Notice.create({
+                description: noticeDescription,
+                UserId: followingId,
+                unread: true
+              }).then(notice => { 
+                io.emit('follow', { noticeDescription, avatar, followingId }) 
+              })
+            }
+           
           })
         })
-
+        // io.emit('alertNotice', {
+        //   count,
+        //   receiveId
+        // })
       }
     }) 
   })
