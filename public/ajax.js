@@ -57,20 +57,6 @@ function dislike(obj) {
   return false
 }
 
-function dislikeReply(obj) {
-  const form = $(obj).parent().parent()
-  const tweetId = $(obj).siblings('.tweetId').val()
-  
-  
-  console.log('-----------------dislike')
-  console.log(tweetId)
-  console.log(replyId)
-  console.log(replyUserId)
-  console.log(likesCount)
-  
-  return false
-}
-
 function unfollow(obj) {
   const followingId = $(obj).siblings('.followingId').val()
   const followIcon = $(obj).parent()
