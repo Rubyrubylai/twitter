@@ -23,10 +23,9 @@ xhr.open('get','/noticeCount')
 xhr.onload = function() {
   const data = JSON.parse(xhr.responseText)
   const hasNotice = data.result
-  console.log('--------data')
-  console.log(data)
-  displayNotice()
-  
+  if (hasNotice) {
+    displayNotice()
+  }
 }
 
 xhr.send()

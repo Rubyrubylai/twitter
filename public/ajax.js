@@ -11,14 +11,14 @@ function dislike(obj) {
     dataType: 'text',
     success: function(response) {
       icon.html(`
-      <form class="like-form">
-        <input type="hidden" name="tweetId" value="${tweetId}">
-        <input type="hidden" name="tweetUserId" value="${tweetUserId}">
-        <input type="hidden" name="likesCount" value="${likesCount}">
-        <input type="hidden" name="type" value="tweet">
-        <button onclick="dislike(this)" type="submit" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
+      <div class="like-form">
+        <input type="hidden" class="tweetId" value="${tweetId}">
+        <input type="hidden" class="tweetUserId" value="${tweetUserId}">
+        <input type="hidden" class="likesCount" value="${likesCount}">
+        <input type="hidden" class="type" value="tweet">
+        <button onclick="like(this)" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
         <div class="count">${likesCount}</div>
-      </form>
+      </div>
       `)
     },
     error: function() {

@@ -29,34 +29,37 @@ socket.on('tweet', (data) => {
   
 })
 
-
 //like a tweet or reply
-$('.like-form').submit((e) => {
+function like(obj) {
   let tweetId, tweetUserId, replyId, replyUserId
-  const type = e.target.type.value
+  const type = $(obj).siblings('.type').val()
   if (type === 'tweet') {
-    tweetId = Number(e.target.tweetId.value)
-    tweetUserId = Number(e.target.tweetUserId.value)
+    tweetId = Number($(obj).siblings('.tweetId').val())
+    tweetUserId = Number($(obj).siblings('.tweetUserId').val())
   }
   else {
-    tweetId = Number(e.target.tweetId.value)
-    replyId = Number(e.target.replyId.value)
-    replyUserId = Number(e.target.replyUserId.value)
+    tweetId = Number($(obj).siblings('.tweetId').val())
+    replyId = Number($(obj).siblings('.replyId').val())
+    replyUserId = Number($(obj).siblings('.replyUserId').val())
   }
-  var likesCount = Number(e.target.likesCount.value) + 1
-  const form = e.target
-  form.innerHTML = `
+  var likesCount = Number($(obj).siblings('.count').text()) + 1
+  const form = $(obj).parent().parent()
+  console.log(form)
+  form.html(`
   <div class="flex-container">       
     <input type="hidden" class="tweetId" value="${tweetId}}">
     <input type="hidden" class="tweetUserId" value="${tweetUserId}">
     <input type="hidden" class="likesCount" value="${likesCount}">
-    <button class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+    <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
     <div class="count">${likesCount}</div>
   </div>
-  `
+  `)
   socket.emit('like', { tweetId, tweetUserId, replyId, replyUserId, type })
-  e.preventDefault()
-})
+  
+}
+// $('.like-form').submit((e) => {
+  
+// })
   
 socket.on('like', (data) => {  
   if(data.tweetUserId === userId) {

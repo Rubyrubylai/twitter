@@ -91,6 +91,7 @@
                   class="far fa-comment" style="color: grey;"></i></button>
               <div style="float: left; font-size:10px; margin-right: 25px;">{{this.ReplyComments.length}}</div>
             </div>
+            <div>
             {{#if this.isLikedReply}}
               {{!-- <form action="/like/{{this.id}}/replies?_method=DELETE" method="POST" style="float: left;"> --}}
               <div class="flex-container">
@@ -105,17 +106,17 @@
               
             {{else}}
               {{!-- <form action="/like/{{this.id}}/replies" method="POST" style="float: left;"> --}}
-              <form class="like-form">
-                <input type="hidden" name="tweetId" value="{{../tweet.id}}">
-                <input type="hidden" name="replyId" value="{{this.id}}">
-                <input type="hidden" name="replyUserId" value="{{this.User.id}}">
-                <input type="hidden" name="likesCount" value="{{this.Likes.length}}">
-                <input type="hidden" name="type" value="reply">
-                <button type="submit" class="btn-push"><i class="far fa-heart"></i></button>
+              <div class="like-form">
+                <input type="hidden" class="tweetId" value="{{../tweet.id}}">
+                <input type="hidden" class="replyId" value="{{this.id}}">
+                <input type="hidden" class="replyUserId" value="{{this.User.id}}">
+                <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
+                <input type="hidden" class="type" value="reply">
+                <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
                 <div class="count">{{this.Likes.length}}</div>
-              </form>
-              
+              </div>
             {{/if}}
+            </div>
           </div>
         </div>
       </li>

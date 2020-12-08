@@ -101,8 +101,7 @@ const messageController = {
     
       res.send({
         'success': true,
-        'result': unreadMessageCount,
-        'message': '資料拿取成功'
+        'result': unreadMessageCount
       })
     })
   },
@@ -124,12 +123,12 @@ const messageController = {
       },
       { model: ReplyComment, 
         include: [ User, Reply ] 
-      },
-      { model: User, include: [{ model: User, as: 'Followers'}] }],
-      order: [[ 'updatedAt', 'DESC' ]]
+      }],
+      order: [[ 'updatedAt', 'DESC' ]],
+      limit: 15
     })
     .then(notices => { 
-      console.log(notices[0].User.Followers)
+      //console.log(notices[0].User.Followers)
       return res.render('notice', { notices })
     })
   },
@@ -143,19 +142,16 @@ const messageController = {
           { UserId: req.user.id },
           { unread: true },
         ]
-      }
-      
+      } 
     }).then(notice => {
       let hasNotice
       if (notice.length > 0) {
         hasNotice = true
         res.send({
           'success': true,
-          'result': hasNotice,
-          'message': '資料拿取成功'
+          'result': hasNotice
         })
       }
-      
     })
   }
 }
