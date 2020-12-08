@@ -46,11 +46,13 @@ $('.like-form').submit((e) => {
   var likesCount = Number(e.target.likesCount.value) + 1
   const form = e.target
   form.innerHTML = `
-  <form action="/tweets/${tweetId}/unlike" method="POST" style="float:left;">
-    <button type="submit" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94);"></i></button>
-    <div style="float:right;">${likesCount}</div>
-  </form>
-  
+  <div class="flex-container">       
+    <input type="hidden" class="tweetId" value="${tweetId}}">
+    <input type="hidden" class="tweetUserId" value="${tweetUserId}">
+    <input type="hidden" class="likesCount" value="${likesCount}">
+    <button class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+    <div class="count">${likesCount}</div>
+  </div>
   `
   socket.emit('like', { tweetId, tweetUserId, replyId, replyUserId, type })
   e.preventDefault()

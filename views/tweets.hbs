@@ -49,12 +49,12 @@
             </div>
             {{#if this.isLiked}}
               {{!-- <form action="/tweets/{{this.id}}/unlike" method="POST" style="float:left;"> --}}
-              <div class="icon">
-                <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart" style="color: rgb(224, 36, 94); display:inline-block;"></i></button>
+              <div class="flex-container">
                 <input type="hidden" class="tweetId" value="{{this.id}}">
                 <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
                 <input type="hidden" class="likesCount" value="{{this.likesCount}}">
-                <div style="display: inline-block;"> {{this.likesCount}}</div>
+                <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+                <div class="count"> {{this.likesCount}}</div>
               </div>
               {{!-- </form> --}}
               
@@ -65,11 +65,9 @@
                 <input type="hidden" class="tweetUserId" name="tweetUserId" value="{{this.user.id}}">
                 <input type="hidden" class="likesCount" name="likesCount" value="{{this.likesCount}}">
                 <input type="hidden" name="type" value="tweet">
-                
                 <button type="submit" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
-                <div style="float:right;"> {{this.likesCount}}</div>
+                <div class="count">{{this.likesCount}}</div>
               </form>
-              
             {{/if}}
           </div>
         </div>

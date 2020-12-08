@@ -90,9 +90,9 @@ module.exports = (app, passport, io) => {
 
   //Like
   // app.post('/tweets/:tweetId/like', authenticated, userController.likeTweet)
-  app.post('/tweets/:tweetId/unlike', authenticated, userController.unlikeTweet)
+  app.post('/tweets/dislike', authenticated, userController.dislikeTweet)
   // app.post('/like/:replyId/replies', authenticated, userController.likeReply)
-  app.post('/like/:replyId/replies', authenticated, userController.dislikeReply)
+  app.post('/replies/dislike', authenticated, userController.dislikeReply)
 
   //Reply
   // app.post('/replies/:replyId', authenticated, replyController.postReply)

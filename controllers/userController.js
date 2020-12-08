@@ -1,9 +1,7 @@
 const bcrypt = require('bcrypt-nodejs')
 const db = require('../models')
-const { User, Tweet, Reply, Like, Followship, ReplyComment } = db
+const { User, Tweet, Reply, Like, Followship, ReplyComment, Notice } = db
 const helpers = require('../_helpers')
-const fs = require('fs')
-const { resolve } = require('path')
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
@@ -114,19 +112,27 @@ const userController = {
   //     })
   // },
 
-  unlikeTweet: (req, res) => {
+  dislikeTweet: (req, res) => {
     Like.findOne({
       where: {
         UserId: helpers.getUser(req).id,
-        TweetId: req.params.tweetId
+        TweetId: req.body.tweetId
       }
     })
-      .then(like => {
-        like.destroy()
-          .then(like => {
-            return res.redirect('back')
-          })
+    .then(like => {
+      Notice.destroy({
+        where: {
+          UserId: req.body.tweetUserId,
+          LikeId: like.id
+        }
       })
+      .then(notice => {
+        like.destroy()
+        .then(like => {
+          return res.redirect('back')
+        })
+      })   
+    })
   },
 
   // likeReply: (req, res) => {
@@ -143,7 +149,7 @@ const userController = {
     Like.findOne({
       where: {
         UserId: helpers.getUser(req).id,
-        ReplyId: req.params.replyId
+        ReplyId: req.body.replyId
       }
     })
       .then(like => {
