@@ -115,7 +115,16 @@ module.exports = (io) => {
           PrivateChat.update({ unread: false }, { 
             where: {
               UserId: Number(receiveId),
-              receiveId: Number(userId)
+              receiveId: userId
+            }
+          })
+        })
+
+        //read notice
+        socket.on('readNotice', ({ userId }) => {
+          Notice.update({ unread: false }, { 
+            where: {
+              UserId: userId,
             }
           })
         })
@@ -185,16 +194,10 @@ module.exports = (io) => {
                     TweetId: tweet.id
                   })
                 )
-                // noticeCount.then((count) => {
-                //   console.log('---------count')
-                //   console.log(count)
-                //   io.emit('alertNotice', {
-                //     count,
-                //     receiveId: items.subscriberId
-                //   })
-                // })
-                
-                
+                io.emit('alertNotice', {
+                  // count,
+                  receiveId: items.subscriberId
+                })
               })
               
               return Promise.all(results).then(() => {
@@ -231,7 +234,10 @@ module.exports = (io) => {
                   })
                 })
               }
-              
+              io.emit('alertNotice', {
+                // count,
+                receiveId: tweetUserId
+              })
             })
           }
           else {
@@ -262,10 +268,10 @@ module.exports = (io) => {
               
             })
           }
-          // io.emit('alertNotice', {
-          //   count,
-          //   receiveId
-          // })
+          io.emit('alertNotice', {
+            // count,
+            receiveId: replyUserId
+          })
           
         })
 
@@ -293,10 +299,10 @@ module.exports = (io) => {
             
            
           })
-          // io.emit('alertNotice', {
-          //   count,
-          //   receiveId
-          // })
+          io.emit('alertNotice', {
+            // count,
+            receiveId: tweetUserId
+          })
         })
 
         //when receive others reply comments
@@ -323,10 +329,10 @@ module.exports = (io) => {
             
            
           })
-          // io.emit('alertNotice', {
-          //   count,
-          //   receiveId
-          // })
+          io.emit('alertNotice', {
+            // count,
+            receiveId: replyUserId
+          })
         })
 
 
@@ -348,13 +354,14 @@ module.exports = (io) => {
                 io.emit('follow', { noticeDescription, avatar, followingId }) 
               })
             }
+            io.emit('alertNotice', {
+              // count,
+              receiveId: followingId
+            })
            
           })
         })
-        // io.emit('alertNotice', {
-        //   count,
-        //   receiveId
-        // })
+        
       }
     }) 
   })

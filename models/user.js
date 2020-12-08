@@ -38,16 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'subscribedId',
       as: 'subscriber'
     })
-    User.belongsToMany(User, {
-      through: models.Notice,
-      foreignKey: 'UserId',
-      as: 'notifier'
-    })
-    User.belongsToMany(User, {
-      through: models.Notice,
-      foreignKey: 'NotifierId',
-      as: 'notified'
-    })
+    User.hasMany(models.Notice)
   };
   return User;
 };

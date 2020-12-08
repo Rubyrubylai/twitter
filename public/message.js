@@ -10,17 +10,26 @@ const userId = Number(user.value)
 const receiveId = window.location.pathname.split('/')[2]
 socket.emit('joinRoom', { receiveId })
 
-//alert
+//alert notice
 socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
   console.log('------------data')
   console.log(data.receiveId)
   if (data.receiveId === userId) {
     let htmlString = `
-    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot"></div></i>通知 (${data.count})</h6>
+    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知</h6>
     `
     noticeIcon.innerHTML = htmlString
   }
+})
+
+//read notice
+$('#notice-icon').click(e => {
+  let htmlString = `
+  <h6><i class="fas fa-bell fa-lg m-2"></i>通知</h6>
+  `
+  noticeIcon.innerHTML = htmlString
+  socket.emit('readNotice', { userId })
 })
 
 //alert
@@ -32,6 +41,15 @@ socket.on('alert', (data) => {
     `
     privateIcon.innerHTML = htmlString
   }
+})
+
+//read
+$('#chat-form').click(e => {
+  let htmlString = `
+  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
+  `
+  privateIcon.innerHTML = htmlString
+  socket.emit('read', { userId, receiveId })
 })
 
 
@@ -75,15 +93,6 @@ socket.on('publicMessage', (data) => {
 
   //scroll down
   chatMessages.scrollTop = chatMessages.scrollHeight
-})
-
-//read
-$('#chat-form').click(e => {
-  let htmlString = `
-  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
-  `
-  privateIcon.innerHTML = htmlString
-  socket.emit('read', { userId, receiveId })
 })
 
 //private message

@@ -199,7 +199,7 @@ const userController = {
         Notice.destroy({
           where: {
             UserId: req.body.followingId,
-            NotifierId: helpers.getUser(req).id
+            FollowshipId: followship.id
           }
         })
         .then(notice => {

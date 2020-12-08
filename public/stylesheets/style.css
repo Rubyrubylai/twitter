@@ -217,6 +217,17 @@
   text-overflow: ellipsis;
 }
 
+.red-dot-notice {
+  width:8px;
+  height:8px; 
+  border-radius: 4px;
+  background-color:red; 
+  position:relative; 
+  bottom:10px; 
+  right: 17px;
+  display: inline-block;
+}
+
 /* tweet */
 .like-form {
   float: left;

@@ -7,6 +7,7 @@ const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
 const ReplyComment = db.ReplyComment
+const Followship = db.Followship
 const { Op } = require('sequelize')
 
 const messageController = {
@@ -108,8 +109,7 @@ const messageController = {
 
   getNotice: (req, res) => {
     Notice.findAll({ 
-      raw: true,
-      nest: true,
+
       where: {
         UserId: req.user.id
       },
@@ -125,21 +125,38 @@ const messageController = {
       { model: ReplyComment, 
         include: [ User, Reply ] 
       },
-      { model: User, 
-        include: [{ model: User, as: 'notifier'}]
-      }],
+      { model: User, include: [{ model: User, as: 'Followers'}] }],
       order: [[ 'updatedAt', 'DESC' ]]
     })
     .then(notices => { 
-      //console.log(notices)
-
-
+      console.log(notices[0].User.Followers)
       return res.render('notice', { notices })
-        
+    })
+  },
 
+  getNoticeCount: (req, res) => {
+    Notice.findAll({
+      raw:true,
+      nest: true,
+      where: {
+        [Op.and]: [
+          { UserId: req.user.id },
+          { unread: true },
+        ]
+      }
+      
+    }).then(notice => {
+      let hasNotice
+      if (notice.length > 0) {
+        hasNotice = true
+        res.send({
+          'success': true,
+          'result': hasNotice,
+          'message': '資料拿取成功'
+        })
+      }
       
     })
-
   }
 }
 

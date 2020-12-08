@@ -18,3 +18,22 @@ function display(messageCount) {
   `
   privateIcon.innerHTML = htmlString
 }
+
+xhr.open('get','/noticeCount')
+xhr.onload = function() {
+  const data = JSON.parse(xhr.responseText)
+  const hasNotice = data.result
+  console.log('--------data')
+  console.log(data)
+  displayNotice()
+  
+}
+
+xhr.send()
+
+function displayNotice() {
+  let htmlString = `
+  <h6><i class="fas fa-bell fa-lg m-2"><div class="red-dot-notice"></div></i>通知</h6>
+  `
+  noticeIcon.innerHTML = htmlString
+}
