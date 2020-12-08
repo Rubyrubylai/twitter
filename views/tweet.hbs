@@ -99,7 +99,8 @@
                 <input type="hidden" class="replyId" value="{{this.id}}">
                 <input type="hidden" class="replyUserId" value="{{this.User.id}}">
                 <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
-                <button onclick="dislikeReply(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+                <input type="hidden" class="type" value="reply">
+                <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
                 <div class="count">{{this.Likes.length}}</div>
               </div>
               {{!-- </form> --}}

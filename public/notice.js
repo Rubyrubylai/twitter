@@ -31,29 +31,42 @@ socket.on('tweet', (data) => {
 
 //like a tweet or reply
 function like(obj) {
-  let tweetId, tweetUserId, replyId, replyUserId
+  // let tweetId, tweetUserId, replyId, replyUserId
   const type = $(obj).siblings('.type').val()
-  if (type === 'tweet') {
-    tweetId = Number($(obj).siblings('.tweetId').val())
-    tweetUserId = Number($(obj).siblings('.tweetUserId').val())
-  }
-  else {
-    tweetId = Number($(obj).siblings('.tweetId').val())
-    replyId = Number($(obj).siblings('.replyId').val())
-    replyUserId = Number($(obj).siblings('.replyUserId').val())
-  }
+  const tweetId = Number($(obj).siblings('.tweetId').val())
+  const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
+  const replyId = Number($(obj).siblings('.replyId').val())
+  const replyUserId = Number($(obj).siblings('.replyUserId').val())
+  // if (type === 'tweet') {
+  //   tweetId = Number($(obj).siblings('.tweetId').val())
+  //   tweetUserId = Number($(obj).siblings('.tweetUserId').val())
+  // }
+  // else {
+  //   tweetId = Number($(obj).siblings('.tweetId').val())
+  //   replyId = Number($(obj).siblings('.replyId').val())
+  //   replyUserId = Number($(obj).siblings('.replyUserId').val())
+  // }
+  
   var likesCount = Number($(obj).siblings('.count').text()) + 1
   const form = $(obj).parent().parent()
   console.log(form)
   form.html(`
   <div class="flex-container">       
-    <input type="hidden" class="tweetId" value="${tweetId}}">
+    <input type="hidden" class="tweetId" value="${tweetId}">
     <input type="hidden" class="tweetUserId" value="${tweetUserId}">
     <input type="hidden" class="likesCount" value="${likesCount}">
+    <input type="hidden" class="replyId" value="${replyId}">
+    <input type="hidden" class="replyUserId" value="${replyUserId}">
     <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
     <div class="count">${likesCount}</div>
   </div>
   `)
+  if (type === 'tweet') {
+    form.children().append('<input type="hidden" class="type" value="tweet"></input>')
+  }
+  else {
+    form.children().append('<input type="hidden" class="type" value="reply"></input>')
+  }
   socket.emit('like', { tweetId, tweetUserId, replyId, replyUserId, type })
   
 }
