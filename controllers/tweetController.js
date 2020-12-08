@@ -112,10 +112,11 @@ const tweetController = {
             ]
           }
         ],
-        order: [['updatedAt', 'DESC']]
+        
       }
     )
       .then(tweet => {
+        console.log(tweet)
         tweet = tweet.toJSON()
         const loginUser = helpers.getUser(req)
 
@@ -128,8 +129,8 @@ const tweetController = {
           isLikedReply: reply.Likes.map(like => like.UserId).includes(loginUser.id)
         }))
 
-        tweet.Replies.sort((a, b) => {
-          return b.updatedAt - a.updatedAt
+        tweetReplies = tweet.Replies.sort((a, b) => {
+          return b.createdAt - a.createdAt
         })
 
         //Top 10 followers

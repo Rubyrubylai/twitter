@@ -140,22 +140,22 @@ module.exports = (io) => {
           socket.join(room)
         })
 
-        let noticeCount = new Promise((resolve, reject) => {
-          Notice.findAll({
-            raw: true,
-            nest: true,
-            where: {
-              [Op.and]: [
-                { UserId: items.subscriberId },
-                { unread: true },
-              ]
-            }
-          })
-          .then(notice => {
-            let count = notice.length
-            return resolve(count)
-          })
-        })
+        // let noticeCount = new Promise((resolve, reject) => {
+        //   Notice.findAll({
+        //     raw: true,
+        //     nest: true,
+        //     where: {
+        //       [Op.and]: [
+        //         { UserId: items.subscriberId },
+        //         { unread: true },
+        //       ]
+        //     }
+        //   })
+        //   .then(notice => {
+        //     let count = notice.length
+        //     return resolve(count)
+        //   })
+        // })
         
         //when receive subscribed post a tweet
         socket.on('tweet', (data) => {
@@ -185,14 +185,14 @@ module.exports = (io) => {
                     TweetId: tweet.id
                   })
                 )
-                noticeCount.then((count) => {
-                  console.log('---------count')
-                  console.log(count)
-                  io.emit('alertNotice', {
-                    count,
-                    receiveId: items.subscriberId
-                  })
-                })
+                // noticeCount.then((count) => {
+                //   console.log('---------count')
+                //   console.log(count)
+                //   io.emit('alertNotice', {
+                //     count,
+                //     receiveId: items.subscriberId
+                //   })
+                // })
                 
                 
               })
