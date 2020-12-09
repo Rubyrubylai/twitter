@@ -25,13 +25,11 @@
       {{!-- <a href="/users/{{userId}}" class="btn rounded-pill float-right btn-outline-twitter">編輯個人資料</a> --}}
       {{else}}
         {{#if isFollowed}}
-        <form action="/followships/{{userId}}?_method=DELETE" method="POST">
-          <button type="submit" class="btn btn-outline-twitter-active rounded-pill float-right">正在跟隨</button>
-        </form>
+          <input type="hidden" class="followingId" value="{{userId}}">
+          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
         {{else}}
-        <form action="/followships" method="POST">
-          <button name="id" value="{{userId}}" type="submit" class="btn btn-outline-twitter rounded-pill float-right">跟隨</button>
-        </form>
+          <input type="hidden" class="followingId" value="{{userId}}">
+          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         {{/if}}
       {{/ifCond}}
     </div>
@@ -64,7 +62,9 @@
       </ul>
     </div>
   </div>
+  
   {{#each data}}
+  {{#if this.TweetId}}
   <div class="row border-bottom">
     <div class="d-flex p-2">
       <a href="/users/{{this.id}}/tweets">
@@ -77,12 +77,12 @@
         <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
          <span style="color: grey">@{{this.account}}</span>
         </a>
-        <span>・{{moment this.tweetUpdatedAt}}</span><br>
+        <span>・{{moment this.updatedAt}}</span><br>
         <span>
           <small>
             {{this.description}}<br>
             <span class="d-flex flex-row ">
-              <a href="/tweets/{{this.tweetId}}/replies">
+              <a href="/tweets/{{this.TweetId}}/replies">
                 <i class="far fa-comment mr-3" style="color: grey;"> {{this.replyCount}}</i>
               </a>
               {{#if this.isLiked}}
@@ -101,7 +101,47 @@
       </div>
     </div>
   </div>
+  {{/if}}
+  {{!-- {{#if this.ReplyId}}
+  <div class="row border-bottom">
+    <div class="d-flex p-2">
+      <a href="/users/{{this.id}}/tweets">
+        <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
+      </a>
+      <div class="col">
+        <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
+          <span class="bold">{{this.name}}</span>
+        </a>
+        <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
+         <span style="color: grey">@{{this.account}}</span>
+        </a>
+        <span>・{{moment this.updatedAt}}</span><br>
+        <span>
+          <small>
+            {{this.description}}<br>
+            <span class="d-flex flex-row ">
+              <a href="/tweets/{{this.ReplyId}}/replies">
+                <i class="far fa-comment mr-3" style="color: grey;"> {{this.replyCount}}</i>
+              </a>
+              {{#if this.isLiked}}
+              <form action="/tweets/{{this.ReplyId}}/unlike" method="POST">
+                <button type="submit" class="btn-push"><i class="fas fa-heart"
+                    style="color:rgb(224, 36, 94);">{{this.likeCount}}</i></button>
+              </form>
+              {{else}}
+              <form action="/tweets/{{this.ReplyId}}/like" method="POST">
+                <button type="submit" class="btn-push"><i class="far fa-heart" style="color: grey;">{{this.likeCount}}</i></button>
+              </form>
+              {{/if}}
+            </span>
+          </small>
+        </span>
+      </div>
+    </div>
+  </div>
+  {{/if}} --}}
   {{/each}}
+  
 </div>
 <!-- pop up reply comment message -->
 {{> message}}

@@ -475,23 +475,24 @@ const userController = {
       order: [[{ model: Like }, 'createdAt', 'DESC']],
       include: [ // TweetId: { $gt: 0 } --> TweetId大於0, 用來排除TweetID=Null (like reply)的情況
         // { model: Like, where: { TweetId: { $gt: 0 } }, include: [{ model: Tweet, include: [User, Reply, Like] }] },
-        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }] },
+        { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }, 
+          { model: Reply, include: [User, ReplyComment, Like] }] },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' },
         Tweet
       ]
     }).then(user => {
-      console.log(user.Likes)
+      
       const data = user.Likes.map(r => ({
         ...r.dataValues,
-        id: r.dataValues.Tweet.User.id,
-        avatar: r.dataValues.Tweet.User.avatar,
-        account: r.dataValues.Tweet.User.account,
-        name: r.dataValues.Tweet.User.name,
-        description: r.dataValues.Tweet.description ? r.dataValues.Tweet.description.substring(0, 160) : '',
-        tweetUpdatedAt: r.dataValues.Tweet.updatedAt,
-        replyCount: r.dataValues.Tweet.Replies.length,
-        likeCount: r.dataValues.Tweet.Likes.length,
+        id: r.dataValues.Tweet ? r.dataValues.Tweet.User.id : r.dataValues.Reply.User.id,
+        avatar: r.dataValues.Tweet ? r.dataValues.Tweet.User.avatar : r.dataValues.Reply.User.avatar,
+        account: r.dataValues.Tweet ? r.dataValues.Tweet.User.account : r.dataValues.Reply.User.account,
+        name: r.dataValues.Tweet ? r.dataValues.Tweet.User.name : r.dataValues.Reply.User.name,
+        description: r.dataValues.Tweet ? r.dataValues.Tweet.description.substring(0, 160) : r.dataValues.Reply.comment.substring(0, 160),
+        updatedAt: r.dataValues.Tweet ? r.dataValues.Tweet.updatedAt : r.dataValues.Reply.updatedAt,
+        replyCount: r.dataValues.Tweet ? r.dataValues.Tweet.Replies.length : r.dataValues.Reply.ReplyComments.length,
+        likeCount: r.dataValues.Tweet ? r.dataValues.Tweet.Likes.length : r.dataValues.Reply.Likes.length,
 
         isLiked: loginUser.Likes.map(l => l.TweetId).includes(r.TweetId)
       }))

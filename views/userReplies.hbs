@@ -23,13 +23,11 @@
       {{!-- <a href="/users/{{userId}}" class="btn rounded-pill float-right btn-outline-twitter">編輯個人資料</a> --}}
       {{else}}
         {{#if isFollowed}}
-        <form action="/followships/{{userId}}?_method=DELETE" method="POST">
-          <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-        </form>
+          <input type="hidden" class="followingId" value="{{userId}}">
+          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
         {{else}}
-        <form action="/followships" method="POST">
-          <button name="id" value="{{userId}}" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-        </form>
+          <input type="hidden" class="followingId" value="{{userId}}">
+          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         {{/if}}
       {{/ifCond}}
     </div>
