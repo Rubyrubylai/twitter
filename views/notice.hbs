@@ -3,7 +3,7 @@
     <p>通知</p>
   </div>
   <div id="notice-list"></div>
-  {{#each notices}}
+  {{#each results}}
   <div class="notice">
     {{#if this.TweetId}}
     <a href="/tweets/{{this.TweetId}}/replies">
@@ -51,10 +51,10 @@
       </div>
     </a>
   
-    {{else}}
-    <a href="/users/{{this.User.Followers.id}}/tweets">
+    {{else if this.NotifierId}}
+    <a href="/users/{{this.Notifier.id}}/tweets">
       <div class="flex-container">
-      <img src="{{this.User.Followers.avatar}}" alt="user avatar" class="user-avatar">
+      <img src="{{this.Notifier.avatar}}" alt="user avatar" class="user-avatar">
         <div class="desc flex-container">
           <span>{{this.description}}</span> 
         </div>

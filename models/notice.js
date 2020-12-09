@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
     LikeId: DataTypes.INTEGER,
     ReplyId: DataTypes.INTEGER,
     ReplyCommentId: DataTypes.INTEGER,
-    FollowshipId: DataTypes.INTEGER
+    NotifierId: DataTypes.INTEGER,
+    // FollowshipId: DataTypes.INTEGER
   }, {});
   Notice.associate = function(models) {
     Notice.belongsTo(models.User)
@@ -16,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
     Notice.belongsTo(models.Like)
     Notice.belongsTo(models.Reply)
     Notice.belongsTo(models.ReplyComment)
-    Notice.belongsTo(models.Followship)
+    // Notice.belongsTo(models.Followship)
   };
   return Notice;
 };

@@ -2,12 +2,12 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.addColumn('Notices', 'FollowshipId', {
+    return queryInterface.addColumn('Notices', 'NotifierId', {
       type: Sequelize.INTEGER
     })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.removeColumn('Notices', 'FollowshipId')
+    return queryInterface.removeColumn('Notices', 'NotifierId')
   }
 };

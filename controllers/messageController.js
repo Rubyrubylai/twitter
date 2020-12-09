@@ -146,11 +146,13 @@ const messageController = {
 
   getNotice: (req, res) => {
     Notice.findAll({ 
-
+      raw: true,
+      nest: true,
       where: {
         UserId: req.user.id
       },
-      include: [{ model: Tweet, 
+      include: [
+      { model: Tweet, 
         include: [ User ] 
       },
       { model: Like, 
@@ -161,16 +163,33 @@ const messageController = {
       },
       { model: ReplyComment, 
         include: [ User, Reply ] 
-      },
-      { model: Followship
       }],
       order: [[ 'updatedAt', 'DESC' ]],
       limit: 15
     })
     .then(notices => {
-      console.log(notices[0].User)
-      //console.log(notices[0].User.Followers)
-      return res.render('notice', { notices })
+      var results = []
+      noticePromise = new Promise((resolve, reject) => {
+        for (let n of notices ) {
+          User.findByPk(n.NotifierId).then(user => {
+            if (n.NotifierId) {
+              n['Notifier'] = user.dataValues
+              results.push(n)
+              resolve(results)
+            }
+            else {
+              results.push(n)
+            }  
+          })
+        }
+      })
+
+      noticePromise.then(results => {
+        results.sort((a, b) => {
+          return b.createdAt - a.createdAt
+        })
+      })
+      return res.render('notice', { results })
     })
   },
 
