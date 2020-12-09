@@ -59,18 +59,16 @@ function dislike(obj) {
 
 function unfollow(obj) {
   const followingId = $(obj).siblings('.followingId').val()
-  const followIcon = $(obj).parent()
+  const form = $(obj).parent()
   $.ajax({
     method: 'POST',
     url: `/followships/delete`,
     data: { followingId },
     dataType: 'text',
     success: function(response) {
-      followIcon.html(`
-      <form class="follow-form">
-        <input type="hidden" name="followingId" value="${followingId}">
-        <button name="id" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-      </form>
+      form.html(`
+      <input type="hidden" class="followingId" value="${followingId}">
+      <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
       `)
     },
     error: function() {

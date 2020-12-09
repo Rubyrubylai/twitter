@@ -184,18 +184,16 @@ socket.on('replyComment', (data) => {
 })
 
 //follow a tweet
-$('.follow-form').submit((e) => {
-  const followingId = Number(e.target.followingId.value)
-  const form = e.target
-  form.innerHTML = `
-  <form action="/followships/${followingId}?_method=DELETE" method="POST">
-  <button type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-</form>
-  
-  `
+function follow(obj) {
+  const followingId = Number($(obj).siblings('.followingId').val())
+  const form = $(obj).parent()
+  form.html(`
+  <input type="hidden" class="followingId" value="${followingId}">
+  <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+  `)
+  console.log(followingId)
   socket.emit('follow', followingId)
-  e.preventDefault()
-})
+}
 
 socket.on('follow', (data) => {  
   if(data.followingId === userId) {
@@ -214,13 +212,13 @@ socket.on('follow', (data) => {
       </a> 
     </div>
     `
-  }
-  if (noticeList.children[0]) {
-    noticeList.insertBefore(newNode, noticeList.children[0])
-  }
-  else {
-    noticeList.appendChild(newNode)
-  } 
+    if (noticeList.children[0]) {
+      noticeList.insertBefore(newNode, noticeList.children[0])
+    }
+    else {
+      noticeList.appendChild(newNode)
+    } 
+  }  
 })
 
 function notice(data) {

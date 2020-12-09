@@ -29,10 +29,10 @@
         {{!-- </form> --}}
         {{else}}
         {{!-- <form action="/followships" method="POST"> --}}
-        <form class="follow-form">
-          <input type="hidden" name="followingId" value="{{this.id}}">
-          <button name="id" type="submit" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-        </form>
+        <div>
+          <input type="hidden" class="followingId" value="{{this.id}}">
+          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+        </div>
         {{/if}}
         {{/ifCond}}
           </div>
