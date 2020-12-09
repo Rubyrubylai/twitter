@@ -131,3 +131,65 @@ function unsubscribe(obj) {
   })
   return false
 }
+
+// function edit(obj) {
+//   const replyId = Number($(obj).siblings('.replyCommentId').val())
+//   const comment = $('.replyComment').text()
+//   const avatar = $(obj).siblings('.avatar').val()
+//   const name = $(obj).siblings('.name').val()
+//   const account = $(obj).siblings('.account').val()
+//   const replyUserName = $(obj).siblings('.replyUserName').val()
+//   const time = $(obj).siblings('.time').val()
+//   const form = $('#reply-comment-form')
+//   console.log('------------')
+//   console.log('comment')
+//   if (!comment) {
+//     return false
+//   }
+//   if (comment.length > 100) {
+//     return false
+//   }
+//   else {
+//     $.ajax({
+//       method: 'PUT',
+//       url: '/replies',
+//       data: { replyId, comment },
+//       dataType: 'text',
+//       success: function(response) {
+//         form(`
+//         <div class="flex-container mb-2">
+//           <div>
+//             <a href="/users/${userId}/tweets">
+//               <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+//             </a>
+//           </div>
+//           <div>
+//             <div class="dropdown show" style="position:absolute; right:20px;">
+//               <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+//                 aria-haspopup="true" aria-expanded="false">
+//                 •••
+//               </a>
+//               <div class="dropdown-menu" aria-labelledby="more">
+//                 <button data-toggle="modal" data-target="#er${replyId}" class="dropdown-item">修改此留言</button>
+//                 <button data-toggle="modal" data-target="#cr${replyId}" class="dropdown-item">刪除此留言</button>
+//               </div>
+//             </div>
+//             <a href="/users/${userId}/tweets
+//             " style="text-decoration:none; color:black"><strong>${name}</strong></a>
+//             <font color="grey">@${account} • ${time}</font>
+//             <p>
+//             ${comment}
+//             </p>
+//             <font color="grey" size="2px">回覆給</font>
+//             <font color="coral" size="2px">@${replyUserName}</font>
+//           </div>
+//         </div>
+//         `)
+//       },
+//       error: function() {
+//         console.error(err)
+//       }
+//     })
+//   }
+//   return false
+// }

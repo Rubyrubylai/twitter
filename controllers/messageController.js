@@ -161,11 +161,14 @@ const messageController = {
       },
       { model: ReplyComment, 
         include: [ User, Reply ] 
+      },
+      { model: Followship
       }],
       order: [[ 'updatedAt', 'DESC' ]],
       limit: 15
     })
-    .then(notices => { 
+    .then(notices => {
+      console.log(notices[0].User)
       //console.log(notices[0].User.Followers)
       return res.render('notice', { notices })
     })
