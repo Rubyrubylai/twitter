@@ -7,14 +7,12 @@ const user = document.getElementById('userId')
 const userId = Number(user.value)
 
 //join the room in the beginning
-const receiveId = window.location.pathname.split('/')[2]
+const receiveId = Number(window.location.pathname.split('/')[2])
 socket.emit('joinRoom', { receiveId })
 
 //alert notice
 socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
-  console.log('------------data')
-  console.log(data.receiveId)
   if (data.receiveId === userId) {
     let htmlString = `
     <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知</h6>
@@ -32,26 +30,41 @@ $('#notice-icon').click(e => {
   socket.emit('readNotice', { userId })
 })
 
+
+
 //alert
 socket.on('alert', (data) => {
+  console.log(data.public)
+  if (data.public) {
+    $('#public-icon').html(`
+      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${data.count})</h6>
+    `)
+  }
+  //console.log($('#private-icon'))  
   //the alert will only show on the receiver page
-  if (data.receiveId === userId) {
-    let htmlString = `
+  else if (data.receiveId === userId) {
+    $('#private-icon').html(`
     <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${data.count})</h6>
-    `
-    privateIcon.innerHTML = htmlString
+    `)
   }
 })
 
-//read
-$('#chat-form').click(e => {
-  let htmlString = `
+//read private
+$('#chat-form').click(() => {
+  $('#private-icon').html(`
   <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
-  `
-  privateIcon.innerHTML = htmlString
+  `)
   socket.emit('read', { userId, receiveId })
 })
 
+//read public
+$('#public-icon').click(() => {
+  $('#public-icon').html(`
+    <h6><i class="fas fa-comments m-2"></i>公開聊天室</h6>
+  `)
+  let public = true
+  socket.emit('read', { userId, receiveId, public })
+})
 
 if ($('.selector').val() === 'public') {
 //online user

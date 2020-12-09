@@ -38,7 +38,6 @@ $('#tweet').submit((e) => {
 // notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {
   notice(data)
-  
 })
 
 //like a tweet or reply

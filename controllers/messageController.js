@@ -81,7 +81,8 @@ const messageController = {
     })    
   },
 
-  getPrivateMessageCount: (req, res) => {
+  getCount: (req, res) => {
+    //未讀私人訊息
     PrivateChat.findAll({
       raw:true,
       nest: true,
@@ -94,16 +95,52 @@ const messageController = {
       include: [{ model: User, as: 'Receiver' },
       { model: User, as: 'Sender' }]
     }).then(privateChat => {
-      //未讀訊息
+      
       const unreadMessage = privateChat.filter(p => {
         return p.receiveId === req.user.id && p.unread === 1
       })
-      const unreadMessageCount = unreadMessage.length
-    
-      res.send({
-        'success': true,
-        'result': unreadMessageCount
+      const privateCount = unreadMessage.length
+
+      //未讀公開訊息
+      PublicChat.findAll({
+        raw: true,
+        nest: true,
+        where: {
+          [Op.and]: [{
+            unread: true,
+            [Op.not]: [
+              { UserId: req.user.id },
+            ]
+          }]
+        }
       })
+      .then(publicChat => {
+        const publicCount = publicChat.length
+
+        //未讀通知
+        Notice.findAll({
+          raw:true,
+          nest: true,
+          where: {
+            [Op.and]: [
+              { UserId: req.user.id },
+              { unread: true },
+            ]
+          }
+        }).then(notice => {
+          let hasNotice
+          if (notice.length > 0) {
+            hasNotice = true
+          }
+          res.send({
+            privateCount,
+            publicCount,
+            hasNotice
+          })
+        })
+      })
+      
+      
     })
   },
 
@@ -131,28 +168,6 @@ const messageController = {
     .then(notices => { 
       //console.log(notices[0].User.Followers)
       return res.render('notice', { notices })
-    })
-  },
-
-  getNoticeCount: (req, res) => {
-    Notice.findAll({
-      raw:true,
-      nest: true,
-      where: {
-        [Op.and]: [
-          { UserId: req.user.id },
-          { unread: true },
-        ]
-      } 
-    }).then(notice => {
-      let hasNotice
-      if (notice.length > 0) {
-        hasNotice = true
-        res.send({
-          'success': true,
-          'result': hasNotice
-        })
-      }
     })
   },
 

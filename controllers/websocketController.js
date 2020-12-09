@@ -11,6 +11,7 @@ const Reply = db.Reply
 const Followship = db.Followship
 const ReplyComment = db.ReplyComment
 const { Op } = require('sequelize')
+const publicchat = require('../models/publicchat')
 
 let onlineUsers = []
 module.exports = (io) => {
@@ -49,21 +50,47 @@ module.exports = (io) => {
     
         // listen for chat message
         socket.on('publicMessage', (msg) => {
-          if (msg) {
-            PublicChat.create({
-              UserId: user.id,
-              message: msg
-            })
-            // broadcast to everyone
-            io.emit('publicMessage', {
-              id: user.id,
-              username: user.name,
-              account: user.account,
-              avatar: user.avatar,
-              message: msg,
-              time: time(new Date())
-            })
-          }
+          PublicChat.findAll({
+            raw: true,
+            nest: true,
+            where: {
+              [Op.and]: [{
+                unread: true,
+                [Op.not]: [
+                  { UserId: userId },
+                ]
+              }]
+            }
+          })
+          .then(publicChat => {
+            console.log(publicChat)
+            let count = publicChat.length
+            if (msg) {
+              count ++
+              PublicChat.create({
+                UserId: user.id,
+                message: msg,
+                unread: true
+              })
+              // broadcast to everyone
+              io.emit('publicMessage', {
+                id: user.id,
+                username: user.name,
+                account: user.account,
+                avatar: user.avatar,
+                message: msg,
+                time: time(new Date())
+              })
+              console.log('----------')
+              console.log(count)
+              let public = true
+              io.emit('alert', {
+                count,
+                public
+              })
+            }
+          })
+         
         })
 
         
@@ -101,6 +128,9 @@ module.exports = (io) => {
                 message: msg,
                 time: time(new Date())
               })
+              console.log('alert--------------')
+              console.log(count)
+              console.log(receiveId)
               io.emit('alert', {
                 count,
                 receiveId
@@ -111,7 +141,10 @@ module.exports = (io) => {
         })
 
         //read
-        socket.on('read', ({ userId, receiveId }) => {
+        socket.on('read', ({ userId, receiveId, public }) => {
+          if (public) {
+            PublicChat.update({ unread: false }, { where: {} })
+          }
           PrivateChat.update({ unread: false }, { 
             where: {
               UserId: Number(receiveId),

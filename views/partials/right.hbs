@@ -4,6 +4,8 @@
       <strong>跟隨誰</strong>
     </li>
     {{#each users}}
+      {{#ifCond ../loginUser.id this.id}}
+      {{else}}
       <li class="list-group-item" style="background-color:rgb(245, 248, 250);">
         <div class="flex-container">
           {{!-- <div class="p-3">Avatar</div> --}}
@@ -18,21 +20,17 @@
             <span class="text-muted">@{{this.account}}</span>
           </div>
           <div class="align-self-center ml-auto">
-        {{#ifCond ../loginUser.id this.id}}
-        {{else}}
-        <div>
-        {{#if this.isFollowing}}
-          <input type="hidden" class="followingId" value="{{this.id}}">
-          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-        {{else}}
-          <input type="hidden" class="followingId" value="{{this.id}}">
-          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-        {{/if}}
-        </div>
-        {{/ifCond}}
+          {{#if this.isFollowing}}
+            <input type="hidden" class="followingId" value="{{this.id}}">
+            <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+          {{else}}
+            <input type="hidden" class="followingId" value="{{this.id}}">
+            <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+          {{/if}}   
           </div>
         </div>
       </li>
+      {{/ifCond}}
     {{/each}}
     <li class="list-group-item" style="background-color: rgb(245, 248, 250);">
       {{#if tweetFollowings}}

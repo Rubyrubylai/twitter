@@ -121,8 +121,7 @@ module.exports = (app, passport, io) => {
   app.get('/message', authenticated, messageController.getMessage)
   // app.get('/privateMessage', authenticated, messageController.getPrivateMessages)
   app.get('/message/:userId', authenticated, messageController.getPrivateMessage)
-  app.get('/privateMessageCount', authenticated, messageController.getPrivateMessageCount)
+  app.get('/count', authenticated, messageController.getCount)
   app.get('/notice', authenticated, messageController.getNotice)
-  app.get('/noticeCount', authenticated, messageController.getNoticeCount)
   app.post('/subscribe', authenticated, messageController.deleteSubscribed)
 }

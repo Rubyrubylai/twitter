@@ -1,38 +1,39 @@
 const xhr = new XMLHttpRequest()
-xhr.open('get','/privateMessageCount')
+xhr.open('get','/count')
 // xhr.setRequestHeader('Content-type','application/json;charset=utf-8')
 
 xhr.onload = function() {
   const data = JSON.parse(xhr.responseText)
-  const messageCount = data.result
-  if (messageCount >= 1) {
-    display(messageCount)
+  const privateCount = data.publicCount
+  const publicCount = data.privateCount
+  if (privateCount >= 1) {
+    display(privateCount)
   }
-}
-
-xhr.send()
-
-function display(messageCount) {
-  let htmlString = `
-  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${messageCount})</h6>
-  `
-  privateIcon.innerHTML = htmlString
-}
-
-xhr.open('get','/noticeCount')
-xhr.onload = function() {
-  const data = JSON.parse(xhr.responseText)
-  const hasNotice = data.result
-  if (hasNotice) {
+  if (publicCount >= 1) {
+    displayPublic(publicCount)
+  }
+  if (data.hasNotice) {
     displayNotice()
   }
 }
 
 xhr.send()
 
+function display(privateCount) {
+  $('#public-icon').html(`
+      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${privateCount})</h6>
+    `)
+}
+
+function displayPublic(publicCount) {
+  $('#private-icon').html(`
+    <h6><i class="fas fa-envelope fa-lg m-2"><div class="red-dot"></div></i>私人訊息 (${publicCount})</h6>
+  `)
+}
+
 function displayNotice() {
   let htmlString = `
-  <h6><i class="fas fa-bell fa-lg m-2"><div class="red-dot-notice"></div></i>通知</h6>
+  <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知</h6>
   `
   noticeIcon.innerHTML = htmlString
 }
