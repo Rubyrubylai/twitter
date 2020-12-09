@@ -1,5 +1,5 @@
 function dislike(obj) {
-  const form = $(obj).parent().parent()
+  const form = $(obj).parent()
   const type = $(obj).siblings('.type').val()
   const tweetId = $(obj).siblings('.tweetId').val()
   const tweetUserId = $(obj).siblings('.tweetUserId').val()

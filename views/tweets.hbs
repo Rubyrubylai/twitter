@@ -48,7 +48,7 @@
               <a href="/tweets/{{this.id}}/replies" style="float:left; color:black; margin-right:4px;"><i class="far fa-comment" style="color: grey;"></i></a>
               <div style="float:left; margin-right:25px;"> {{this.repliesCount}}</div>
             </div>
-            <div>
+            
             {{#if this.isLiked}}
               {{!-- <form action="/tweets/{{this.id}}/unlike" method="POST" style="float:left;"> --}}
               <div class="flex-container">
@@ -63,7 +63,7 @@
               
             {{else}}
               {{!-- <form action="/tweets/{{this.id}}/like" method="POST" style="float:left;"> --}}
-              <div class="like-form">
+              <div class="flex-container">
                 <input type="hidden" class="tweetId" value="{{this.id}}">
                 <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
                 <input type="hidden" class="likesCount" value="{{this.likesCount}}">
@@ -72,7 +72,7 @@
                 <div class="count">{{this.likesCount}}</div>
               </div>
             {{/if}}
-            </div>
+            
           </div>
         </div>
       </li>

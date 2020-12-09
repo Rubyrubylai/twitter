@@ -38,7 +38,7 @@ function like(obj) {
   const replyUserId = Number($(obj).siblings('.replyUserId').val())
   
   var likesCount = Number($(obj).siblings('.count').text()) + 1
-  const form = $(obj).parent().parent()
+  const form = $(obj).parent()
   console.log(form)
   form.html(`
   <div class="flex-container">       
