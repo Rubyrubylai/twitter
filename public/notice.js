@@ -31,21 +31,11 @@ socket.on('tweet', (data) => {
 
 //like a tweet or reply
 function like(obj) {
-  // let tweetId, tweetUserId, replyId, replyUserId
   const type = $(obj).siblings('.type').val()
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
   const replyId = Number($(obj).siblings('.replyId').val())
   const replyUserId = Number($(obj).siblings('.replyUserId').val())
-  // if (type === 'tweet') {
-  //   tweetId = Number($(obj).siblings('.tweetId').val())
-  //   tweetUserId = Number($(obj).siblings('.tweetUserId').val())
-  // }
-  // else {
-  //   tweetId = Number($(obj).siblings('.tweetId').val())
-  //   replyId = Number($(obj).siblings('.replyId').val())
-  //   replyUserId = Number($(obj).siblings('.replyUserId').val())
-  // }
   
   var likesCount = Number($(obj).siblings('.count').text()) + 1
   const form = $(obj).parent().parent()
@@ -68,12 +58,8 @@ function like(obj) {
     form.children().append('<input type="hidden" class="type" value="reply"></input>')
   }
   socket.emit('like', { tweetId, tweetUserId, replyId, replyUserId, type })
-  
 }
-// $('.like-form').submit((e) => {
-  
-// })
-  
+
 socket.on('like', (data) => {  
   if(data.tweetUserId === userId) {
     notice(data)
@@ -85,15 +71,15 @@ socket.on('like', (data) => {
 
 //post a tweetReply
 $('#reply-form').submit((e) => {
-  var comment = e.target.comment.value
-  const tweetId = Number(e.target.tweetId.value)
-  const tweetUserId = Number(e.target.tweetUserId.value)
-  const avatar = e.target.avatar.value
-  const name = e.target.name.value
-  const account = e.target.account.value
-  const tweetUserName = e.target.tweetUserName.value
-  const time = e.target.time.value
-  const commentNode = document.getElementById('comment')
+  var comment = $(obj).siblings('.comment').val()
+  const tweetId = Number($(obj).siblings('.tweetId').val())
+  const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
+  const avatar =$(obj).siblings('.avatar').val()
+  const name = $(obj).siblings('.name').val()
+  const account =$(obj).siblings('.account').val()
+  const tweetUserName = $(obj).siblings('.tweetUserName').val()
+  const time = $(obj).siblings('.time').val()
+  const commentNode = document.getElementById('commentNode')
 
   if (comment.length === 0) {
     e.preventDefault()
@@ -104,7 +90,7 @@ $('#reply-form').submit((e) => {
   else {
     const tweetReplies = document.getElementById('tweetReplies')
 
-    tweetReplies.innerHTML += `
+    $('#tweetReplies').append(`
     <div class="flex-container mb-2">
       <div>
         <a href="/users/${userId}/tweets">
@@ -122,11 +108,11 @@ $('#reply-form').submit((e) => {
         <font color="coral" size="2px">@${tweetUserName}</font>
       </div>
     </div>
-    `
+    `)
     commentNode.value = ''
     
     socket.emit('reply', { comment, userId, tweetId, tweetUserId })
-    e.preventDefault()    
+    
   }
 })
 
@@ -137,30 +123,25 @@ socket.on('reply', (data) => {
 })
 
 //post a replyComment
-$('#reply-comment-form').submit((e) => {
-  console.log(e.target)
-  var comment = e.target.comment.value
-  e.preventDefault()    
-  const tweetId = Number(e.target.tweetId.value)
-  const replyId = Number(e.target.replyId.value)
-  const replyUserId = Number(e.target.replyUserId.value)
-  const avatar = e.target.avatar.value
-  const name = e.target.name.value
-  const account = e.target.account.value
-  const replyUserName = e.target.replyUserName.value
-  const time = e.target.time.value
-  const commentReplyNode = document.getElementById('reply-comment')
+function replyComment(obj) {
+  var comment = $(obj).siblings('.comment').val()
+  const tweetId = Number($(obj).siblings('.tweetId').val())
+  const replyId = Number($(obj).siblings('.replyId').val())
+  const replyUserId = Number($(obj).siblings('.replyUserId').val())
+  const avatar = $(obj).siblings('.avatar').val()
+  const name = $(obj).siblings('.name').val()
+  const account = $(obj).siblings('.account').val()
+  const replyUserName = $(obj).siblings('.replyUserName').val()
+  const time = $(obj).siblings('.time').val()
   
   if (comment.length === 0) {
-    e.preventDefault()
+    return false
   }
   else if (comment.length > 100) {
-    e.preventDefault()
+    return false
   }
   else {
-    const replyComments = document.getElementById('reply-comments')
-
-    replyComments.innerHTML += `
+    $('#reply-comments').append(`
     <div class="flex-container mb-2">
       <div>
         <a href="/users/${userId}/tweets">
@@ -168,6 +149,16 @@ $('#reply-comment-form').submit((e) => {
         </a>
       </div>
       <div>
+        <div class="dropdown show" style="position:absolute; right:20px;">
+          <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            •••
+          </a>
+          <div class="dropdown-menu" aria-labelledby="more">
+            <button data-toggle="modal" data-target="#er${replyId}" class="dropdown-item">修改此留言</button>
+            <button data-toggle="modal" data-target="#cr${replyId}" class="dropdown-item">刪除此留言</button>
+          </div>
+        </div>
         <a href="/users/${userId}/tweets
         " style="text-decoration:none; color:black"><strong>${name}</strong></a>
         <font color="grey">@${account} • ${time}</font>
@@ -178,13 +169,13 @@ $('#reply-comment-form').submit((e) => {
         <font color="coral" size="2px">@${replyUserName}</font>
       </div>
     </div>
-    `
-    commentReplyNode.value = ''
+    `)
+    $('#reply-comment')
     
     socket.emit('replyComment', { comment, userId, tweetId, replyId, replyUserId })
-    e.preventDefault()    
+    $(obj).siblings('.comment').val('')
   }
-})
+}
 
 socket.on('replyComment', (data) => {  
   if(data.replyUserId === userId) {
