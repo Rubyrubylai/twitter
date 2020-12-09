@@ -1,6 +1,7 @@
 function dislike(obj) {
   const form = $(obj).parent()
   const type = $(obj).siblings('.type').val()
+  const type2 = $(obj).siblings('.type2').val()
   const tweetId = $(obj).siblings('.tweetId').val()
   const tweetUserId = $(obj).siblings('.tweetUserId').val()
   const replyId = $(obj).siblings('.replyId').val()
@@ -19,10 +20,21 @@ function dislike(obj) {
           <input type="hidden" class="tweetUserId" value="${tweetUserId}">
           <input type="hidden" class="likesCount" value="${likesCount}">
           <input type="hidden" class="type" value="tweet">
-          <button onclick="like(this)" class="btn-push" name="icon"><i class="far fa-heart"></i></button>
-          <div class="count">${likesCount}</div>
         </div>
         `)
+        if (type2 === 'tweetLike') {
+          form.children().append(`
+            <input type="hidden" class="type2" value="tweetLike">
+            <button onclick="like(this)" class="btn-push"><i class="far fa-heart fa-lg"></i></button>
+          `)
+          $('#tweet-like').text(likesCount)
+        }
+        else {
+          form.children().append(`
+            <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
+            <div class="count">${likesCount}</div> 
+          `)
+        }
       },
       error: function() {
         console.error(err)
@@ -43,10 +55,21 @@ function dislike(obj) {
           <input type="hidden" class="replyUserId" value="${replyUserId}">
           <input type="hidden" class="likesCount" value="${likesCount}">
           <input type="hidden" class="type" value="reply">
-          <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
-          <div class="count">${likesCount}</div>
         </div>
         `)
+        if (type2 === 'tweetLike') {
+          form.children().append(`
+            <input type="hidden" class="type2" value="tweetLike">
+            <button onclick="like(this)" class="btn-push"><i class="far fa-heart fa-lg"></i></button>
+          `)
+          $('#tweet-like').text(likesCount)
+        }
+        else {
+          form.children().append(`
+            <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
+            <div class="count">${likesCount}</div> 
+          `)
+        }
       },
       error: function() {
         console.error(err)

@@ -32,6 +32,7 @@ socket.on('tweet', (data) => {
 //like a tweet or reply
 function like(obj) {
   const type = $(obj).siblings('.type').val()
+  const type2 = $(obj).siblings('.type2').val()
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
   const replyId = Number($(obj).siblings('.replyId').val())
@@ -41,16 +42,28 @@ function like(obj) {
   const form = $(obj).parent()
   console.log(form)
   form.html(`
-  <div class="flex-container">       
-    <input type="hidden" class="tweetId" value="${tweetId}">
-    <input type="hidden" class="tweetUserId" value="${tweetUserId}">
-    <input type="hidden" class="likesCount" value="${likesCount}">
-    <input type="hidden" class="replyId" value="${replyId}">
-    <input type="hidden" class="replyUserId" value="${replyUserId}">
-    <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
-    <div class="count">${likesCount}</div>
-  </div>
+      <div class="flex-container">       
+        <input type="hidden" class="tweetId" value="${tweetId}">
+        <input type="hidden" class="tweetUserId" value="${tweetUserId}">
+        <input type="hidden" class="likesCount" value="${likesCount}">
+        <input type="hidden" class="replyId" value="${replyId}">
+        <input type="hidden" class="replyUserId" value="${replyUserId}">
+      </div>
   `)
+  if (type2 === 'tweetLike') {
+    form.children().append(`
+      <input type="hidden" class="type2" value="tweetLike">
+      <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart fa-lg like-icon"></i></button>
+    `)
+    $('#tweet-like').text(likesCount)
+  }
+  else {
+    form.children().append(`
+      <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+      <div class="count">${likesCount}</div> 
+    `)
+  }
+  
   if (type === 'tweet') {
     form.children().append('<input type="hidden" class="type" value="tweet"></input>')
   }
