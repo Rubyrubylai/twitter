@@ -141,12 +141,12 @@ module.exports = (io) => {
         })
 
         //when receive the notification
-        socket.on('notice', (room) => {
+        socket.on('notice', (subscribedId) => {
           Subscribeship.create({
             subscriberId: user.id,
-            subscribedId: room      
+            subscribedId: subscribedId      
           })
-          socket.join(room)
+          socket.join(subscribedId)
         })
 
         // let noticeCount = new Promise((resolve, reject) => {

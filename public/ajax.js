@@ -100,3 +100,26 @@ function unfollow(obj) {
   })
   return false
 }
+
+function unsubscribe(obj) {
+  const subscribedId = $(obj).children('#subscribedId').val()
+  const form = $(obj).parent()
+  $.ajax({
+    method: 'POST',
+    url: '/subscribe',
+    data: { subscribedId },
+    dataType: 'text',
+    success: function(response) {
+      form.html(`
+      <button onclick="subscribe(this)" class="btn-push">
+        <input type="hidden" id="subscribedId" value="${subscribedId}">
+        <i class="far fa-bell fa-2x mt-1 mx-2" style="color: rgb(255, 102, 0);"></i>
+      </button>
+      `)
+    },
+    error: function() {
+      console.error(err)
+    }
+  })
+  return false
+}

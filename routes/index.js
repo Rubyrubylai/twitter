@@ -124,4 +124,5 @@ module.exports = (app, passport, io) => {
   app.get('/privateMessageCount', authenticated, messageController.getPrivateMessageCount)
   app.get('/notice', authenticated, messageController.getNotice)
   app.get('/noticeCount', authenticated, messageController.getNoticeCount)
+  app.post('/subscribe', authenticated, messageController.deleteSubscribed)
 }

@@ -315,10 +315,12 @@ const userController = {
       include: [
         { model: Tweet, include: [Like, Reply] },
         { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' }
+        { model: User, as: 'Followers' },
+        { model: User, as: 'subscriber'}
       ]
     }).then(user => {
-      console.log(user)
+      
+
       const tweets = user.toJSON().Tweets.map(tweet => ({
         id: user.toJSON().id,
         avatar: user.toJSON().avatar,
@@ -329,10 +331,11 @@ const userController = {
         replyCount: tweet.Replies.length,
         likeCount: tweet.Likes.length,
         tweetId: tweet.id,
-        isLiked: loginUser.Likes.map(like => like.TweetId).includes(tweet.id)
+        isLiked: loginUser.Likes.map(like => like.TweetId).includes(tweet.id),
+        
       }))
-
       const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
       // Right side
       // filter the tweets to those that user followings & user himself
@@ -374,7 +377,8 @@ const userController = {
           tweetFollowings,
           loginUser,
           users,
-          isFollowed
+          isFollowed,
+          isSubscribed
         })
       })
     })
@@ -396,6 +400,7 @@ const userController = {
         },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' },
+        { model: User, as: 'subscriber'},
         Tweet
       ]
     }).then(user => {
@@ -421,6 +426,7 @@ const userController = {
         isLiked: loginUser.Likes.map(like => like.TweetId).includes(reply.TweetId)
       }))
       const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
       // Right side
       // filter the tweets to those that user followings & user himself
@@ -462,7 +468,8 @@ const userController = {
           tweetFollowings,
           loginUser,
           users,
-          isFollowed
+          isFollowed,
+          isSubscribed
         })
       })
     })
@@ -479,6 +486,7 @@ const userController = {
           { model: Reply, include: [User, ReplyComment, Like] }] },
         { model: User, as: 'Followings' },
         { model: User, as: 'Followers' },
+        { model: User, as: 'subscriber'},
         Tweet
       ]
     }).then(user => {
@@ -498,6 +506,8 @@ const userController = {
       }))
 
       const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
+
       // Right side
       // filter the tweets to those that user followings & user himself
       const tweetFollowings = []
@@ -539,7 +549,8 @@ const userController = {
           tweetFollowings,
           loginUser,
           users,
-          isFollowed
+          isFollowed,
+          isSubscribed
         })
       })
     })

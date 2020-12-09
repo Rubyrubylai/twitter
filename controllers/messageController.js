@@ -8,6 +8,7 @@ const Like = db.Like
 const Reply = db.Reply
 const ReplyComment = db.ReplyComment
 const Followship = db.Followship
+const Subscribeship = db.Subscribeship
 const { Op } = require('sequelize')
 
 const messageController = {
@@ -152,6 +153,17 @@ const messageController = {
           'result': hasNotice
         })
       }
+    })
+  },
+
+  deleteSubscribed: (req, res) => {
+    Subscribeship.destroy({ where: {
+        subscriberId: req.user.id,
+        subscribedId: req.body.subscribedId
+      }
+    })
+    .then(subscribship => {
+      return res.redirect('back')
     })
   }
 }

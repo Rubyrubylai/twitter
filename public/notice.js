@@ -8,6 +8,18 @@ $('.notice-btn').click((e) => {
   socket.emit('notice', room)
 })
 
+function subscribe(obj) {
+  const subscribedId = Number($(obj).children('#subscribedId').val())
+  const form = $(obj).parent()
+  form.html(`
+  <button onclick="unsubscribe(this)" class="btn-push">
+    <input type="hidden" id="subscribedId" value="${subscribedId}">
+    <i class="far fa-bell-slash fa-2x mt-1 mx-2" style="color: rgb(255, 102, 0);"></i>
+  </button>
+  `)
+  socket.emit('notice', subscribedId)
+}
+
 //post a tweet
 $('#tweet').submit((e) => {
   const description = e.target.description.value
