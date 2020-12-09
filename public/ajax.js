@@ -82,17 +82,25 @@ function dislike(obj) {
 
 function unfollow(obj) {
   const followingId = $(obj).siblings('.followingId').val()
+  const type = $(obj).siblings('.type').val()
   const form = $(obj).parent()
+  console.log($(obj).parents('.follow-list'))
   $.ajax({
     method: 'POST',
     url: `/followships/delete`,
     data: { followingId },
     dataType: 'text',
     success: function(response) {
-      form.html(`
-      <input type="hidden" class="followingId" value="${followingId}">
-      <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-      `)
+      if (type === 'userFollowings') {
+        $(obj).parents('.follow-list').remove()
+      }
+      else {
+        form.html(`
+        <input type="hidden" class="followingId" value="${followingId}">
+        <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+        `)
+        $('#follower-count').text(Number($('#follower-count').text())-1)
+      }
     },
     error: function() {
       console.error(err)

@@ -55,9 +55,15 @@
       <a href="/users/{{userId}}/tweets" style="color:black; text-decoration:none;">
         <span style="color: grey">@{{account}}</span><br>
       </a>
-      <span>{{introduction}}</span><br>
-      {{followingsCount}}個 <a href="/users/{{user.id}}/followings" style="text-decoration:none;"><span style="color: grey">跟隨中</span></a>
-      {{followersCount}}位 <a href="/users/{{user.id}}/followers" style="text-decoration:none;"><span style="color: grey">跟隨者</span></a>
+      <span>{{introduction}}</span>
+      <div>
+        <a href="/users/{{user.id}}/followings" style="text-decoration:none;">
+          <span style="color: grey">{{followingsCount}}位 跟隨中</span>
+        </a>
+        <a href="/users/{{user.id}}/followers" style="text-decoration:none;">
+          <span id="follower-count">{{followersCount}}</span><span style="color: grey">位 跟隨者</span>
+        </a>
+      </div>
     </div>
   </div>
   <div class="row border-bottom">

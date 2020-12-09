@@ -216,7 +216,7 @@ function follow(obj) {
   <input type="hidden" class="followingId" value="${followingId}">
   <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
   `)
-  console.log(followingId)
+  $('#follower-count').text(Number($('#follower-count').text())+1)
   socket.emit('follow', followingId)
 }
 
