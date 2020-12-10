@@ -191,8 +191,6 @@ module.exports = (io) => {
           })
           .then(notice => {
             if (receiveId !== userId) {
-              console.log('---------------notice')
-              console.log(notice)
               let count = notice.length || 0
               count ++
               io.emit('alertNotice',{
@@ -200,16 +198,12 @@ module.exports = (io) => {
                 count
               })
             }
-            
           })
         }
         
         //when receive subscribed post a tweet
         socket.on('tweet', (data) => {
           const { description, username } = data
-          console.group('----------------')
-          console.log(description)
-          console.log(username)
           Tweet.create({
             description,
             UserId: userId
@@ -238,11 +232,6 @@ module.exports = (io) => {
                   )
                   countNotice(items.subscriberId)
                 }
-               
-                // io.emit('alertNotice', {
-                //   count,
-                //   receiveId: items.subscriberId
-                // })
               })
               
               return Promise.all(results).then(() => {
@@ -280,11 +269,6 @@ module.exports = (io) => {
                 })
                 countNotice(tweetUserId)
               }
-              
-              // io.emit('alertNotice', {
-              //   // count,
-              //   receiveId: tweetUserId
-              // })
             })
           }
           else {
@@ -309,16 +293,9 @@ module.exports = (io) => {
                   
                 })
                 countNotice(replyUserId)
-              }
-              
+              } 
             })
-          }
-          
-          // io.emit('alertNotice', {
-          //   count,
-          //   receiveId: replyUserId
-          // })
-          
+          } 
         })
 
         //when receive others reply
@@ -342,15 +319,8 @@ module.exports = (io) => {
                 io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
               })
               countNotice(tweetUserId)
-            }
-            
-           
+            }          
           })
-         
-          // io.emit('alertNotice', {
-          //   count,
-          //   receiveId: tweetUserId
-          // })
         })
 
         //when receive others reply comments
@@ -374,15 +344,8 @@ module.exports = (io) => {
                 io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
               })
               countNotice(replyUserId)
-            }
-            
-           
+            }       
           })
-         
-          // io.emit('alertNotice', {
-          //   // count,
-          //   receiveId: replyUserId
-          // })
         })
 
 
@@ -405,12 +368,6 @@ module.exports = (io) => {
               })
               countNotice(followingId)
             }
-            
-            // io.emit('alertNotice', {
-            //   // count,
-            //   receiveId: followingId
-            // })
-           
           })
         })
         

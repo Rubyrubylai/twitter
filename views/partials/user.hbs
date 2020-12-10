@@ -7,7 +7,7 @@
       <form action="/users/{{user.id}}?_method=PUT" method="POST" enctype="multipart/form-data">
         <!-- Modal header -->
         <div class="modal-header">
-          <button type="button" class="border-0" style="background-color: rgba(0, 0, 0, 0);color: rgb(255, 102, 0);"
+          <button type="button" class="border-0 btn-close"
             data-dismiss="modal" aria-label="Close">
             <h5>X</h5>
           </button>
@@ -16,9 +16,9 @@
         </div>
         <!-- Modal body -->
         <div class="modal-body no-gutters p-0">
-          <div class="form-group" style="height:275px">
-            <img src="{{ cover }}" id="preCover" class="img-fluid user_cover" alt="Responsive image">
-            <img src="{{ avatar }}" id="preAvatar" class="user_avatar ml-3">
+          <div class="form-group edit-user-page">
+            <img src="{{cover}}" id="preCover" class="img-fluid user_cover" alt="Responsive image">
+            <img src="{{avatar}}" id="preAvatar" class="user_avatar ml-3">
           </div>
           <div class="form-group mx-3">
             <label for="name" class="col-form-label">名稱</label>

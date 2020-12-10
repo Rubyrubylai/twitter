@@ -21,42 +21,42 @@
       <div class="col-2 mr-5">
         <div class="row">
           <div class="col mb-5">
-            <img style="width: 50px; height: 50px" src="https://i.imgur.com/yqet9K2.png" alt="AlphaCamp">
+            <img class="logo" src="https://i.imgur.com/yqet9K2.png" alt="AlphaCamp">
           </div>
         </div>
         <div class="row">
           {{#ifCond user.role 'admin'}}
             <div class="col">
-              <a href="/admin/tweets" class="btn" style="color: black;">
-                <h6><i class="fa fa-home fa-lg m-3"></i>推文清單</h6>
+              <a href="/admin/tweets" class="btn a-black">
+                <h6><i class="fa fa-home fa-lg nav-icon"></i>推文清單</h6>
               </a><br>
-              <a href="/admin/users" class="btn" style="color: black;">
-                <h6><i class="fa fa-user fa-lg m-3"></i>使用者列表</h6>
+              <a href="/admin/users" class="btn a-black">
+                <h6><i class="fa fa-user fa-lg nav-icon"></i>使用者列表</h6>
               </a><br>
             </div>
             {{else}}
-              <div class="col list-group">
-                <a href="/" class="list-group-item border-0" style="color: black;">
-                  <h6><i class="fa fa-home fa-lg m-2"></i>首頁</h6>
+              <div class="col list-group nav">
+                <a href="/" class="list-group-item border-0 a-black">
+                  <h6><i class="fa fa-home fa-lg nav-icon"></i>首頁</h6>
                 </a>
-                <a href="/notice" class="list-group-item border-0" style="color: black;" id="notice-icon">
-                  <h6><i class="fas fa-bell fa-lg m-2"></i>通知</h6>
+                <a href="/notice" class="list-group-item border-0 a-black" id="notice-icon">
+                  <h6><i class="fas fa-bell fa-lg nav-icon"></i>通知</h6>
                 </a>
-                <a href="/message" class="list-group-item border-0" style="color:black;" id="public-icon">
-                  <h6><i class="fas fa-comments m-2"></i>公開聊天室</h6>
+                <a href="/message" class="list-group-item border-0 a-black" id="public-icon">
+                  <h6><i class="fas fa-comments nav-icon"></i>公開聊天室</h6>
                 </a>
-                <a href="/message/{{user.id}}" class="list-group-item border-0" style="color: black;" id="private-icon">
-                  <h6><i class="fas fa-envelope fa-lg m-2"></i>私人訊息</h6>
+                <a href="/message/{{user.id}}" class="list-group-item border-0 a-black" id="private-icon">
+                  <h6><i class="fas fa-envelope fa-lg nav-icon"></i>私人訊息</h6>
                 </a>
-                <a href="/users/{{user.id}}/tweets" class="list-group-item border-0" style="color: black;">
-                  <h6><i class="fa fa-user fa-lg m-2"></i>個人資料</h6>
+                <a href="/users/{{user.id}}/tweets" class="list-group-item border-0 a-black">
+                  <h6><i class="fa fa-user fa-lg nav-icon"></i>個人資料</h6>
                 </a>
-                <a href="/users/settings" class="list-group-item border-0" style="color: black;">
-                  <h6><i class="fa fa-cog fa-lg m-2"></i>設定</h6>
+                <a href="/users/settings" class="list-group-item border-0 a-black">
+                  <h6><i class="fa fa-cog fa-lg nav-icon"></i>設定</h6>
                 </a>
 
 
-              <button data-toggle="modal" data-target="#createTweet" class="btn btn-create rounded-pill" style="width: 180px">推文</button>
+                <button data-toggle="modal" data-target="#createTweet" class="btn btn-create rounded-pill">推文</button>
               <!-- pop up create tweet message -->
               {{> message}}
               </div>
@@ -64,8 +64,8 @@
         </div>
         <div class="row">
           <div class="col">
-            <a href="/logout" class="btn" style="color: black;">
-              <h6><i class="fas fa-sign-out-alt fa-lg m-3"></i>登出</h6>
+            <a href="/logout" class="btn a-black">
+              <h6><i class="fas fa-sign-out-alt fa-lg log-out"></i>登出</h6>
             </a>
           </div>
         </div>

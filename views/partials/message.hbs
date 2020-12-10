@@ -3,7 +3,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: coral;">
+        <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -15,7 +15,7 @@
             </a>
           </div>
           <div>
-            <a href="/users/{{tweet.User.id}}/tweets" style="text-decoration:none; color:black"><strong>{{tweet.User.name}}</strong></a>
+            <a class="a-black" href="/users/{{tweet.User.id}}/tweets"><strong>{{tweet.User.name}}</strong></a>
             <font color="grey">@{{tweet.User.account}} • {{moment tweet.updatedAt}}</font>
             <p>
               {{tweet.description}}
@@ -31,8 +31,8 @@
               </a>
             </div>
             <div>
-              <a href="/users/{{this.User.id}}/tweets
-              " style="text-decoration:none; color:black"><strong>{{this.User.name}}</strong></a>
+              <a class="a-black" href="/users/{{this.User.id}}/tweets
+              "><strong>{{this.User.name}}</strong></a>
               <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
               <p>
                 {{this.comment}}
@@ -47,11 +47,10 @@
           <div>
             <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
           </div>
-          <div style="width: 600px;">
-            {{!-- <form action="/tweets/{{tweet.id}}/replies" method="POST"> --}}
-            <form action="" id="reply-form">
-              <textarea placeholder="推你的回覆" class="form-control" id="comment" name="comment" rows="3"
-                style="border: none;"></textarea>
+          <div class="post-tweet">
+            <form id="reply-form">
+              <textarea placeholder="推你的回覆" class="form-control description" id="comment" name="comment" rows="3"
+                ></textarea>
               <input type="hidden" name="tweetId" value="{{tweet.id}}">
               <input type="hidden" name="tweetUserId" value="{{tweet.User.id}}">
               <input type="hidden" name="avatar" value="{{user.avatar}}">
@@ -59,8 +58,7 @@
               <input type="hidden" name="account" value="{{user.account}}">
               <input type="hidden" name="tweetUserName" value="{{tweet.User.name}}">
               <input type="hidden" name="time" value="{{moment now}}">
-              <button class="btn" type="submit"
-                style="border-radius: 18px; background:coral; color:white; width: 60px; float: right;">留言</button>
+              <button class="btn btn-reply" type="submit">留言</button>
             </form>
           </div>
         </div>
@@ -74,7 +72,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: coral;">
+          <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -86,7 +84,7 @@
               </a>
             </div>
             <div>
-              <a href="/users/{{this.User.id}}/tweets" style="text-decoration:none; color:black"><strong>{{this.User.name}}</strong></a>
+              <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
               <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
               <p>
                 {{this.comment}}
@@ -103,8 +101,8 @@
               </div>
               <div>
                 {{#ifCond ../../loginUser.id this.User.id}}
-                  <div class="dropdown show" style="position:absolute; right:20px;">
-                    <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+                  <div class="dropdown more">
+                    <a class="a-black" role="button" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false">
                       •••
                     </a>
@@ -114,7 +112,7 @@
                     </div>
                   </div>
                 {{/ifCond}}
-                <a href="/users/{{this.User.id}}/tweets" style="text-decoration:none; color:black"><strong>{{this.User.name}}</strong></a>
+                <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
                 <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
                 <p>
                   {{this.comment}}
@@ -133,11 +131,11 @@
             <div>
               <img src="{{../loginUser.avatar}}" alt="user avatar" class="user-avatar">
             </div>
-            <div style="width: 600px;">
+            <div class="post-tweet">
               {{!-- <form action="/replies/{{this.id}}" method="POST"> --}}
               <div id="reply-comment-form">
                 <textarea placeholder="推你的回覆" class="form-control comment" id="reply-comment" rows="3"
-                  style="border: none;"></textarea>
+                  ></textarea>
                 <input type="hidden" class="tweetId" value="{{../tweet.id}}">
                 <input type="hidden" class="replyId" value="{{this.id}}">
                 <input type="hidden" class="replyUserId" value="{{this.User.id}}">
@@ -146,8 +144,7 @@
                 <input type="hidden" class="account" value="{{../user.account}}">
                 <input type="hidden" class="replyUserName" value="{{this.User.name}}">
                 <input type="hidden" class="time" value="{{moment now}}">
-                <button  onclick="replyComment(this)" class="btn" type="button"
-                  style="border-radius: 18px; background:coral; color:white; width: 60px; float: right;">留言</button>
+                <button  onclick="replyComment(this)" class="btn btn-reply" type="button">留言</button>
               </div>
             </div>
           </div>
@@ -161,7 +158,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:coral;">
+        <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -169,16 +166,15 @@
         <form id="tweet" onSubmit="tweet(this)">
           <div class="flex-container">
             <div>
-              <img src="{{user.avatar}}" alt="user avatar" class="user-avatar"
-                style="border-radius: 50%; height: 50px; width: 50px">
+              <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
             </div>
-            <div style="width: 600px;">
+            <div class="post-tweet">
               <input type="hidden" class="username" value="{{user.name}}">
               <textarea placeholder="有什麼新鮮事?" class="form-control description" id="description" rows="3"
-                style="border: none;"></textarea>
+                ></textarea>
             </div>
           </div>
-          <button class="btn btn-create" type="submit" style="border-radius: 18px; float: right;">推文</button>
+          <button class="btn btn-reply" type="submit">推文</button>
         </form>
       </div>
     </div>

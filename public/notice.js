@@ -14,7 +14,7 @@ function subscribe(obj) {
   form.html(`
   <button onclick="unsubscribe(this)" class="btn-push">
     <input type="hidden" id="subscribedId" value="${subscribedId}">
-    <i class="far fa-bell-slash fa-2x mt-1 mx-2" style="color: rgb(255, 102, 0);"></i>
+    <i class="far fa-bell-slash fa-2x mt-1 mx-2 a-coral"></i>
   </button>
   `)
   socket.emit('notice', subscribedId)
@@ -35,25 +35,6 @@ function tweet(obj) {
     socket.emit('tweet', { description, userId, username })
   }
 }
-
-// $('#tweet').submit((e) => {
-//   e.preventDefault()
-//   console.log('AAAAAAAAAAA')
-//   const description = e.target.description.value
-//   const username = e.target.username.value
-//   console.log(description)
-//   console.log('------------')
-  
-//   if (description.length === 0) {
-//     e.preventDefault()
-//   }
-//   else if (description.length > 140) {
-//     e.preventDefault()
-//   }
-//   else {
-//     socket.emit('tweet', { description, userId, username })
-//   }
-// })
 
 // notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {
@@ -138,18 +119,17 @@ $('#reply-form').submit((e) => {
     <div class="flex-container mb-2">
       <div>
         <a href="/users/${userId}/tweets">
-          <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+          <img class="user-avatar" src="${avatar}" alt="user avatar">
         </a>
       </div>
       <div>
-        <a href="/users/${userId}/tweets
-        " style="text-decoration:none; color:black"><strong>${name}</strong></a>
-        <font color="grey">@${account} • ${time}</font>
+        <a class="a-black" href="/users/${userId}/tweets"><strong>${name}</strong></a>
+        <font class="reply-font">@${account} • ${time}</font>
         <p>
         ${comment}
         </p>
-        <font color="grey" size="2px">回覆給</font>
-        <font color="coral" size="2px">@${tweetUserName}</font>
+        <font class="reply-to-font">回覆給</font>
+        <font class="reply-to-account">@${tweetUserName}</font>
       </div>
     </div>
     `)
@@ -189,12 +169,12 @@ function replyComment(obj) {
     <div class="flex-container mb-2">
       <div>
         <a href="/users/${userId}/tweets">
-          <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
+          <img class="user-avatar" src="${avatar}" alt="user avatar">
         </a>
       </div>
       <div>
-        <div class="dropdown show" style="position:absolute; right:20px;">
-          <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+        <div class="dropdown more">
+          <a class="a-black" role="button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="false">
             •••
           </a>
@@ -204,7 +184,7 @@ function replyComment(obj) {
           </div>
         </div>
         <a href="/users/${userId}/tweets
-        " style="text-decoration:none; color:black"><strong>${name}</strong></a>
+        " class="a-black"><strong>${name}</strong></a>
         <font color="grey">@${account} • ${time}</font>
         <p>
         ${comment}

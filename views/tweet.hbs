@@ -2,22 +2,21 @@
 <div class="col">
   <ul class="list-group">
     <li class="list-group-item">
-      <a href="javascript:history.back()" style="color:black;"><i class="fas fa-arrow-left mr-4"></i></a>
+      <a href="javascript:history.back()" class="back"><i class="fas fa-arrow-left"></i></a>
       <strong>推文</strong>
     </li>
     <li class="list-group-item">
       <div class="flex-container">
         <a href="/users/{{tweet.User.id}}/tweets">
-          <img class="mr-2 user-avatar" src="{{tweet.User.avatar}}" alt="user avatar"
-            style="border-radius: 50%; height: 50px; width: 50px">
+          <img class="user-avatar" src="{{tweet.User.avatar}}" alt="user avatar">
         </a>
         <div>
-          <a href="/users/{{tweet.User.id}}/tweets" style="text-decoration:none; color:black"><strong>{{tweet.User.name}}</strong><br></a>
+          <a href="/users/{{tweet.User.id}}/tweets" class="a-black"><strong>{{tweet.User.name}}</strong><br></a>
           <font class="text-muted">@{{tweet.User.account}}</font>
         </div>
-        {{#ifCond loginUser.id tweet.User.id}}
-          <div class="dropdown show" style="position:absolute; right:20px;">
-            <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+        {{#ifCond user.id tweet.User.id}}
+          <div class="dropdown more">
+            <a class="a-black" role="button" data-toggle="dropdown"
               aria-haspopup="true" aria-expanded="false">
               •••
             </a>
@@ -28,9 +27,9 @@
           </div>
         {{/ifCond}}
       </div>
-      <div class="mt-2">
+      <div class="tweet-desc">
         <p>{{tweet.description}}</p>
-        <font class="text-muted" size="2px">{{date tweet.updatedAt}}</font>
+        <font class="text-muted">{{date tweet.updatedAt}}</font>
       </div>
     </li>
     <li class="list-group-item">
@@ -38,8 +37,8 @@
       <strong id="tweet-like">{{tweet.Likes.length}}</strong> 喜歡次數
     </li>
     <li class="list-group-item">
-      <div class="flex-container">
-      <button data-toggle="modal" data-target="#s{{tweet.id}}" class="mr-3 btn-push"><i class="far fa-comment mr-3 fa-lg" style="color: grey;"></i></button>
+      <div class="flex-container tweets">
+      <button data-toggle="modal" data-target="#s{{tweet.id}}" class="tweet-icon"><i class="far fa-comment fa-lg"></i></button>
       <div>
         {{#if isLikedTweet}}
           <input type="hidden" class="tweetId" value="{{tweet.id}}">
@@ -47,14 +46,14 @@
           <input type="hidden" class="likesCount" value="{{tweet.Likes.length}}">
           <input type="hidden" class="type" value="tweet">
           <input type="hidden" class="type2" value="tweetLike">
-          <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart fa-lg like-icon"></i></button>
+          <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart fa-lg like-icon"></i></button>
         {{else}}
           <input type="hidden" class="tweetId" value="{{tweet.id}}">
           <input type="hidden" class="tweetUserId" value="{{tweet.User.id}}">
           <input type="hidden" class="likesCount" value="{{tweet.Likes.length}}">
           <input type="hidden" class="type" value="tweet">
           <input type="hidden" class="type2" value="tweetLike">
-          <button onclick="like(this)" class="btn-push" name="icon"><i class="far fa-heart fa-lg"></i></button>
+          <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart fa-lg"></i></button>
         {{/if}}
       </div>
       </div>
@@ -65,14 +64,13 @@
         <div class="flex-container">
           <div>
             <a href="/users/{{this.User.id}}/tweets">
-              <img class="mr-2" src="{{this.User.avatar}}" alt="user avatar"
-                style="width: 50px; height: 50px; border-radius: 50%;">
+              <img class="user-avatar" src="{{this.User.avatar}}" alt="user avatar">
             </a>
           </div>
           <div>
-            {{#ifCond ../loginUser.id this.User.id}}
-              <div class="dropdown show" style="position:absolute; right:20px;">
-                <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
+            {{#ifCond ../user.id this.User.id}}
+              <div class="dropdown more">
+                <a class="a-custom" role="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
                   •••
                 </a>
@@ -82,42 +80,33 @@
                 </div>
               </div>
             {{/ifCond}}
-            <a href="/users/{{this.User.id}}/tweets" style="text-decoration:none; color:black"><strong>{{this.User.name}}</strong></a>
+            <a href="/users/{{this.User.id}}/tweets" class="a-black"><strong>{{this.User.name}}</strong></a>
             <font class="text-muted">@{{this.User.account}} • {{moment this.updatedAt}}</font>
             <br>
-            <font class="text-muted" size="2px">回覆</font>
-            <a href="/users/{{../tweet.User.id}}/tweets" style="color: coral; text-decoration:none;" style="font-size: 2px;">@{{../tweet.User.name}}</a>
+            <font class="text-muted reply">回覆</font>
+            <a href="/users/{{../tweet.User.id}}/tweets" class="a-coral">@{{../tweet.User.name}}</a>
             <p>{{this.comment}}</p>
             <div>
-              <button data-toggle="modal" data-target="#r{{this.id}}"
-                style="float: left; color:black; font-size:10px; border:none; background-color:white;"><i
-                  class="far fa-comment" style="color: grey;"></i></button>
-              <div style="float: left; font-size:10px; margin-right: 25px;">{{this.ReplyComments.length}}</div>
+              <button data-toggle="modal" data-target="#r{{this.id}}" class="tweet-icon"><i class="far fa-comment"></i></button>
+              <div class="comments-count">{{this.ReplyComments.length}}</div>
             </div>
             <div>
               <div class="flex-container">
             {{#if this.isLikedReply}}
-              {{!-- <form action="/like/{{this.id}}/replies?_method=DELETE" method="POST" style="float: left;"> --}}
-              
               <input type="hidden" class="tweetId" value="{{../tweet.id}}">
               <input type="hidden" class="replyId" value="{{this.id}}">
               <input type="hidden" class="replyUserId" value="{{this.User.id}}">
               <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
               <input type="hidden" class="type" value="reply">
-              <button onclick="dislike(this)" class="btn-push"><i class="fas fa-heart like-icon"></i></button>
+              <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
               <div class="count">{{this.Likes.length}}</div>
-    
-              {{!-- </form> --}}
-              
             {{else}}
-              {{!-- <form action="/like/{{this.id}}/replies" method="POST" style="float: left;"> --}}
-          
               <input type="hidden" class="tweetId" value="{{../tweet.id}}">
               <input type="hidden" class="replyId" value="{{this.id}}">
               <input type="hidden" class="replyUserId" value="{{this.User.id}}">
               <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
               <input type="hidden" class="type" value="reply">
-              <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
+              <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
               <div class="count">{{this.Likes.length}}</div>
               
             {{/if}}

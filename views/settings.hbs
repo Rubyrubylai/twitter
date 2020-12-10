@@ -4,21 +4,21 @@
   </div>
   <div class="row">
     <div class="col">
-      <form action="/users/settings/{{user.id}}?_method=PUT" method="POST">
+      <form action="/users/settings/{{user.id}}?_method=PUT" method="POST" class="user-setting">
         <div class="form-group">
           <label for="account">帳號</label>
           <input required type="text" id="account" name="account" class="form-control" placeholder="Enter account"
-            value="{{ user.account }}">
+            value="{{user.account}}">
         </div>
         <div class="form-group">
           <label for="name">名稱</label>
           <input required type="text" id="name" name="name" class="form-control" placeholder="Enter Name"
-            value="{{ user.name }}">
+            value="{{user.name}}">
         </div>
         <div class="form-group">
           <label for="email">Email</label>
           <input required type="email" id="email" name="email" class="form-control" placeholder="Enter Email"
-            value="{{ user.email }}">
+            value="{{user.email}}">
         </div>
         <div class="form-group">
           <label for="password">密碼</label>
@@ -28,7 +28,7 @@
           <label for="checkPassword">密碼確認</label>
           <input type="password" id="checkPassword" name="checkPassword" class="form-control" placeholder="********">
         </div>
-        <button type="submit" class="btn btn-twitter rounded-pill float-right" style="width: 180px;">儲存</button>
+        <button type="submit" class="btn btn-twitter rounded-pill">儲存</button>
       </form>
     </div>
   </div>

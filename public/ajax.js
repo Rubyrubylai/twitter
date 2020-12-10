@@ -25,13 +25,13 @@ function dislike(obj) {
         if (type2 === 'tweetLike') {
           form.children().append(`
             <input type="hidden" class="type2" value="tweetLike">
-            <button onclick="like(this)" class="btn-push"><i class="far fa-heart fa-lg"></i></button>
+            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart fa-lg"></i></button>
           `)
           $('#tweet-like').text(likesCount)
         }
         else {
           form.children().append(`
-            <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
+            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
             <div class="count">${likesCount}</div> 
           `)
         }
@@ -60,13 +60,13 @@ function dislike(obj) {
         if (type2 === 'tweetLike') {
           form.children().append(`
             <input type="hidden" class="type2" value="tweetLike">
-            <button onclick="like(this)" class="btn-push"><i class="far fa-heart fa-lg"></i></button>
+            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart fa-lg"></i></button>
           `)
           $('#tweet-like').text(likesCount)
         }
         else {
           form.children().append(`
-            <button onclick="like(this)" class="btn-push"><i class="far fa-heart"></i></button>
+            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
             <div class="count">${likesCount}</div> 
           `)
         }
@@ -119,9 +119,9 @@ function unsubscribe(obj) {
     dataType: 'text',
     success: function(response) {
       form.html(`
-      <button onclick="subscribe(this)" class="btn-push">
+      <button onclick="subscribe(this)" class="tweet-icon">
         <input type="hidden" id="subscribedId" value="${subscribedId}">
-        <i class="far fa-bell fa-2x mt-1 mx-2" style="color: rgb(255, 102, 0);"></i>
+        <i class="far fa-bell fa-2x mt-1 mx-2 a-coral"></i>
       </button>
       `)
     },

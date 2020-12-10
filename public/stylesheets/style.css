@@ -2,19 +2,61 @@
   display: flex;
 }
 
+.user-avatar {
+  height:50px;
+  width: 50px; 
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.back {
+  color:black;
+  margin-right: 20px;
+}
+
+.a-black {
+  color:black; 
+  text-decoration: none;
+}
+
+.a-black:hover{
+  color:black; 
+  text-decoration: none;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+}
+
 .btn-cancel{
   background-color:lightgray; 
   color:white;
+  border-radius: 18px; 
+  width: 60px; 
 }
 
 .btn-edit, .btn-delete, .btn-create {
   background-color:rgb(255, 102, 0); 
   color:white;
+  border-radius: 18px; 
+  width: 60px; 
+  float: right;
 }
 
-.user-avatar {
-  width: 50px; 
-  border-radius: 50%;
+
+.nav .btn-create {
+  min-width: 100px;
+  width: 80%;
+}
+
+.log-out {
+  margin-top: 100px;
+  margin-right: 10px;
+}
+
+.nav-icon {
+  margin-right: 10px;
 }
 
 .btn-push {
@@ -27,24 +69,7 @@
   height: 200px; 
   width: 100%;
 }
-.user_avatar {
-  position: relative;
-  background: #fff;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0);
-  transform: translateY(-50%);
-  /* left: 50%; */
-  /* cursor: pointer;  */
-}
-.user_avatar_s {
-  background: #fff;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0);
-}
+
 .selected_nav {
   color: rgb(255, 102, 0); 
   border-bottom: rgb(255, 102, 0) solid;
@@ -64,9 +89,7 @@
 .admin-users-card{
   border-color: white;
 }
-.unselected_nav {
-  color: grey;
-}
+
 .btn-twitter {
   background:rgb(255, 102, 0);
   color:white;
@@ -83,6 +106,10 @@
 }
 
 /* chat room */
+.chat-room {
+  height: 88vh;
+}
+
 .send-messages {
   margin-bottom: 6px;
   display: flex;
@@ -108,7 +135,7 @@
 }
 
 .send-message {
-  background-color: coral;
+  background-color: rgb(255, 102, 0);;
   border-radius: 20px 20px 0px 20px;
   word-break: break-all;
   max-width: 220px;
@@ -178,7 +205,7 @@
   font-weight: 600;
 }
 
-.red-dot {
+.red-dot-private {
   width:8px;
   height:8px; 
   border-radius: 4px;
@@ -194,6 +221,20 @@
   word-break: break-all;
   max-width: 220px;
   padding: 10px;
+}
+
+.reply-font {
+  color: grey;
+}
+
+.reply-to-font {
+  color: grey;
+  font-size: 2px;
+}
+
+.reply-to-account {
+  color: :rgb(255, 102, 0);
+  font-size: 2px;
 }
 
 /* notice */
@@ -224,7 +265,7 @@
   background-color:red; 
   position:relative; 
   bottom:10px; 
-  right: 17px;
+  right: px;
   display: inline-block;
 }
 
@@ -234,8 +275,8 @@
   border-radius: 4px;
   background-color:red; 
   position:relative; 
-  bottom:10px; 
-  right: 17px;
+  bottom:8px; 
+  right: 10px;
   display: inline-block;
 }
 
@@ -244,14 +285,152 @@
   float: left;
 }
 
-.count {
-  float: right;
-}
 
 .like-icon {
   color: rgb(224, 36, 94);
 }
 
-/* .reply .count, .reply .like-icon {
- font-size: 10px;
-} */
+.description, .comment {
+  border: none;
+}
+
+.more {
+  position:absolute; 
+  right:20px;
+}
+
+.tweet-icon {
+  float:left; 
+  color:grey; 
+  border: none; 
+  background-color:white;
+}
+
+.tweet-icon:hover{
+  color:grey; 
+}
+
+.comment-count {
+  float:left; 
+  color:grey; 
+  margin-right:25px;
+  margin-left: 6px;
+}
+
+.count {
+  color:grey; 
+  float: right;
+}
+
+.home {
+  border-bottom-width:8px;
+}
+
+.post-tweet {
+  width: 600px;
+}
+
+.tweets .tweet-icon {
+  margin-right: 20px;
+}
+
+.tweet-desc {
+  margin-top: 10px;
+}
+
+.tweet-desc font, .reply {
+  font-size: 14px;
+}
+
+.a-coral {
+  color: rgb(255, 102, 0);; 
+  text-decoration:none;
+}
+
+.comments-count {
+  float:left; 
+  color:grey; 
+  margin-right:25px;
+}
+
+/* login */
+.log-in, .register {
+  border-radius: 18px; 
+  background: rgb(255, 102, 0);; 
+  color:white;
+}
+
+.log-font {
+  font-size: 14px; 
+  font-weight: bold;
+}
+
+/* setting */
+.user-setting .btn-twitter {
+  width: 180px;
+  float: right;
+  margin-top: 10px;
+}
+
+.btn-close {
+  background-color: rgba(0, 0, 0, 0);
+  color: rgb(255, 102, 0);
+}
+
+.edit-user-page {
+  height: 275px;
+}
+
+/* uesr follow */
+.follow-font {
+  color: grey;
+}
+
+.top-follow-list {
+  background-color: rgb(245, 248, 250);
+}
+
+/* user page */
+.user-icon {
+  float: right;
+}
+
+.user-nav {
+  height: 75px;
+}
+
+.user_avatar {
+  position: relative;
+  background: #fff;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0);
+  transform: translateY(-50%);
+}
+
+.user_avatar_s {
+  background: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0);
+}
+
+.user-font {
+  color: grey;
+}
+
+/* alert */
+.alert {
+  margin: 30px 0 ;
+}
+
+/* message */
+.btn-reply {
+  border-radius: 18px; 
+  background:rgb(255, 102, 0);
+  color:white; 
+  width: 60px; 
+  float: right;
+}

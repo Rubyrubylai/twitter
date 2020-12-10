@@ -1,7 +1,7 @@
 {{!-- Center --}}
 <div class="col border-left border-right">
   <div class="row mt-3 pl-3 border-bottom align-items-center">
-    <a href="javascript:history.back()"><i class="fas fa-arrow-left fa-lg"></i></a>
+    <a class="a-black" href="javascript:history.back()"><i class="fas fa-arrow-left fa-lg"></i></a>
     <div class="ml-5">
       <h5>{{ name }}</h5>
       <span class="text-muted">{{tweetsCount}} 推文</span>
@@ -26,11 +26,11 @@
         <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
       </a>
       <div class="col">
-        <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
+        <a href="/users/{{this.id}}/tweets" class="a-black">
           <span class="bold">{{this.name}}</span><br>
         </a>
-        <a href="/users/{{this.id}}/tweets" style="text-decoration:none;">
-          <span style="color: grey">@{{this.account}}</span><br>
+        <a href="/users/{{this.id}}/tweets">
+          <span class="follow-font">@{{this.account}}</span><br>
         </a>
         <span><small>{{this.introduction}}<br></small></span>
       </div>

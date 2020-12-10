@@ -22,19 +22,19 @@ xhr.send()
 
 function display(privateCount) {
   $('#public-icon').html(`
-      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${privateCount})</h6>
+      <h6><i class="fas fa-comments nav-icon"><div class="red-dot-public"></div></i>公開聊天室 (${privateCount})</h6>
     `)
 }
 
 function displayPublic(publicCount) {
   $('#private-icon').html(`
-    <h6><i class="fas fa-envelope fa-lg m-2"><div class="red-dot"></div></i>私人訊息 (${publicCount})</h6>
+    <h6><i class="fas fa-envelope fa-lg nav-icon"><div class="red-dot-private"></div></i>私人訊息 (${publicCount})</h6>
   `)
 }
 
 function displayNotice(noticeCount) {
   let htmlString = `
-  <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知 (${noticeCount})</h6>
+  <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></div></i>通知 (${noticeCount})</h6>
   `
   noticeIcon.innerHTML = htmlString
 }

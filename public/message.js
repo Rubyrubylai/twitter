@@ -15,7 +15,7 @@ socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     let htmlString = `
-    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知 (${data.count})</h6>
+    <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></i></div>通知 (${data.count})</h6>
     `
     noticeIcon.innerHTML = htmlString
   }
@@ -24,7 +24,7 @@ socket.on('alertNotice', (data) => {
 //read notice
 $('#notice-icon').click(e => {
   let htmlString = `
-  <h6><i class="fas fa-bell fa-lg m-2"></i>通知</h6>
+  <h6><i class="fas fa-bell fa-lg nav-icon"></i>通知</h6>
   `
   noticeIcon.innerHTML = htmlString
   socket.emit('readNotice', { userId })
@@ -32,7 +32,7 @@ $('#notice-icon').click(e => {
 
 
 
-//alert
+//alert private and public message
 socket.on('alert', (data) => {
   // console.log('---------------')
   // var publicChat = data.publicChat
@@ -49,14 +49,14 @@ socket.on('alert', (data) => {
   // console.log(unreadCount)
   // if (data.public && data.userId !== userId) {
   //   $('#public-icon').html(`
-  //     <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
+  //     <h6><i class="fas fa-comments nav-icon"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
   //   `)
   // }
   //console.log($('#private-icon'))  
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     $('#private-icon').html(`
-    <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${data.count})</h6>
+    <h6><i class="fas fa-envelope fa-lg nav-icon" id="private-icon"><div class="red-dot-private"></div></i>私人訊息 (${data.count})</h6>
     `)
   }
 })
@@ -64,7 +64,7 @@ socket.on('alert', (data) => {
 //read private
 $('#chat-form').click(() => {
   $('#private-icon').html(`
-  <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"></i>私人訊息</h6>
+  <h6><i class="fas fa-envelope fa-lg nav-icon" id="private-icon"></i>私人訊息</h6>
   `)
   socket.emit('read', { userId, receiveId })
 })
@@ -72,7 +72,7 @@ $('#chat-form').click(() => {
 //read public
 $('#public-icon').click(() => {
   $('#public-icon').html(`
-    <h6><i class="fas fa-comments m-2"></i>公開聊天室</h6>
+    <h6><i class="fas fa-comments nav-icon"></i>公開聊天室</h6>
   `)
   let public = true
   socket.emit('read', { userId, receiveId, public })
@@ -133,19 +133,16 @@ socket.on('privateMessage', (data) => {
 function appendUserData(data) {
   let htmlString 
   htmlString = `
-  <div class="list-group-item">
-    <div class="flex-container" id="user-${data.id}">
-      <div class="mr-2">
-        <a href="/users/${data.id}/tweets">
-          <img src="${data.avatar}" alt="user avatar" class="user-avatar"
-            style="border-radius: 50%; height:50px; width: 50px">
-        </a>
-      </div>
-      <div style="display: flex; align-items: center">
-        <a href="/users/${data.id}/tweets" style="text-decoration:none; color:black"><strong>${data.username}</strong></a>
+  <div class="user-list" id="user-${data.id}">
+    <a href="/users/${data.id}/tweets">
+    <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+      <div class="flex-container">
+        <p>${data.username}</p>
         <font class="text-muted"> @${data.account}</font>
       </div>
     </div>
+    </a>
   </div>
   `
   userList.innerHTML += htmlString
