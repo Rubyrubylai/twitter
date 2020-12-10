@@ -1,7 +1,6 @@
 var socket = io()
 
 const chatMessages = document.getElementById('chat-messages')
-const privateIcon = document.getElementById('private-icon')
 const userList = document.getElementById('user-list')
 const user = document.getElementById('userId')
 const userId = Number(user.value)
@@ -15,17 +14,18 @@ socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     $('#notice-icon').html(`
-    <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></i></div>通知 (${data.count})</h6>
+    <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></div></i>通知 (${data.count})</h6>
     `)
   }
 })
 
 //read notice
-$('#notice-icon').click(e => {
-  let htmlString = `
+$('#notice-icon').click(() => {
+  console.log('-------------------')
+  $('#notice-icon').html(`
   <h6><i class="fas fa-bell fa-lg nav-icon"></i>通知</h6>
   `
-  noticeIcon.innerHTML = htmlString
+  )
   socket.emit('readNotice', { userId })
 })
 

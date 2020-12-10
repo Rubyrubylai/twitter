@@ -150,6 +150,7 @@ module.exports = (io) => {
 
         //read notice
         socket.on('readNotice', ({ userId }) => {
+          console.log('-------------------------------read notice')
           Notice.update({ unread: false }, { 
             where: {
               UserId: userId,

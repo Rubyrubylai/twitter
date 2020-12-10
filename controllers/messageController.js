@@ -77,8 +77,8 @@ const messageController = {
         }).then(privateChat => {
           
           User.findByPk(req.params.userId)
-          .then(user => {
-            return res.render('chat', { messages: privateChat, users, user })
+          .then(userTo => {
+            return res.render('chat', { messages: privateChat, users, userTo })
           })
         })  
       })

@@ -1,6 +1,6 @@
 const noticeBtn = document.querySelector('.notice-btn')
 const noticeId = document.getElementById('noticeId')
-
+let followship
 
 //turn on notification
 $('.notice-btn').click((e) => {
@@ -38,7 +38,7 @@ function tweet(obj) {
 
 // notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {
-  notice(data)
+  notice(data, followship)
 })
 
 //like a tweet or reply
@@ -87,15 +87,15 @@ function like(obj) {
 
 socket.on('like', (data) => {  
   if(data.tweetUserId === userId) {
-    notice(data)
+    notice(data, followship)
   }
   if(data.replyUserId === userId) {
-    notice(data)
+    notice(data, followship)
   }
 })
 
 //post a tweetReply
-$('#reply-form').submit((e) => {
+$('.reply-form').submit((e) => {
   var comment = $(obj).siblings('.comment').val()
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
@@ -142,7 +142,7 @@ $('#reply-form').submit((e) => {
 
 socket.on('reply', (data) => {  
   if(data.tweetUserId === userId) {
-    notice(data)
+    notice(data, followship)
   }
 })
 
@@ -203,7 +203,7 @@ function replyComment(obj) {
 
 socket.on('replyComment', (data) => {  
   if(data.replyUserId === userId) {
-    notice(data)
+    notice(data, followship)
   }
 })
 
@@ -220,25 +220,40 @@ function follow(obj) {
 }
 
 socket.on('follow', (data) => {  
-  if(data.followingId === userId) {
-    notice(data)
+  if(data.id === userId) {
+    let followship = true
+    notice(data, followship)
   }  
 })
 
-function notice(data) {
+function notice(data, followship) {
   const noticeList = document.getElementById('notice-list')
   var newNode = document.createElement('div')
   newNode.className = 'notice'
-  newNode.innerHTML = `
-  <a href="/tweets/${data.id}/replies">
-    <div class="flex-container">
-    <img src="${data.avatar}" alt="user avatar" class="user-avatar">
-      <div class="desc flex-container">
-        <span>${data.noticeDescription}</span> 
-        <font class="text-muted">${data.description}</font>
+  if (followship) {
+    newNode.innerHTML = `
+    <a href="/tweets/${data.id}/replies">
+      <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>${data.noticeDescription}</span>
+        </div>
       </div>
-    </div>
-  </a> `
+    </a> `
+  }
+  else {
+    newNode.innerHTML = `
+    <a href="/tweets/${data.id}/replies">
+      <div class="flex-container">
+      <img src="${data.avatar}" alt="user avatar" class="user-avatar">
+        <div class="desc flex-container">
+          <span>${data.noticeDescription}</span> 
+          <font class="text-muted">${data.description}</font>
+        </div>
+      </div>
+    </a> `
+  }
+  
   if (noticeList.children[0]) {
     noticeList.insertBefore(newNode, noticeList.children[0])
   }

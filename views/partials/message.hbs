@@ -48,8 +48,8 @@
             <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
           </div>
           <div class="post-tweet">
-            <form id="reply-form">
-              <textarea placeholder="推你的回覆" class="form-control description" id="comment" name="comment" rows="3"
+            <form class="reply-form">
+              <textarea placeholder="推你的回覆" class="form-control description" name="comment" rows="3"
                 ></textarea>
               <input type="hidden" name="tweetId" value="{{tweet.id}}">
               <input type="hidden" name="tweetUserId" value="{{tweet.User.id}}">
@@ -163,14 +163,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="tweet" onSubmit="tweet(this)">
+        <form onSubmit="tweet(this)">
           <div class="flex-container">
             <div>
               <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
             </div>
             <div class="post-tweet">
               <input type="hidden" class="username" value="{{user.name}}">
-              <textarea placeholder="有什麼新鮮事?" class="form-control description" id="description" rows="3"
+              <textarea placeholder="有什麼新鮮事?" class="form-control description" rows="3"
                 ></textarea>
             </div>
           </div>
