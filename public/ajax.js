@@ -132,6 +132,56 @@ function unsubscribe(obj) {
   return false
 }
 
+function remove(obj) {
+  const type = $(obj).siblings('.type').val() 
+  if (type === 'tweet') {
+    const tweetId = $(obj).siblings('.tweetId').val()
+    const tweet = $(`#tweet-${tweetId}`)
+    $.ajax({
+      method: 'POST',
+      url: `/tweets/delete`,
+      data: { tweetId },
+      dataType: 'text',
+      success: function() {
+        tweet.parent().children().remove()
+        $('.modal').modal('hide')
+      }
+    })
+  }
+  else if (type === 'reply') {
+    const replyId = $(obj).siblings('.replyId').val()
+    const reply = $(`#reply-${replyId}`)
+    $.ajax({
+      method: 'POST',
+      url: `/replies/delete`,
+      data: { replyId },
+      dataType: 'text',
+      success: function() {
+        reply.parent().children().remove()
+        $(`.modal`).modal('hide')
+      }
+    })
+  }
+  else if (type === 'replyComment') {
+    const replyCommentId = $(obj).siblings('.replyCommentId').val()
+    const replyComment = $(`#replyComment-${replyCommentId}`)
+    console.log(`#cr${replyCommentId}`)
+    $.ajax({
+      method: 'POST',
+      url: `/replyComments/delete`,
+      data: { replyCommentId },
+      dataType: 'text',
+      success: function() {
+        replyComment.parent().children().remove()
+        // $(`.close-replyComment`).click()
+      }
+    })
+  }
+
+  return false
+}
+
+
 // function edit(obj) {
 //   const replyId = Number($(obj).siblings('.replyCommentId').val())
 //   const comment = $('.replyComment').text()

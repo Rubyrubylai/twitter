@@ -22,7 +22,9 @@ const replyController = {
   // },
 
   deleteReply: (req, res) => {
-    ReplyComment.findByPk(req.params.replyId)
+    console.log('------------replyCommentId')
+    console.log(req.body.replyCommentId)
+    ReplyComment.findByPk(req.body.replyCommentId)
       .then(replyComment => {
         replyComment.destroy()
           .then(replyComment => {

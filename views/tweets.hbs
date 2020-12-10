@@ -18,8 +18,10 @@
         <button type="submit" class="btn btn-create">推文</button>
       </form>
     </li>
+    
     {{#each tweetFollowings}}
-      <li class="list-group-item">
+    <div>
+      <li class="list-group-item" id="tweet-{{this.id}}">
         <div class="flex-container">
           <div>
             <a href="/users/{{this.user.id}}/tweets">
@@ -74,7 +76,9 @@
       {{> edit}}
       <!-- pop up delete tweet message -->
       {{> delete}}
+    </div>
     {{/each}}
+    
   </ul>
 </div>
 {{!-- Right side --}}

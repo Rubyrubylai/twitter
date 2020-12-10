@@ -68,7 +68,7 @@
 </div>
 <!-- pop up reply comment message -->
 {{#each tweetReplies}}
-  <div class="modal fade" id="r{{this.id}}" aria-hidden="true">
+  <div class="modal fade" aria-hidden="true" id="r{{this.id}}">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -93,7 +93,8 @@
           </div>
           <div id="reply-comments">
           {{#each this.ReplyComments}}
-            <div class="flex-container mb-2">
+          <div>
+            <div class="flex-container mb-2" id="replyComment-{{this.id}}">
               <div>
                 <a href="/users/{{this.User.id}}/tweets">
                   <img class="mr-3 user-avatar" src="{{this.User.avatar}}" alt="user avatar">
@@ -125,6 +126,7 @@
             {{> delete}}
             <!-- pop up edit reply comment message -->
             {{> edit}}
+          </div>
           {{/each}}
           </div>
           <div class="flex-container">
@@ -152,6 +154,7 @@
       </div>
     </div>
   </div>
+
 {{/each}}
 <!-- pop up create tweet message -->
 <div class="modal fade" id="createTweet" aria-hidden="true">

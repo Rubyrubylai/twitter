@@ -1,6 +1,6 @@
 {{!-- Center --}}
 <div class="col">
-  <ul class="list-group">
+  <ul class="list-group" id="tweet-{{tweet.id}}">
     <li class="list-group-item">
       <a href="javascript:history.back()" class="back"><i class="fas fa-arrow-left"></i></a>
       <strong>推文</strong>
@@ -60,7 +60,8 @@
     </li>
     <div>
     {{#each tweetReplies}}
-      <li class="list-group-item">
+    <div>
+      <li class="list-group-item" id="reply-{{this.id}}">
         <div class="flex-container">
           <div>
             <a href="/users/{{this.User.id}}/tweets">
@@ -119,6 +120,7 @@
       {{> edit}}
       <!-- pop up delete tweet reply message -->
       {{> delete}}
+    </div>
     {{/each}}
     </div>
   </ul>

@@ -116,7 +116,8 @@ const tweetController = {
       }
     )
       .then(tweet => {
-        tweet = tweet.toJSON()
+        if (tweet) {
+          tweet = tweet.toJSON()
         const loginUser = helpers.getUser(req)
 
         //like and dislike tweet
@@ -163,6 +164,10 @@ const tweetController = {
 
             return res.render('tweet', { tweet, loginUser, isLikedTweet, tweetReplies, users, now })
           })
+        }
+        else {
+          return res.redirect('/')
+        }
       })
   },
 
@@ -189,7 +194,7 @@ const tweetController = {
   // },
 
   deleteTweet: (req, res) => {
-    Tweet.findByPk(req.params.tweetId)
+    Tweet.findByPk(req.body.tweetId)
       .then(tweet => {
         tweet.destroy()
           .then(tweet => {
@@ -199,7 +204,9 @@ const tweetController = {
   },
 
   deleteReply: (req, res) => {
-    Reply.findByPk(req.params.replyId)
+    console.log('-------------replyID')
+    console.log(req.body.replyId)
+    Reply.findByPk(req.body.replyId)
       .then(reply => {
         reply.destroy()
           .then(reply => {

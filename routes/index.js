@@ -81,10 +81,11 @@ module.exports = (app, passport, io) => {
   //tweet page
   app.get('/tweets', authenticated, tweetController.getTweets)
   // app.post('/tweets', authenticated, tweetController.postTweets)
+  app.post('/tweets/delete', authenticated, tweetController.deleteTweet)
   app.get('/tweets/:tweetId/replies', authenticated, tweetController.getReply)
   // app.post('/tweets/:tweetId/replies', authenticated, tweetController.postReply)
-  app.delete('/tweets/:tweetId', authenticated, tweetController.deleteTweet)
-  app.delete('/tweets/:replyId/replies', authenticated, tweetController.deleteReply)
+  
+  app.post('/replies/delete', authenticated, tweetController.deleteReply)
   app.put('/tweets/:tweetId', authenticated, tweetController.editTweet)
   app.put('/tweets/:replyId/replies', authenticated, tweetController.editReply)
 
@@ -96,7 +97,7 @@ module.exports = (app, passport, io) => {
 
   //Reply
   // app.post('/replies/:replyId', authenticated, replyController.postReply)
-  app.delete('/replies/:replyId', authenticated, replyController.deleteReply)
+  app.post('/replyComments/delete', authenticated, replyController.deleteReply)
   app.put('/replies/:replyId', authenticated, replyController.editReply)
 
   //follow
