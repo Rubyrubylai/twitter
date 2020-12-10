@@ -34,10 +34,22 @@ $('#notice-icon').click(e => {
 
 //alert
 socket.on('alert', (data) => {
-  console.log(data.public)
-  if (data.public) {
+  console.log('---------------')
+  var publicChat = data.publicChat
+  let unreadCount = 0
+  publicChat = publicChat.forEach(p => {
+    //console.log(p.unread & p.UserId !== userId )
+    if (p.unread === 1 & p.UserId !== userId) {
+      
+      unreadCount += 1
+      //console.log()
+    }
+  })
+  unreadCount += 1
+  console.log(unreadCount)
+  if (data.public && data.userId !== userId) {
     $('#public-icon').html(`
-      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${data.count})</h6>
+      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
     `)
   }
   //console.log($('#private-icon'))  

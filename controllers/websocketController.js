@@ -52,21 +52,14 @@ module.exports = (io) => {
         socket.on('publicMessage', (msg) => {
           PublicChat.findAll({
             raw: true,
-            nest: true,
-            where: {
-              [Op.and]: [{
-                unread: true,
-                [Op.not]: [
-                  { UserId: userId },
-                ]
-              }]
-            }
+            nest: true
+        
           })
           .then(publicChat => {
             console.log(publicChat)
-            let count = publicChat.length
+            //let count = publicChat.length
             if (msg) {
-              count ++
+              //count ++
               PublicChat.create({
                 UserId: user.id,
                 message: msg,
@@ -82,11 +75,14 @@ module.exports = (io) => {
                 time: time(new Date())
               })
               console.log('----------')
-              console.log(count)
+              //console.log(count)
+              
               let public = true
               io.emit('alert', {
-                count,
-                public
+                userId,
+                //count,
+                public,
+                publicChat
               })
             }
           })
@@ -375,9 +371,6 @@ module.exports = (io) => {
           .then(followship => {
             if (userId !== followingId) {
               const noticeDescription = `${user.name}正在追蹤你`
-              console.log('----------')
-              // console.log(followship)
-              // console.log(followship.id)
               Notice.create({
                 description: noticeDescription,
                 UserId: followingId,
