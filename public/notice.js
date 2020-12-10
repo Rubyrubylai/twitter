@@ -21,19 +21,39 @@ function subscribe(obj) {
 }
 
 //post a tweet
-$('#tweet').submit((e) => {
-  const description = e.target.description.value
-  const username = e.target.username.value
+function tweet(obj) {
+  const description = $(obj).children().children(":nth-child(2)").children('.description').val()
+  const username = $(obj).children().children(":nth-child(2)").children('.username').val()
+
   if (description.length === 0) {
-    e.preventDefault()
+    return false
   }
   else if (description.length > 140) {
-    e.preventDefault()
+    return false
   }
   else {
     socket.emit('tweet', { description, userId, username })
   }
-})
+}
+
+// $('#tweet').submit((e) => {
+//   e.preventDefault()
+//   console.log('AAAAAAAAAAA')
+//   const description = e.target.description.value
+//   const username = e.target.username.value
+//   console.log(description)
+//   console.log('------------')
+  
+//   if (description.length === 0) {
+//     e.preventDefault()
+//   }
+//   else if (description.length > 140) {
+//     e.preventDefault()
+//   }
+//   else {
+//     socket.emit('tweet', { description, userId, username })
+//   }
+// })
 
 // notice subscriber that the subscriber post a tweet
 socket.on('tweet', (data) => {

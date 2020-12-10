@@ -15,7 +15,7 @@ socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     let htmlString = `
-    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知</h6>
+    <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知 (${data.count})</h6>
     `
     noticeIcon.innerHTML = htmlString
   }
@@ -34,27 +34,27 @@ $('#notice-icon').click(e => {
 
 //alert
 socket.on('alert', (data) => {
-  console.log('---------------')
-  var publicChat = data.publicChat
-  let unreadCount = 0
-  publicChat = publicChat.forEach(p => {
-    //console.log(p.unread & p.UserId !== userId )
-    if (p.unread === 1 & p.UserId !== userId) {
+  // console.log('---------------')
+  // var publicChat = data.publicChat
+  // let unreadCount = 0
+  // publicChat = publicChat.forEach(p => {
+  //   //console.log(p.unread & p.UserId !== userId )
+  //   if (p.unread === 1 & p.UserId !== userId) {
       
-      unreadCount += 1
-      //console.log()
-    }
-  })
-  unreadCount += 1
-  console.log(unreadCount)
-  if (data.public && data.userId !== userId) {
-    $('#public-icon').html(`
-      <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
-    `)
-  }
+  //     unreadCount += 1
+  //     //console.log()
+  //   }
+  // })
+  // unreadCount += 1
+  // console.log(unreadCount)
+  // if (data.public && data.userId !== userId) {
+  //   $('#public-icon').html(`
+  //     <h6><i class="fas fa-comments m-2"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
+  //   `)
+  // }
   //console.log($('#private-icon'))  
   //the alert will only show on the receiver page
-  else if (data.receiveId === userId) {
+  if (data.receiveId === userId) {
     $('#private-icon').html(`
     <h6><i class="fas fa-envelope fa-lg m-2" id="private-icon"><div class="red-dot"></div></i>私人訊息 (${data.count})</h6>
     `)

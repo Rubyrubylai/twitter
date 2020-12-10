@@ -6,14 +6,15 @@ xhr.onload = function() {
   const data = JSON.parse(xhr.responseText)
   const privateCount = data.publicCount
   const publicCount = data.privateCount
+  const noticeCount = data.noticeCount
   if (privateCount >= 1) {
     display(privateCount)
   }
   if (publicCount >= 1) {
     displayPublic(publicCount)
   }
-  if (data.hasNotice) {
-    displayNotice()
+  if (noticeCount >= 1) {
+    displayNotice(noticeCount)
   }
 }
 
@@ -31,9 +32,9 @@ function displayPublic(publicCount) {
   `)
 }
 
-function displayNotice() {
+function displayNotice(noticeCount) {
   let htmlString = `
-  <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知</h6>
+  <h6><i class="fas fa-bell fa-lg m-2"></i><div class="red-dot-notice"></div>通知 (${noticeCount})</h6>
   `
   noticeIcon.innerHTML = htmlString
 }

@@ -11,7 +11,6 @@ const Reply = db.Reply
 const Followship = db.Followship
 const ReplyComment = db.ReplyComment
 const { Op } = require('sequelize')
-const publicchat = require('../models/publicchat')
 
 let onlineUsers = []
 module.exports = (io) => {
@@ -177,28 +176,40 @@ module.exports = (io) => {
           })
           socket.join(subscribedId)
         })
-
-        // let noticeCount = new Promise((resolve, reject) => {
-        //   Notice.findAll({
-        //     raw: true,
-        //     nest: true,
-        //     where: {
-        //       [Op.and]: [
-        //         { UserId: items.subscriberId },
-        //         { unread: true },
-        //       ]
-        //     }
-        //   })
-        //   .then(notice => {
-        //     let count = notice.length
-        //     return resolve(count)
-        //   })
-        // })
+        
+        
+        function countNotice(receiveId) {
+          Notice.findAll({
+            raw: true,
+            nest: true,
+            where: {
+              [Op.and]: [
+                { UserId: receiveId },
+                { unread: true },
+              ]
+            }
+          })
+          .then(notice => {
+            if (receiveId !== userId) {
+              console.log('---------------notice')
+              console.log(notice)
+              let count = notice.length || 0
+              count ++
+              io.emit('alertNotice',{
+                receiveId,
+                count
+              })
+            }
+            
+          })
+        }
         
         //when receive subscribed post a tweet
         socket.on('tweet', (data) => {
           const { description, username } = data
-          
+          console.group('----------------')
+          console.log(description)
+          console.log(username)
           Tweet.create({
             description,
             UserId: userId
@@ -211,22 +222,27 @@ module.exports = (io) => {
               }
             })
             .then(subscribeship => {
+              
               const noticeDescription = `${username}發布了新貼文`
               const description = tweet.description
               var results = []
               subscribeship.forEach(items => {
-                results.push(
-                  Notice.create({
-                    description: noticeDescription,
-                    UserId: items.subscriberId,
-                    unread: true,
-                    TweetId: tweet.id
-                  })
-                )
-                io.emit('alertNotice', {
-                  // count,
-                  receiveId: items.subscriberId
-                })
+                if (items.subscriberId !== userId){
+                  results.push(
+                    Notice.create({
+                      description: noticeDescription,
+                      UserId: items.subscriberId,
+                      unread: true,
+                      TweetId: tweet.id
+                    })
+                  )
+                  countNotice(items.subscriberId)
+                }
+               
+                // io.emit('alertNotice', {
+                //   count,
+                //   receiveId: items.subscriberId
+                // })
               })
               
               return Promise.all(results).then(() => {
@@ -262,11 +278,13 @@ module.exports = (io) => {
                     io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
                   })
                 })
+                countNotice(tweetUserId)
               }
-              io.emit('alertNotice', {
-                // count,
-                receiveId: tweetUserId
-              })
+              
+              // io.emit('alertNotice', {
+              //   // count,
+              //   receiveId: tweetUserId
+              // })
             })
           }
           else {
@@ -290,14 +308,16 @@ module.exports = (io) => {
                   })
                   
                 })
+                countNotice(replyUserId)
               }
               
             })
           }
-          io.emit('alertNotice', {
-            // count,
-            receiveId: replyUserId
-          })
+          
+          // io.emit('alertNotice', {
+          //   count,
+          //   receiveId: replyUserId
+          // })
           
         })
 
@@ -321,14 +341,16 @@ module.exports = (io) => {
                 const description = reply.comment
                 io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
               })
+              countNotice(tweetUserId)
             }
             
            
           })
-          io.emit('alertNotice', {
-            // count,
-            receiveId: tweetUserId
-          })
+         
+          // io.emit('alertNotice', {
+          //   count,
+          //   receiveId: tweetUserId
+          // })
         })
 
         //when receive others reply comments
@@ -351,14 +373,16 @@ module.exports = (io) => {
                 const description = replyComment.comment
                 io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
               })
+              countNotice(replyUserId)
             }
             
            
           })
-          io.emit('alertNotice', {
-            // count,
-            receiveId: replyUserId
-          })
+         
+          // io.emit('alertNotice', {
+          //   // count,
+          //   receiveId: replyUserId
+          // })
         })
 
 
@@ -379,11 +403,13 @@ module.exports = (io) => {
               }).then(notice => { 
                 io.emit('follow', { noticeDescription, avatar, followingId }) 
               })
+              countNotice(followingId)
             }
-            io.emit('alertNotice', {
-              // count,
-              receiveId: followingId
-            })
+            
+            // io.emit('alertNotice', {
+            //   // count,
+            //   receiveId: followingId
+            // })
            
           })
         })

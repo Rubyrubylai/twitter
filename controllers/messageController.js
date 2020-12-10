@@ -128,14 +128,12 @@ const messageController = {
             ]
           }
         }).then(notice => {
-          let hasNotice
-          if (notice.length > 0) {
-            hasNotice = true
-          }
+          const noticeCount = notice.length
+
           res.send({
             privateCount,
             publicCount,
-            hasNotice
+            noticeCount
           })
         })
       })
