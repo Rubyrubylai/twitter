@@ -75,7 +75,11 @@ const messageController = {
           },
           include: [{ model: User, as: 'Sender' }]
         }).then(privateChat => {
-            return res.render('chat', { messages: privateChat, users })
+          
+          User.findByPk(req.params.userId)
+          .then(user => {
+            return res.render('chat', { messages: privateChat, users, user })
+          })
         })  
       })
     })    

@@ -14,10 +14,9 @@ socket.emit('joinRoom', { receiveId })
 socket.on('alertNotice', (data) => {
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
-    let htmlString = `
+    $('#notice-icon').html(`
     <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></i></div>通知 (${data.count})</h6>
-    `
-    noticeIcon.innerHTML = htmlString
+    `)
   }
 })
 
@@ -56,7 +55,7 @@ socket.on('alert', (data) => {
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     $('#private-icon').html(`
-    <h6><i class="fas fa-envelope fa-lg nav-icon" id="private-icon"><div class="red-dot-private"></div></i>私人訊息 (${data.count})</h6>
+    <h6><i class="fas fa-envelope fa-lg nav-icon"><div class="red-dot-private"></div></i>私人訊息 (${data.count})</h6>
     `)
   }
 })
@@ -64,7 +63,7 @@ socket.on('alert', (data) => {
 //read private
 $('#chat-form').click(() => {
   $('#private-icon').html(`
-  <h6><i class="fas fa-envelope fa-lg nav-icon" id="private-icon"></i>私人訊息</h6>
+  <h6><i class="fas fa-envelope fa-lg nav-icon"></i>私人訊息</h6>
   `)
   socket.emit('read', { userId, receiveId })
 })

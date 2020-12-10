@@ -84,9 +84,16 @@
   border-color: white;
   position: absolute;
   top: 80px;
-  left: 55px
+  left: 55px;
+  border-radius: 50%; 
+  height: 100px; 
+  width: 100px;
+  position: relative; 
+  top: -60px;
 }
+
 .admin-users-card{
+  background-color: rgb(247, 247, 247);
   border-color: white;
 }
 
@@ -265,7 +272,7 @@
   background-color:red; 
   position:relative; 
   bottom:10px; 
-  right: px;
+  right: 9px;
   display: inline-block;
 }
 

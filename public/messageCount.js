@@ -33,8 +33,7 @@ function displayPublic(publicCount) {
 }
 
 function displayNotice(noticeCount) {
-  let htmlString = `
+  $('#notice-icon').html(`
   <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></div></i>通知 (${noticeCount})</h6>
-  `
-  noticeIcon.innerHTML = htmlString
+  `)
 }

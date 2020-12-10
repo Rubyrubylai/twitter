@@ -1,6 +1,6 @@
 const noticeBtn = document.querySelector('.notice-btn')
 const noticeId = document.getElementById('noticeId')
-const noticeIcon = document.getElementById('notice-icon')
+
 
 //turn on notification
 $('.notice-btn').click((e) => {
@@ -221,27 +221,7 @@ function follow(obj) {
 
 socket.on('follow', (data) => {  
   if(data.followingId === userId) {
-    const noticeList = document.getElementById('notice-list')
-    var newNode = document.createElement('div')
-    newNode.className = 'notice'
-    noticeList.innerHTML = `
-    <div class="notice">
-      <a href="/users/${data.followingId}/tweets">
-        <div class="flex-container">
-        <img src="${data.avatar}" alt="user avatar" class="user-avatar">
-          <div class="desc flex-container">
-            <span>${data.noticeDescription}</span>
-          </div>
-        </div>
-      </a> 
-    </div>
-    `
-    if (noticeList.children[0]) {
-      noticeList.insertBefore(newNode, noticeList.children[0])
-    }
-    else {
-      noticeList.appendChild(newNode)
-    } 
+    notice(data)
   }  
 })
 
@@ -250,12 +230,12 @@ function notice(data) {
   var newNode = document.createElement('div')
   newNode.className = 'notice'
   newNode.innerHTML = `
-  <a href="/tweets/${data.tweetId}/replies">
+  <a href="/tweets/${data.id}/replies">
     <div class="flex-container">
     <img src="${data.avatar}" alt="user avatar" class="user-avatar">
       <div class="desc flex-container">
         <span>${data.noticeDescription}</span> 
-        <font class="text-muted tweet-desc">${data.description}</font>
+        <font class="text-muted">${data.description}</font>
       </div>
     </div>
   </a> `

@@ -235,8 +235,8 @@ module.exports = (io) => {
               })
               
               return Promise.all(results).then(() => {
-                const tweetId = tweet.id
-                socket.to(userId).emit('tweet', { noticeDescription, avatar, tweetId, description })
+                const id = tweet.id
+                socket.to(userId).emit('tweet', { noticeDescription, avatar, id, description })
               })
             })
           })
@@ -264,7 +264,8 @@ module.exports = (io) => {
                   Tweet.findByPk(tweetId)
                   .then(tweet => {
                     const description = tweet.description
-                    io.emit('like', { noticeDescription, avatar, tweetId, tweetUserId, description })
+                    const id = tweetId
+                    io.emit('like', { noticeDescription, avatar, id, tweetUserId, description })
                   })
                 })
                 countNotice(tweetUserId)
@@ -288,7 +289,8 @@ module.exports = (io) => {
                   Reply.findByPk(replyId)
                   .then(reply => {
                     const description = reply.comment
-                    io.emit('like', { noticeDescription, avatar, tweetId, description, replyUserId, replyId })
+                    const id = tweetId
+                    io.emit('like', { noticeDescription, avatar, id, description, replyUserId, replyId })
                   })
                   
                 })
@@ -316,7 +318,8 @@ module.exports = (io) => {
                 ReplyId: reply.id
               }).then(notice => {
                 const description = reply.comment
-                io.emit('reply', { noticeDescription, avatar, tweetId, tweetUserId, description })
+                const id = tweetId
+                io.emit('reply', { noticeDescription, avatar, id, tweetUserId, description })
               })
               countNotice(tweetUserId)
             }          
@@ -341,7 +344,8 @@ module.exports = (io) => {
                 ReplyCommentId: replyComment.id
               }).then(notice => {
                 const description = replyComment.comment
-                io.emit('replyComment', { noticeDescription, avatar, tweetId, replyUserId, description })
+                const id = tweetId
+                io.emit('replyComment', { noticeDescription, avatar, id, replyUserId, description })
               })
               countNotice(replyUserId)
             }       
@@ -364,7 +368,8 @@ module.exports = (io) => {
                 unread: true,
                 notifierId: userId
               }).then(notice => { 
-                io.emit('follow', { noticeDescription, avatar, followingId }) 
+                const id = followingId
+                io.emit('follow', { noticeDescription, avatar, id }) 
               })
               countNotice(followingId)
             }
