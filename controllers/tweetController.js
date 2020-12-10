@@ -14,7 +14,7 @@ const tweetController = {
       include: [
         Like,
         Reply,
-        { model: User, include: [{ model: User, as: 'Followers' }] }],
+        { model: User, include: [{ model: User, as: 'follower' }] }],
       order: [['updatedAt', 'DESC']]
     }).then(tweets => {
       const loginUser = helpers.getUser(req)
@@ -24,7 +24,7 @@ const tweetController = {
         likesCount: tweet.dataValues ? tweet.dataValues.Likes.length : null,
         repliesCount: tweet.dataValues ? tweet.dataValues.Replies.length : null,
         user: tweet.dataValues ? tweet.dataValues.User.dataValues : null,
-        followerId: tweet.dataValues ? tweet.dataValues.User.dataValues.Followers.map(followers => followers.dataValues.id) : null,
+        followerId: tweet.dataValues ? tweet.dataValues.User.dataValues.follower.map(follower => follower.dataValues.id) : null,
         isLiked: loginUser.Likes.map(like => like.TweetId).includes(tweet.id)
       }))
 
@@ -43,12 +43,12 @@ const tweetController = {
 
       //Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       })
         .then(users => {
           users = users.map(user => ({
             ...user.dataValues,
-            isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+            isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
           }))
 
           users.forEach((user, index, arr) => {
@@ -59,7 +59,7 @@ const tweetController = {
 
           //sort by the amount of the followers
           users.sort((a, b) => {
-            return b.Followers.length - a.Followers.length
+            return b.follower.length - a.follower.length
           })
 
           //more followers
@@ -134,12 +134,12 @@ const tweetController = {
 
         //Top 10 followers
         User.findAll({
-          include: [{ model: User, as: 'Followers' }]
+          include: [{ model: User, as: 'follower' }]
         })
           .then(users => {
             users = users.map(user => ({
               ...user.dataValues,
-              isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+              isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
             }))
 
             users.forEach((user, index, arr) => {
@@ -150,7 +150,7 @@ const tweetController = {
 
             //sort by the amount of the followers
             users.sort((a, b) => {
-              return b.Followers.length - a.Followers.length
+              return b.follower.length - a.follower.length
             })
 
             //more followers

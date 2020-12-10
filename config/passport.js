@@ -16,8 +16,8 @@ let strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
   User.findByPk(jwt_payload.id, {
     include: [
       Like,
-      { model: User, as: 'Followers' },
-      { model: User, as: 'Followings' }
+      { model: User, as: 'follower' },
+      { model: User, as: 'following' }
     ]
   }).then(user => {
     if (!user) return next(null, false)
@@ -71,8 +71,8 @@ passport.deserializeUser((id, cb) => {
   User.findByPk(id, {
     include: [
       Like,
-      { model: User, as: 'Followers' },
-      { model: User, as: 'Followings' },
+      { model: User, as: 'follower' },
+      { model: User, as: 'following' },
     ]
   }).then(user => {
     user = user.toJSON()

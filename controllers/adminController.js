@@ -38,8 +38,8 @@ const adminControllers = {
       include: [
         { model: Like },
         { model: Tweet },
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
+        { model: User, as: 'following' },
+        { model: User, as: 'follower' },
       ],
     }).then(users => {
       // console.log(users)

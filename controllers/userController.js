@@ -199,7 +199,7 @@ const userController = {
         Notice.destroy({
           where: {
             UserId: req.body.followingId,
-            NotifierId: helpers.getUser(req).id
+            notifierId: helpers.getUser(req).id
           }
         })
         .then(notice => {
@@ -314,8 +314,8 @@ const userController = {
       order: [[{ model: Tweet }, 'createdAt', 'DESC']],
       include: [
         { model: Tweet, include: [Like, Reply] },
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
+        { model: User, as: 'following' },
+        { model: User, as: 'follower' },
         { model: User, as: 'subscriber'}
       ]
     }).then(user => {
@@ -334,7 +334,7 @@ const userController = {
         isLiked: loginUser.Likes.map(like => like.TweetId).includes(tweet.id),
         
       }))
-      const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
       // Right side
@@ -342,11 +342,11 @@ const userController = {
       const tweetFollowings = []
       // Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       }).then(users => {
         users = users.map(user => ({
           ...user.dataValues,
-          isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+          isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
         }))
         users.forEach((user, index, arr) => {
           if (user.role === "admin") {
@@ -355,7 +355,7 @@ const userController = {
         })
         //sort by the amount of the followers
         users.sort((a, b) => {
-          return b.Followers.length - a.Followers.length
+          return b.follower.length - a.follower.length
         })
         //more followers
         if (req.query.more) {
@@ -371,8 +371,8 @@ const userController = {
           account: user.toJSON().account,
           name: user.toJSON().name,
           introduction: user.toJSON().introduction,
-          followingsCount: user.toJSON().Followings.length,
-          followersCount: user.toJSON().Followers.length,
+          followingsCount: user.toJSON().following.length,
+          followersCount: user.toJSON().follower.length,
           tweetsCount: tweets.length,
           tweetFollowings,
           loginUser,
@@ -398,8 +398,8 @@ const userController = {
             { model: Like }
           ]
         },
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
+        { model: User, as: 'following' },
+        { model: User, as: 'follower' },
         { model: User, as: 'subscriber'},
         Tweet
       ]
@@ -425,7 +425,7 @@ const userController = {
         tweetLikeCount: reply.Tweet.Likes.length,
         isLiked: loginUser.Likes.map(like => like.TweetId).includes(reply.TweetId)
       }))
-      const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
       // Right side
@@ -433,11 +433,11 @@ const userController = {
       const tweetFollowings = []
       // Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       }).then(users => {
         users = users.map(user => ({
           ...user.dataValues,
-          isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+          isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
         }))
         users.forEach((user, index, arr) => {
           if (user.role === "admin") {
@@ -446,7 +446,7 @@ const userController = {
         })
         //sort by the amount of the followers
         users.sort((a, b) => {
-          return b.Followers.length - a.Followers.length
+          return b.follower.length - a.follower.length
         })
         //more followers
         if (req.query.more) {
@@ -462,8 +462,8 @@ const userController = {
           account: user.toJSON().account,
           name: user.toJSON().name,
           introduction: user.toJSON().introduction,
-          followingsCount: user.toJSON().Followings.length,
-          followersCount: user.toJSON().Followers.length,
+          followingsCount: user.toJSON().following.length,
+          followersCount: user.toJSON().follower.length,
           tweetsCount: user.toJSON().Tweets.length,
           tweetFollowings,
           loginUser,
@@ -484,8 +484,8 @@ const userController = {
         // { model: Like, where: { TweetId: { $gt: 0 } }, include: [{ model: Tweet, include: [User, Reply, Like] }] },
         { model: Like, include: [{ model: Tweet, include: [User, Reply, Like] }, 
           { model: Reply, include: [User, ReplyComment, Like] }] },
-        { model: User, as: 'Followings' },
-        { model: User, as: 'Followers' },
+        { model: User, as: 'following' },
+        { model: User, as: 'follower' },
         { model: User, as: 'subscriber'},
         Tweet
       ]
@@ -505,7 +505,7 @@ const userController = {
         isLiked: loginUser.Likes.map(l => l.TweetId).includes(r.TweetId)
       }))
 
-      const isFollowed = user.Followers.map(followers => followers.id).includes(loginUser.id)
+      const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
       // Right side
@@ -513,11 +513,11 @@ const userController = {
       const tweetFollowings = []
       // Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       }).then(users => {
         users = users.map(user => ({
           ...user.dataValues,
-          isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+          isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
         }))
 
         users.forEach((user, index, arr) => {
@@ -528,7 +528,7 @@ const userController = {
 
         //sort by the amount of the followers
         users.sort((a, b) => {
-          return b.Followers.length - a.Followers.length
+          return b.follower.length - a.follower.length
         })
         //more followers
         if (req.query.more) {
@@ -543,8 +543,8 @@ const userController = {
           account: user.toJSON().account,
           name: user.toJSON().name,
           introduction: user.toJSON().introduction,
-          followingsCount: user.toJSON().Followings.length,
-          followersCount: user.toJSON().Followers.length,
+          followingsCount: user.toJSON().following.length,
+          followersCount: user.toJSON().follower.length,
           tweetsCount: user.toJSON().Tweets.length,
           tweetFollowings,
           loginUser,
@@ -562,12 +562,12 @@ const userController = {
     return User.findByPk(reqUserId, {
       include: [
         Tweet,
-        { model: User, as: 'Followers' }
+        { model: User, as: 'follower' }
       ]
     }).then(data => {
       const tweetsCount = data.toJSON().Tweets.length
       const name = data.toJSON().name
-      data = data.Followers.map(r => ({
+      data = data.follower.map(r => ({
         ...r.dataValues,
         id: r.id,
         avatar: r.avatar,
@@ -576,8 +576,8 @@ const userController = {
         introduction: r.introduction ? r.introduction.substring(0, 140) : 0,
         followshipCreatedAt: r.Followship.createdAt,
         // 追蹤者人數
-        followerCount: data.Followers.length,
-        isFollowed: helpers.getUser(req).Followings.map(d => d.id).includes(r.id)
+        followerCount: data.follower.length,
+        isFollowed: helpers.getUser(req).following.map(d => d.id).includes(r.id)
       }))
       // 排序
       data = data.sort((a, b) => b.followshipCreatedAt - a.followshipCreatedAt)
@@ -589,11 +589,11 @@ const userController = {
       const tweetFollowings = []
       // Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       }).then(users => {
         users = users.map(user => ({
           ...user.dataValues,
-          isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+          isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
         }))
         users.forEach((user, index, arr) => {
           if (user.role === "admin") {
@@ -602,7 +602,7 @@ const userController = {
         })
         //sort by the amount of the followers
         users.sort((a, b) => {
-          return b.Followers.length - a.Followers.length
+          return b.follower.length - a.follower.length
         })
         //more followers
         if (req.query.more) {
@@ -627,12 +627,12 @@ const userController = {
     return User.findByPk(reqUserId, {
       include: [
         Tweet,
-        { model: User, as: 'Followings' }
+        { model: User, as: 'following' }
       ]
     }).then(data => {
       const tweetsCount = data.toJSON().Tweets.length
       const name = data.toJSON().name
-      data = data.Followings.map(r => ({
+      data = data.following.map(r => ({
         ...r.dataValues,
         id: r.id,
         avatar: r.avatar,
@@ -641,7 +641,7 @@ const userController = {
         introduction: r.introduction ? r.introduction.substring(0, 140) : 0,
         followshipCreatedAt: r.Followship.createdAt,
         // 追蹤者人數
-        isFollowed: helpers.getUser(req).Followings.map(d => d.id).includes(r.id)
+        isFollowed: helpers.getUser(req).following.map(d => d.id).includes(r.id)
       }))
       // 排序
       data = data.sort((a, b) => b.followshipCreatedAt - a.followshipCreatedAt)
@@ -651,11 +651,11 @@ const userController = {
       const tweetFollowings = []
       // Top 10 followers
       User.findAll({
-        include: [{ model: User, as: 'Followers' }]
+        include: [{ model: User, as: 'follower' }]
       }).then(users => {
         users = users.map(user => ({
           ...user.dataValues,
-          isFollowing: user.Followers.map(follower => follower.id).includes(loginUser.id)
+          isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
         }))
         users.forEach((user, index, arr) => {
           if (user.role === "admin") {
@@ -664,7 +664,7 @@ const userController = {
         })
         //sort by the amount of the followers
         users.sort((a, b) => {
-          return b.Followers.length - a.Followers.length
+          return b.follower.length - a.follower.length
         })
         //more followers
         if (req.query.more) {

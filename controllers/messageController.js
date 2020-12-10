@@ -163,7 +163,8 @@ const messageController = {
       },
       { model: ReplyComment, 
         include: [ User, Reply ] 
-      }],
+      }
+      ],
       order: [[ 'updatedAt', 'DESC' ]],
       limit: 15
     })
@@ -171,8 +172,8 @@ const messageController = {
       var results = []
       noticePromise = new Promise((resolve, reject) => {
         for (let n of notices ) {
-          User.findByPk(n.NotifierId).then(user => {
-            if (n.NotifierId) {
+          User.findByPk(n.notifierId).then(user => {
+            if (n.notifierId) {
               n['Notifier'] = user.dataValues
               results.push(n)
               resolve(results)
@@ -183,7 +184,7 @@ const messageController = {
           })
         }
       })
-
+      
       noticePromise.then(results => {
         results.sort((a, b) => {
           return b.createdAt - a.createdAt

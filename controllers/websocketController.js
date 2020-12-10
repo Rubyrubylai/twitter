@@ -376,13 +376,13 @@ module.exports = (io) => {
             if (userId !== followingId) {
               const noticeDescription = `${user.name}正在追蹤你`
               console.log('----------')
-              console.log(followship)
-              console.log(followship.id)
+              // console.log(followship)
+              // console.log(followship.id)
               Notice.create({
                 description: noticeDescription,
                 UserId: followingId,
                 unread: true,
-                NotifierId: userId
+                notifierId: userId
               }).then(notice => { 
                 io.emit('follow', { noticeDescription, avatar, followingId }) 
               })
