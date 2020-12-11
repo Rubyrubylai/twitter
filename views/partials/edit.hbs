@@ -33,13 +33,44 @@
       <div class="modal-header">
         <h4>編輯貼文</h4>
       </div>
-      <form action="/tweets/{{tweet.id}}?_method=PUT" method="POST">
+      <input type="hidden" class="type" value="tweet">
+      <input type="hidden" class="tweetId" value="{{tweet.id}}">
+      <form onsubmit="edit(this); return false;">
+      {{!-- <form action="/tweets/{{tweet.id}}?_method=PUT" method="POST"> --}}
       <div class="modal-body flex-container">
         <div>
-          <img src="{{loginUser.avatar}}" alt="user avatar" class="user-avatar">
+          <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
         </div>
         <div class="post-tweet">  
           <textarea placeholder="有什麼新鮮事?" class="form-control description" name="description" rows="3">{{tweet.description}}</textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-edit">儲存</button>
+        <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- pop up edit reply message in tweet page -->
+<div class="modal fade modal-open" id="er{{this.id}}" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4>編輯留言</h4>
+      </div>
+      <input type="hidden" class="type" value="reply">
+      <input type="hidden" class="replyId" value="{{this.id}}">
+      <form onsubmit="edit(this); return false;">
+      {{!-- <form action="/tweets/{{this.id}}/replies?_method=PUT" method="POST"> --}}
+      <div class="modal-body flex-container">
+        <div>
+          <img src="{{this.User.avatar}}" alt="user avatar" class="user-avatar">
+        </div>
+        <div class="post-tweet">  
+          <textarea placeholder="留言..." class="form-control description" name="comment" rows="3">{{this.comment}}</textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -76,27 +107,3 @@
   </div>
 </div>
 
-<!-- pop up edit reply message in tweet page -->
-<div class="modal fade" id="er{{this.id}}" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4>編輯留言</h4>
-      </div>
-      <form action="/tweets/{{this.id}}/replies?_method=PUT" method="POST">
-      <div class="modal-body flex-container">
-        <div>
-          <img src="{{this.User.avatar}}" alt="user avatar" class="user-avatar">
-        </div>
-        <div class="post-tweet">  
-          <textarea placeholder="留言..." class="form-control description" name="comment" rows="3">{{this.comment}}</textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-edit">儲存</button>
-        <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>

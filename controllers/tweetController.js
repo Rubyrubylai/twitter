@@ -243,26 +243,27 @@ const tweetController = {
   },
 
   editReply: (req, res) => {
-    Reply.findByPk(req.params.replyId)
+    Reply.findByPk(req.body.replyId)
       .then(reply => {
-        const { comment } = req.body
-        if (!comment) {
-          req.flash('error_messages', '留言不得為空白')
-          return res.redirect('back')
-        }
-        if (comment.length > 100) {
-          req.flash('error_messages', '留言字數不得超過100字')
-          return res.redirect('back')
-        }
-        else {
+        // const { comment } = req.body
+        // if (!comment) {
+        //   req.flash('error_messages', '留言不得為空白')
+        //   return res.redirect('back')
+        // }
+        // if (comment.length > 100) {
+        //   req.flash('error_messages', '留言字數不得超過100字')
+        //   return res.redirect('back')
+        // }
+        // else {
           reply.update({
-            comment
+            comment: req.body.updatedDesc
           })
             .then(reply => {
-              req.flash('success_messages', '已成功更新留言')
-              return res.redirect('back')
+              // req.flash('success_messages', '已成功更新留言')
+              // return res.redirect('back')
+              return res.send('edit reply')
             })
-        }
+        // }
       })
   }
 }

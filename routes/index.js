@@ -93,14 +93,14 @@ module.exports = (app, passport, io) => {
   
   app.delete('/replies/:replyId', authenticated, tweetController.deleteReply)
   app.put('/tweets/:tweetId', authenticated, tweetController.editTweet)
-  app.put('/tweets/:replyId/replies', authenticated, tweetController.editReply)
+  app.put('/replies/:replyId', authenticated, tweetController.editReply)
 
   
 
   //Reply
   // app.post('/replies/:replyId', authenticated, replyController.postReply)
   app.delete('/replyComments/:replyId', authenticated, replyController.deleteReply)
-  app.put('/replies/:replyId', authenticated, replyController.editReply)
+  app.put('/replyComments/:replyId', authenticated, replyController.editReply)
 
   //follow
   // app.post('/followships', authenticated, userController.postFollowing)

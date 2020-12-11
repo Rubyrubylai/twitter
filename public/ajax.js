@@ -199,80 +199,54 @@ function edit(obj) {
   const type = $(obj).siblings('.type').val()
   
   if (type === 'tweet') {
-    console.log($(obj))
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweetDesc = $(`#tweet-description-${tweetId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
-    console.log(updatedDesc)
-    $.ajax({
-      method: 'PUT',
-      url: `/tweets/${tweetId}`,
-      data: { tweetId, updatedDesc },
-      dataType: 'text',
-      success: function() {
-        tweetDesc.text(`${updatedDesc}`)
-        $(`.modal`).modal('hide')
-        $('body').removeClass('modal-open')
-        $('.modal-backdrop').remove()
-      },
-      error: function() {
-        console.error(err)
-      }
-    })
-  }  
-  else {   
-    const replyId = Number($(obj).siblings('.replyCommentId').val())
-    const comment = $('.replyComment').text()
-    const avatar = $(obj).siblings('.avatar').val()
-    const name = $(obj).siblings('.name').val()
-    const account = $(obj).siblings('.account').val()
-    const replyUserName = $(obj).siblings('.replyUserName').val()
-    const time = $(obj).siblings('.time').val()
-    const form = $('#reply-comment-form')
-    console.log('------------')
-    console.log('comment')
-    if (!comment) {
+    if (!updatedDesc) {
       return false
     }
-    if (comment.length > 100) {
+    if (updatedDesc.length > 100) {
       return false
     }
     else {
       $.ajax({
         method: 'PUT',
-        url: '/replies',
-        data: { replyId, comment },
+        url: `/tweets/${tweetId}`,
+        data: { tweetId, updatedDesc },
         dataType: 'text',
-        success: function(response) {
-          form(`
-          <div class="flex-container mb-2">
-            <div>
-              <a href="/users/${userId}/tweets">
-                <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
-              </a>
-            </div>
-            <div>
-              <div class="dropdown show" style="position:absolute; right:20px;">
-                <a style="color:black; text-decoration:none;" role="button" id="more" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-                  •••
-                </a>
-                <div class="dropdown-menu" aria-labelledby="more">
-                  <button data-toggle="modal" data-target="#er${replyId}" class="dropdown-item">修改此留言</button>
-                  <button data-toggle="modal" data-target="#cr${replyId}" class="dropdown-item">刪除此留言</button>
-                </div>
-              </div>
-              <a href="/users/${userId}/tweets
-              " style="text-decoration:none; color:black"><strong>${name}</strong></a>
-              <font color="grey">@${account} • ${time}</font>
-              <p>
-              ${comment}
-              </p>
-              <font color="grey" size="2px">回覆給</font>
-              <font color="coral" size="2px">@${replyUserName}</font>
-            </div>
-          </div>
-          `)
+        success: function() {
+          tweetDesc.text(`${updatedDesc}`)
+          $(`.modal`).modal('hide')
+          $('body').removeClass('modal-open')
+          $('.modal-backdrop').remove()
+        },
+        error: function() {
+          console.error(err)
+        }
+      })
+    }
+  }  
+  else if (type === 'reply') {   
+    const replyId = $(obj).siblings('.replyId').val()
+    const replyDesc = $(`#reply-description-${replyId}`)
+    const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+    if (!updatedDesc) {
+      return false
+    }
+    if (updatedDesc.length > 100) {
+      return false
+    }
+    else {
+      $.ajax({
+        method: 'PUT',
+        url: `/replies/${replyId}`,
+        data: { replyId, updatedDesc },
+        dataType: 'text',
+        success: function() {
+          replyDesc.text(`${updatedDesc}`)
+          $(`.modal`).modal('hide')
+          $('body').removeClass('modal-open')
+          $('.modal-backdrop').remove()
         },
         error: function() {
           console.error(err)
