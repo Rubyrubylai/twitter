@@ -28,7 +28,7 @@ const replyController = {
       .then(replyComment => {
         replyComment.destroy()
           .then(replyComment => {
-            return res.redirect('back')
+            return res.send('delete replyComment')
           })
       })
   },

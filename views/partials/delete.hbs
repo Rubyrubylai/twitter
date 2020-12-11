@@ -1,5 +1,5 @@
 <!-- pop up delete tweet message in tweets page -->
-<div class="modal fade" id="t{{this.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="t{{this.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -12,7 +12,7 @@
         {{!-- <form action="/tweets/{{this.id}}?_method=DELETE" method="POST"> --}}
         <input type="hidden" class="type" value="tweet">
         <input type="hidden" class="tweetId" value="{{this.id}}">
-        <button onclick="remove(this)" type="button" class="btn btn-delete" data-dismiss="modal">刪除</button>
+        <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
         {{!-- </form> --}}
         <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
     </div>
@@ -21,7 +21,7 @@
 </div>
 
 <!-- pop up delete reply comment message in tweet page -->
-<div class="modal fade" id="cr{{this.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="cr{{this.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -33,6 +33,7 @@
       <div class="modal-footer">
         <input type="hidden" class="type" value="replyComment">
         <input type="hidden" class="replyCommentId" value="{{this.id}}">
+        <input type="hidden" class="replyId" value="{{../this.id}}">
         <button onclick="remove(this)" type="button" class="btn btn-delete" data-dismiss="modal">刪除</button>
         {{!-- <form action="/replies/{{this.id}}?_method=DELETE" method="POST">
             <button type="submit" class="btn btn-delete">刪除</button>
@@ -44,7 +45,7 @@
 </div>
 
 <!-- pop up delete tweet message in tweet page -->
-<div class="modal fade" id="t{{tweet.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="t{{tweet.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -67,7 +68,7 @@
 </div>
 
 <!-- pop up delete tweet reply message in tweet page -->
-<div class="modal fade" id="tr{{this.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="tr{{this.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">

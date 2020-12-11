@@ -129,7 +129,7 @@ const userController = {
       .then(notice => {
         like.destroy()
         .then(like => {
-          return res.redirect('back')
+          return res.send('dislike tweet')
         })
       })   
     })
@@ -165,7 +165,7 @@ const userController = {
           
           like.destroy()
           .then(like => {
-            return res.redirect('back')
+            return res.send('dislike reply')
           })
         })
         
@@ -205,7 +205,7 @@ const userController = {
         .then(notice => {
           followship.destroy()
           .then(followship => {
-            return res.redirect('back')
+            return res.send('delete followship')
           })
         })
       })

@@ -95,7 +95,7 @@ socket.on('like', (data) => {
 })
 
 //post a tweetReply
-$('.reply-form').submit((e) => {
+function reply(obj) {
   var comment = $(obj).siblings('.comment').val()
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
@@ -105,17 +105,15 @@ $('.reply-form').submit((e) => {
   const tweetUserName = $(obj).siblings('.tweetUserName').val()
   const time = $(obj).siblings('.time').val()
   const commentNode = document.getElementById('commentNode')
-
+  
   if (comment.length === 0) {
-    e.preventDefault()
+    return false
   }
   else if (comment.length > 100) {
-    e.preventDefault()
+    return false
   }
   else {
-    const tweetReplies = document.getElementById('tweetReplies')
-
-    $('#tweetReplies').append(`
+    $('#tweet-replies').append(`
     <div class="flex-container mb-2">
       <div>
         <a href="/users/${userId}/tweets">
@@ -133,12 +131,100 @@ $('.reply-form').submit((e) => {
       </div>
     </div>
     `)
-    commentNode.value = ''
+    $('.tweeReply-form').append(`
+    <li class="list-group-item" id="reply-{{this.id}}">
+    <div class="flex-container">
+      <div>
+        <a href="/users/${userId}/tweets">
+          <img class="user-avatar" src="${avatar}" alt="user avatar">
+        </a>
+      </div>
+      <div>
+          <div class="dropdown more">
+            <a class="a-custom" role="button" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="false">
+              •••
+            </a>
+            <div class="dropdown-menu" aria-labelledby="more">
+              <button data-toggle="modal" data-target="#er{{this.id}}" class="dropdown-item">修改此留言</button>
+              <button data-toggle="modal" data-target="#tr{{this.id}}" class="dropdown-item">刪除此留言</button>
+            </div>
+          </div>
+        <a href="/users/${userId}/tweets" class="a-black"><strong>${name}</strong></a>
+        <font class="text-muted">@${account} • ${time}</font>
+        <br>
+        <font class="text-muted reply">回覆</font>
+        <a href="/users/${tweetUserId}/tweets" class="a-coral">@${tweetUserName}</a>
+        <p>${comment}</p>
+        <div>
+          <button data-toggle="modal" data-target="#r{{this.id}}" class="tweet-icon"><i class="far fa-comment"></i></button>
+          <div id="replyComment-count-{{this.id}}" class="comments-count">0</div>
+        </div>
+        <div>
+          <div class="flex-container">
+          <input type="hidden" class="tweetId" value="${tweetId}">
+          <input type="hidden" class="replyId" value="{{this.id}}">
+          <input type="hidden" class="replyUserId" value="${userId}">
+          <input type="hidden" class="likesCount" value="0">
+          <input type="hidden" class="type" value="reply">
+          <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
+          <div class="count">0</div>
+        </div>
+        </div>
+      </div>
+    </div>
+    `)
     
     socket.emit('reply', { comment, userId, tweetId, tweetUserId })
-    
+    $(obj).siblings('.comment').val('')
   }
-})
+}
+
+
+// $('.reply-form').submit((e) => {
+//   var comment = $(obj).siblings('.comment').val()
+//   const tweetId = Number($(obj).siblings('.tweetId').val())
+//   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
+//   const avatar =$(obj).siblings('.avatar').val()
+//   const name = $(obj).siblings('.name').val()
+//   const account =$(obj).siblings('.account').val()
+//   const tweetUserName = $(obj).siblings('.tweetUserName').val()
+//   const time = $(obj).siblings('.time').val()
+//   const commentNode = document.getElementById('commentNode')
+
+//   if (comment.length === 0) {
+//     e.preventDefault()
+//   }
+//   else if (comment.length > 100) {
+//     e.preventDefault()
+//   }
+//   else {
+//     const tweetReplies = document.getElementById('tweetReplies')
+
+//     $('#tweetReplies').append(`
+//     <div class="flex-container mb-2">
+//       <div>
+//         <a href="/users/${userId}/tweets">
+//           <img class="user-avatar" src="${avatar}" alt="user avatar">
+//         </a>
+//       </div>
+//       <div>
+//         <a class="a-black" href="/users/${userId}/tweets"><strong>${name}</strong></a>
+//         <font class="reply-font">@${account} • ${time}</font>
+//         <p>
+//         ${comment}
+//         </p>
+//         <font class="reply-to-font">回覆給</font>
+//         <font class="reply-to-account">@${tweetUserName}</font>
+//       </div>
+//     </div>
+//     `)
+//     commentNode.value = ''
+    
+//     socket.emit('reply', { comment, userId, tweetId, tweetUserId })
+    
+//   }
+// })
 
 socket.on('reply', (data) => {  
   if(data.tweetUserId === userId) {

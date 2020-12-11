@@ -9,8 +9,8 @@ function dislike(obj) {
   const likesCount = $(obj).siblings('.likesCount').val() - 1
   if (type === 'tweet') {
     $.ajax({
-      method: 'POST',
-      url: '/tweets/dislike',
+      method: 'DELETE',
+      url: '/tweets/like',
       data: { tweetId, tweetUserId },
       dataType: 'text',
       success: function(response) {
@@ -43,8 +43,8 @@ function dislike(obj) {
   }
   else {
     $.ajax({
-      method: 'POST',
-      url: '/replies/dislike',
+      method: 'DELETE',
+      url: '/replies/like',
       data: { replyId, replyUserId },
       dataType: 'text',
       success: function(response) {
@@ -86,8 +86,8 @@ function unfollow(obj) {
   const form = $(obj).parent()
   console.log($(obj).parents('.follow-list'))
   $.ajax({
-    method: 'POST',
-    url: `/followships/delete`,
+    method: 'DELETE',
+    url: `/followships`,
     data: { followingId },
     dataType: 'text',
     success: function(response) {
@@ -138,42 +138,56 @@ function remove(obj) {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweet = $(`#tweet-${tweetId}`)
     $.ajax({
-      method: 'POST',
-      url: `/tweets/delete`,
+      method: 'DELETE',
+      url: `/tweets/${tweetId}`,
       data: { tweetId },
       dataType: 'text',
       success: function() {
         tweet.parent().children().remove()
         $('.modal').modal('hide')
+        $('body').removeClass('modal-open')
+        $('.modal-backdrop').remove()
       }
     })
   }
   else if (type === 'reply') {
     const replyId = $(obj).siblings('.replyId').val()
     const reply = $(`#reply-${replyId}`)
+    const replyCount = Number($('#reply-count').text())
+    console.log(replyCount)
     $.ajax({
-      method: 'POST',
-      url: `/replies/delete`,
+      method: 'DELETE',
+      url: `/replies/${replyId}`,
       data: { replyId },
       dataType: 'text',
       success: function() {
         reply.parent().children().remove()
+        $('#reply-count').text(replyCount-1)
         $(`.modal`).modal('hide')
+        $('body').removeClass('modal-open')
+        $('.modal-backdrop').remove()
       }
     })
   }
   else if (type === 'replyComment') {
     const replyCommentId = $(obj).siblings('.replyCommentId').val()
+    // const replyId = $('.replyId').val()
     const replyComment = $(`#replyComment-${replyCommentId}`)
-    console.log(`#cr${replyCommentId}`)
+    // const replyCommentCount = $(`replyComment-count-${replyId}`).text()
+    
+    console.log(replyCommentId)
+    console.log($(`replyComment-count-${replyCommentId}`))
     $.ajax({
-      method: 'POST',
-      url: `/replyComments/delete`,
+      method: 'DELETE',
+      url: `/replyComments/${replyCommentId}`,
       data: { replyCommentId },
       dataType: 'text',
       success: function() {
         replyComment.parent().children().remove()
-        // $(`.close-replyComment`).click()
+        // $(`replyComment-count-${replyId}`).text(replyCommentCount-1)
+        $(`.modal`).modal('hide')
+        $('body').removeClass('modal-open')
+        $('.modal-backdrop').remove()
       }
     })
   }

@@ -166,7 +166,7 @@ const tweetController = {
           })
         }
         else {
-          return res.redirect('/')
+          return res.send('no reply')
         }
       })
   },
@@ -198,19 +198,17 @@ const tweetController = {
       .then(tweet => {
         tweet.destroy()
           .then(tweet => {
-            return res.redirect('back')
+            return res.send('delete tweet')
           })
       })
   },
 
   deleteReply: (req, res) => {
-    console.log('-------------replyID')
-    console.log(req.body.replyId)
     Reply.findByPk(req.body.replyId)
       .then(reply => {
         reply.destroy()
           .then(reply => {
-            return res.redirect('back')
+            return res.send('delete reply')
           })
       })
   },

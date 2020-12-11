@@ -1,11 +1,11 @@
 {{!-- Center --}}
 <div class="col">
-  <ul class="list-group" id="tweet-{{tweet.id}}">
+  <ul class="list-group">
     <li class="list-group-item">
       <a href="javascript:history.back()" class="back"><i class="fas fa-arrow-left"></i></a>
       <strong>推文</strong>
     </li>
-    <li class="list-group-item">
+    <li class="list-group-item" id="tweet-{{tweet.id}}">
       <div class="flex-container">
         <a href="/users/{{tweet.User.id}}/tweets">
           <img class="user-avatar" src="{{tweet.User.avatar}}" alt="user avatar">
@@ -33,7 +33,7 @@
       </div>
     </li>
     <li class="list-group-item">
-      <strong>{{tweet.Replies.length}}</strong> 回覆 &nbsp
+      <strong id="reply-count">{{tweet.Replies.length}}</strong> 回覆 &nbsp
       <strong id="tweet-like">{{tweet.Likes.length}}</strong> 喜歡次數
     </li>
     <li class="list-group-item">
@@ -58,7 +58,7 @@
       </div>
       </div>
     </li>
-    <div>
+    <div class="tweeReply-form">
     {{#each tweetReplies}}
     <div>
       <li class="list-group-item" id="reply-{{this.id}}">
@@ -89,7 +89,7 @@
             <p>{{this.comment}}</p>
             <div>
               <button data-toggle="modal" data-target="#r{{this.id}}" class="tweet-icon"><i class="far fa-comment"></i></button>
-              <div class="comments-count">{{this.ReplyComments.length}}</div>
+              <div id="replyComment-count-{{this.id}}" class="comments-count">{{this.ReplyComments.length}}</div>
             </div>
             <div>
               <div class="flex-container">

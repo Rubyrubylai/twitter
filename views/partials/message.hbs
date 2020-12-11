@@ -16,13 +16,13 @@
           </div>
           <div>
             <a class="a-black" href="/users/{{tweet.User.id}}/tweets"><strong>{{tweet.User.name}}</strong></a>
-            <font color="grey">@{{tweet.User.account}} • {{moment tweet.updatedAt}}</font>
+            <font class="reply-font">@{{tweet.User.account}} • {{moment tweet.updatedAt}}</font>
             <p>
               {{tweet.description}}
             </p>
           </div>
         </div>
-        <div id="tweetReplies">
+        <div id="tweet-replies">
         {{#each tweetReplies}}
           <div class="flex-container mb-2">
             <div>
@@ -31,14 +31,13 @@
               </a>
             </div>
             <div>
-              <a class="a-black" href="/users/{{this.User.id}}/tweets
-              "><strong>{{this.User.name}}</strong></a>
-              <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
+              <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
+              <font class="reply-font">@{{this.User.account}} • {{moment this.updatedAt}}</font>
               <p>
                 {{this.comment}}
               </p>
-              <font color="grey" size="2px">回覆給</font>
-              <font color="coral" size="2px">@{{../tweet.User.name}}</font>
+              <font class="reply-to-font">回覆給</font>
+              <font class="reply-to-account">@{{../tweet.User.name}}</font>
             </div>
           </div>
         {{/each}}
@@ -48,18 +47,18 @@
             <img src="{{user.avatar}}" alt="user avatar" class="user-avatar">
           </div>
           <div class="post-tweet">
-            <form class="reply-form">
-              <textarea placeholder="推你的回覆" class="form-control description" name="comment" rows="3"
+            <div id="reply-form">
+              <textarea placeholder="推你的回覆" class="form-control comment" rows="3"
                 ></textarea>
-              <input type="hidden" name="tweetId" value="{{tweet.id}}">
-              <input type="hidden" name="tweetUserId" value="{{tweet.User.id}}">
-              <input type="hidden" name="avatar" value="{{user.avatar}}">
-              <input type="hidden" name="name" value="{{user.name}}">
-              <input type="hidden" name="account" value="{{user.account}}">
-              <input type="hidden" name="tweetUserName" value="{{tweet.User.name}}">
-              <input type="hidden" name="time" value="{{moment now}}">
-              <button class="btn btn-reply" type="submit">留言</button>
-            </form>
+              <input type="hidden" class="tweetId" value="{{tweet.id}}">
+              <input type="hidden" class="tweetUserId" value="{{tweet.User.id}}">
+              <input type="hidden" class="avatar" value="{{user.avatar}}">
+              <input type="hidden" class="name" value="{{user.name}}">
+              <input type="hidden" class="account" value="{{user.account}}">
+              <input type="hidden" class="tweetUserName" value="{{tweet.User.name}}">
+              <input type="hidden" class="time" value="{{moment now}}">
+              <button onclick="reply(this)" class="btn btn-reply" type="button">留言</button>
+            </div>
           </div>
         </div>
       </div>
@@ -85,7 +84,7 @@
             </div>
             <div>
               <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
-              <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
+              <font class="reply-font">@{{this.User.account}} • {{moment this.updatedAt}}</font>
               <p>
                 {{this.comment}}
               </p>
@@ -101,7 +100,7 @@
                 </a>
               </div>
               <div>
-                {{#ifCond ../../loginUser.id this.User.id}}
+                {{#ifCond ../../user.id this.User.id}}
                   <div class="dropdown more">
                     <a class="a-black" role="button" data-toggle="dropdown"
                       aria-haspopup="true" aria-expanded="false">
@@ -114,12 +113,12 @@
                   </div>
                 {{/ifCond}}
                 <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
-                <font color="grey">@{{this.User.account}} • {{moment this.updatedAt}}</font>
+                <font class="reply-font">@{{this.User.account}} • {{moment this.updatedAt}}</font>
                 <p>
                   {{this.comment}}
                 </p>
-                <font color="grey" size="2px">回覆給</font>
-                <font color="coral" size="2px">@{{../this.User.name}}</font>
+                <font lass="reply-to">回覆給</font>
+                <font class="reply-to-account">@{{../this.User.name}}</font>
               </div>
             </div>
             <!-- pop up delete reply comment message -->
