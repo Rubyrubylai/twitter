@@ -203,7 +203,7 @@ const messageController = {
       }
     })
     .then(subscribship => {
-      return res.redirect('back')
+      return res.send('delete subscribe')
     })
   }
 }

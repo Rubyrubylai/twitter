@@ -214,27 +214,32 @@ const tweetController = {
   },
 
   editTweet: (req, res) => {
-    Tweet.findByPk(req.params.tweetId)
+    console.log('------------------edit')
+    Tweet.findByPk(req.body.tweetId)
       .then(tweet => {
-        const { description } = req.body
-        if (!description) {
-          req.flash('error_messages', '貼文不得為空白')
-          return res.redirect('back')
-        }
-        if (description.length > 140) {
-          req.flash('error_messages', '貼文字數不得超過140字')
-          return res.redirect('back')
-        }
-        else {
+        console.log(req.body.tweetId)
+        console.log(req.body.updatedDesc)
+        // const { description } = req.body
+        // if (!description) {
+        //   req.flash('error_messages', '貼文不得為空白')
+        //   return res.redirect('back')
+        // }
+        // if (description.length > 140) {
+        //   req.flash('error_messages', '貼文字數不得超過140字')
+        //   return res.redirect('back')
+        // }
+        // else {
           tweet.update({
-            description
+            description: req.body.updatedDesc
           })
             .then(tweet => {
-              req.flash('success_messages', '已成功更新貼文')
-              return res.redirect('back')
+              // req.flash('success_messages', '已成功更新貼文')
+              // return res.redirect('back')
+              return res.send('update tweet')
             })
         }
-      })
+      // }
+      )
   },
 
   editReply: (req, res) => {

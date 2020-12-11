@@ -126,5 +126,5 @@ module.exports = (app, passport, io) => {
   app.get('/message/:userId', authenticated, messageController.getPrivateMessage)
   app.get('/count', authenticated, messageController.getCount)
   app.get('/notice', authenticated, messageController.getNotice)
-  app.post('/subscribe', authenticated, messageController.deleteSubscribed)
+  app.delete('/subscribe', authenticated, messageController.deleteSubscribed)
 }

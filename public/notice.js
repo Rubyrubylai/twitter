@@ -180,52 +180,6 @@ function reply(obj) {
   }
 }
 
-
-// $('.reply-form').submit((e) => {
-//   var comment = $(obj).siblings('.comment').val()
-//   const tweetId = Number($(obj).siblings('.tweetId').val())
-//   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
-//   const avatar =$(obj).siblings('.avatar').val()
-//   const name = $(obj).siblings('.name').val()
-//   const account =$(obj).siblings('.account').val()
-//   const tweetUserName = $(obj).siblings('.tweetUserName').val()
-//   const time = $(obj).siblings('.time').val()
-//   const commentNode = document.getElementById('commentNode')
-
-//   if (comment.length === 0) {
-//     e.preventDefault()
-//   }
-//   else if (comment.length > 100) {
-//     e.preventDefault()
-//   }
-//   else {
-//     const tweetReplies = document.getElementById('tweetReplies')
-
-//     $('#tweetReplies').append(`
-//     <div class="flex-container mb-2">
-//       <div>
-//         <a href="/users/${userId}/tweets">
-//           <img class="user-avatar" src="${avatar}" alt="user avatar">
-//         </a>
-//       </div>
-//       <div>
-//         <a class="a-black" href="/users/${userId}/tweets"><strong>${name}</strong></a>
-//         <font class="reply-font">@${account} • ${time}</font>
-//         <p>
-//         ${comment}
-//         </p>
-//         <font class="reply-to-font">回覆給</font>
-//         <font class="reply-to-account">@${tweetUserName}</font>
-//       </div>
-//     </div>
-//     `)
-//     commentNode.value = ''
-    
-//     socket.emit('reply', { comment, userId, tweetId, tweetUserId })
-    
-//   }
-// })
-
 socket.on('reply', (data) => {  
   if(data.tweetUserId === userId) {
     notice(data, followship)
