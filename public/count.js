@@ -1,5 +1,6 @@
 const xhr = new XMLHttpRequest()
 xhr.open('get','/count')
+
 // xhr.setRequestHeader('Content-type','application/json;charset=utf-8')
 
 xhr.onload = function() {

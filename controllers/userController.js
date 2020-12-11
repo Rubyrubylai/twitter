@@ -417,12 +417,12 @@ const userController = {
         isReplyLiked: loginUser.Likes.map(like => like.ReplyId).includes(reply.id),
         // Tweet
         tweetId: reply.TweetId,
-        tweetUserId: reply.Tweet.User.id,
-        tweetUserAccount: reply.Tweet.User.account,
-        tweetUserName: reply.Tweet.User.name,
-        tweetDescription: reply.Tweet.description.substring(0, 160),
-        replyCount: reply.Tweet.Replies.length,
-        tweetLikeCount: reply.Tweet.Likes.length,
+        tweetUserId: reply.Tweet ? reply.Tweet.User.id: null,
+        tweetUserAccount: reply.Tweet  ? reply.Tweet.User.account: null,
+        tweetUserName: reply.Tweet ? reply.Tweet.User.name: null,
+        tweetDescription: reply.Tweet ? reply.Tweet.description.substring(0, 160): null,
+        replyCount: reply.Tweet ? reply.Tweet.Replies.length: null,
+        tweetLikeCount: reply.Tweet ? reply.Tweet.Likes.length: null,
         isLiked: loginUser.Likes.map(like => like.TweetId).includes(reply.TweetId)
       }))
       const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
@@ -567,6 +567,7 @@ const userController = {
     }).then(data => {
       const tweetsCount = data.toJSON().Tweets.length
       const name = data.toJSON().name
+      const userId = data.dataValues.id
       data = data.follower.map(r => ({
         ...r.dataValues,
         id: r.id,
@@ -580,9 +581,7 @@ const userController = {
         isFollowed: helpers.getUser(req).following.map(d => d.id).includes(r.id)
       }))
       // 排序
-      data = data.sort((a, b) => b.followshipCreatedAt - a.followshipCreatedAt)
-      console.log('=================================')
-      console.log('data:', data)
+      data = data.sort((a, b) => a.followshipCreatedAt - b.followshipCreatedAt)
 
       // Right side
       // filter the tweets to those that user followings & user himself
@@ -612,6 +611,7 @@ const userController = {
 
         return res.render('userFollowers', {
           users, // for right partials
+          userId,
           data,
           name: name,
           tweetsCount: tweetsCount,
@@ -632,6 +632,7 @@ const userController = {
     }).then(data => {
       const tweetsCount = data.toJSON().Tweets.length
       const name = data.toJSON().name
+      const userId = data.dataValues.id
       data = data.following.map(r => ({
         ...r.dataValues,
         id: r.id,
@@ -644,7 +645,7 @@ const userController = {
         isFollowed: helpers.getUser(req).following.map(d => d.id).includes(r.id)
       }))
       // 排序
-      data = data.sort((a, b) => b.followshipCreatedAt - a.followshipCreatedAt)
+      data = data.sort((a, b) => a.followshipCreatedAt - b.followshipCreatedAt)
 
       // Right side
       // filter the tweets to those that user followings & user himself
@@ -674,6 +675,7 @@ const userController = {
 
         return res.render('userFollowings', {
           users,
+          userId,
           data,
           name: name,
           tweetsCount: tweetsCount,

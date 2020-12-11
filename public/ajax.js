@@ -81,23 +81,32 @@ function dislike(obj) {
 }
 
 function unfollow(obj) {
-  const followingId = $(obj).siblings('.followingId').val()
-  const type = $(obj).siblings('.type').val()
-  const form = $(obj).parent()
-  console.log($(obj).parents('.follow-list'))
+  const type = $('.type').val()
+  const followingId = Number($(obj).parent().siblings('.followingId').val())
+  var userForm = $(`#follow-${followingId}`)
+  const rightForm = $(`#right-follow-${followingId}`)
+
   $.ajax({
     method: 'DELETE',
     url: `/followships`,
     data: { followingId },
     dataType: 'text',
     success: function(response) {
-      if (type === 'userFollowings') {
-        $(obj).parents('.follow-list').remove()
+      rightForm.parent().html(`
+        <button id="right-follow-${followingId}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+      `)
+      if (type === 'userFollowings' && userId === receiveId) {
+        //the followings will be remove when user unfollow them in himself userFollowing page
+        userForm.parents('.follow-list').remove()
+      }
+      else if (type === 'userFollowers' && userId !== receiveId && followingId === receiveId) {
+        //the user will be remove when user unfollow follower in others userFollower page
+        userForm = $(`#user-${userId}`)
+        userForm.parents('.follow-list').remove()
       }
       else {
-        form.html(`
-        <input type="hidden" class="followingId" value="${followingId}">
-        <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+        userForm.parent().html(`
+        <button id="follow-${followingId}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         `)
         $('#follower-count').text(Number($('#follower-count').text())-1)
       }
@@ -137,8 +146,6 @@ function remove(obj) {
   if (type === 'tweet') {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweet = $(`#tweet-${tweetId}`)
-    console.log('--------------tweet')
-    console.log(tweetId)
     $.ajax({
       method: 'DELETE',
       url: `/tweets/${tweetId}`,
@@ -202,7 +209,9 @@ function edit(obj) {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweetDesc = $(`#tweet-description-${tweetId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+    //tweets page
     const tweetsTime = $(`#tweets-time-${tweetId}`)
+    //tweet page
     const tweetTime = $(`#tweet-time-${tweetId}`)
     var updatedTweetTime = new Date()
     var date = getDate(updatedTweetTime)

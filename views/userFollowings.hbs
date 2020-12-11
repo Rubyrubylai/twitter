@@ -11,45 +11,46 @@
     <div class="col">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link unselected_nav" href="/users/{{user.id}}/followers">跟隨者</a>
+          <a class="nav-link unselected_nav" href="/users/{{userId}}/followers">跟隨者</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link selected_nav" href="/users/{{user.id}}/followings">正在跟隨</a>
+          <a class="nav-link selected_nav" href="/users/{{userId}}/followings">正在跟隨</a>
         </li>
       </ul>
     </div>
   </div>
-  
-  {{#each data}}
-  <div class="follow-list">
-    <div class="d-flex p-2 row border-bottom">
-      <a href="/users/{{this.id}}/tweets">
-        <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
-      </a>
-      <div class="col">
-        <a class="a-black" href="/users/{{this.id}}/tweets">
-          <span class="bold">{{this.name}}</span><br>
-        </a>
+  <input type="hidden" class="type" value="userFollowings">
+  <div class="user-sheet">
+    {{#each data}}
+      <div class="d-flex p-2 row border-bottom follow-list">
         <a href="/users/{{this.id}}/tweets">
-          <span class="follow-font">@{{this.account}}</span><br>
+          <img class="mr-3 user_avatar_s" src="{{this.avatar}}" alt="Avatar">
         </a>
-        <span><small>{{this.introduction}}<br></small></span>
-      </div>
-      <div>
-        {{#if this.isFollowed}}
-          <input type="hidden" class="followingId" value="{{this.id}}">
-          <input type="hidden" class="type" value="userFollowings">
-          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+        <div class="col">
+          <a class="a-black" href="/users/{{this.id}}/tweets">
+            <span class="bold">{{this.name}}</span><br>
+          </a>
+          <a href="/users/{{this.id}}/tweets">
+            <span class="follow-font">@{{this.account}}</span><br>
+          </a>
+          <span><small>{{this.introduction}}<br></small></span>
+        </div>
+        <input type="hidden" class="followingId" value="{{this.id}}">
+        <input type="hidden" class="userId" value="{{../user.id}}">
+        {{#ifCond ../user.id this.id}}
         {{else}}
-          <input type="hidden" class="followingId" value="{{this.id}}">
-          <input type="hidden" class="type" value="userFollowings">
-          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-        {{/if}}
+        <div>
+          {{#if this.isFollowed}}
+            <button id="follow-{{this.id}}" onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+          {{else}}
+            <button id="follow-{{this.id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+          {{/if}}
+        </div>
+        {{/ifCond}}
       </div>
-    </div>
-  </div>
+
   {{/each}}
-  
+  </div>
 </div>
 {{!-- Right side --}}
 {{> right}}

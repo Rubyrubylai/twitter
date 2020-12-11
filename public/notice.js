@@ -249,13 +249,91 @@ socket.on('replyComment', (data) => {
 
 //follow a tweet
 function follow(obj) {
-  const followingId = Number($(obj).siblings('.followingId').val())
-  const form = $(obj).parent()
-  form.html(`
-  <input type="hidden" class="followingId" value="${followingId}">
-  <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+  const type = $('.type').val()
+  const followingId = Number($(obj).parent().siblings('.followingId').val())
+  const name = $(obj).parent().siblings('.name').val()
+  const avatar = $(obj).parent().siblings('.avatar').val()
+  const account = $(obj).parent().siblings('.account').val()
+  const introduction = $(obj).parent().siblings('.introduction').val()
+  const userId = Number($(obj).parent().siblings('.userId').val())
+  const username = $(obj).parent().siblings('.username').val()
+  const userAvatar = $(obj).parent().siblings('.userAvatar').val()
+  const userAccount = $(obj).parent().siblings('.userAccount').val()
+  const userIntroduction = $(obj).parent().siblings('.userIntroduction').val()
+  var userForm = $(`.user-sheet`)
+  const rightForm = $(`#right-follow-${followingId}`)
+
+  rightForm.parent().html(`
+    <button id="right-follow-${followingId}" onclick="unfollow(this)" type="button" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
   `)
-  $('#follower-count').text(Number($('#follower-count').text())+1)
+
+  if (type === 'userFollowings' && userId === receiveId) {
+    //the followings will be add when user follow them in himself userFollowing page
+    userForm.append(`
+    <div class="follow-list">
+      <div class="d-flex p-2 row border-bottom">
+        <a href="/users/${followingId}/tweets">
+          <img class="mr-3 user_avatar_s" src="${avatar}" alt="Avatar">
+        </a>
+        <div class="col">
+          <a class="a-black" href="/users/${followingId}/tweets">
+            <span class="bold">${name}</span><br>
+          </a>
+          <a href="/users/${followingId}/tweets">
+            <span class="follow-font">@${account}</span><br>
+          </a>
+          <span><small>${introduction}<br></small></span>
+        </div>
+        <div>
+          <input type="hidden" class="followingId" value="${followingId}">
+          <div> 
+            <button id="follow-${followingId}" onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+          <div> 
+        </div>
+      </div>
+    </div>
+    `)
+  }
+  else if (type === 'userFollowers' && userId !== receiveId && followingId === receiveId) {
+    //the user will be add when user follow follower in others userFollower page
+    userForm.append(`
+    <div class="follow-list">
+      <div class="d-flex p-2 row border-bottom" id="user-${userId}">
+        <a href="/users/${userId}/tweets">
+          <img class="mr-3 user_avatar_s" src="${userAvatar}" alt="Avatar">
+        </a>
+        <div class="col">
+          <a class="a-black" href="/users/${userId}/tweets">
+            <span class="bold">${username}</span><br>
+          </a>
+          <a href="/users/${userId}/tweets">
+            <span class="follow-font">@${userAccount}</span><br>
+          </a>
+          <span><small>${userIntroduction}<br></small></span>
+        </div>
+        
+      </div>
+    </div>
+    `)
+    
+  }
+  
+  
+  else {
+    const userForm = $(`#follow-${followingId}`)
+    userForm.parent().html(`
+    <button id="follow-${followingId}" onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+    `)
+    
+    
+    $('#follower-count').text(Number($('#follower-count').text())+1)
+  }
+  // const form = $(obj).parent()
+  // form.html(`
+  // <input type="hidden" class="followingId" value="${followingId}">
+  // <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+  // `)
+  // $('#follower-count').text(Number($('#follower-count').text())+1)
   socket.emit('follow', followingId)
 }
 

@@ -166,9 +166,13 @@ const tweetController = {
           })
         }
         else {
-          return res.send('no reply')
+          return res.render('delete', { message: '此則貼文已被作者刪除'})
         }
       })
+  },
+
+  getNoReply: (req, res) => {
+    return res.render('delete', { message: '此則留言已被作者刪除'})
   },
 
   // postReply: (req, res) => {

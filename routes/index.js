@@ -88,6 +88,7 @@ module.exports = (app, passport, io) => {
   app.get('/tweets', authenticated, tweetController.getTweets)
   // app.post('/tweets', authenticated, tweetController.postTweets)
   app.delete('/tweets/:tweetId', authenticated, tweetController.deleteTweet)
+  app.get('/tweets//replies', authenticated, tweetController.getNoReply)
   app.get('/tweets/:tweetId/replies', authenticated, tweetController.getReply)
   // app.post('/tweets/:tweetId/replies', authenticated, tweetController.postReply)
   

@@ -4,7 +4,7 @@
       <strong>跟隨誰</strong>
     </li>
     {{#each users}}
-      {{#ifCond ../loginUser.id this.id}}
+      {{#ifCond ../user.id this.id}}
       {{else}}
       <li class="list-group-item top-follow-list">
         <div class="flex-container">
@@ -14,18 +14,26 @@
               <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
             </a>
           </div>
-          <div>
+          <div >
             <a class="a-black" href="/users/{{this.id}}/tweets"><strong>{{this.name}}</strong><br></a>
             <span class="text-muted">@{{this.account}}</span>
           </div>
+          <input type="hidden" class="followingId" value="{{this.id}}">
+          <input type="hidden" class="name" value="{{this.name}}">
+          <input type="hidden" class="avatar" value="{{this.avatar}}">
+          <input type="hidden" class="account" value="{{this.account}}">
+          <input type="hidden" class="introduction" value="{{this.introduction}}">
+          <input type="hidden" class="userId" value="{{../user.id}}">
+          <input type="hidden" class="username" value="{{../user.name}}">
+          <input type="hidden" class="userAvatar" value="{{../user.avatar}}">
+          <input type="hidden" class="userAccount" value="{{../user.account}}">
+          <input type="hidden" class="userIntroduction" value="{{../user.introduction}}">
           <div class="align-self-center ml-auto">
-          {{#if this.isFollowing}}
-            <input type="hidden" class="followingId" value="{{this.id}}">
-            <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-          {{else}}
-            <input type="hidden" class="followingId" value="{{this.id}}">
-            <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-          {{/if}}   
+            {{#if this.isFollowing}}
+              <button id="right-follow-{{this.id}}"onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+            {{else}}
+              <button id="right-follow-{{this.id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+            {{/if}}   
           </div>
         </div>
       </li>

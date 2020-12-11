@@ -173,15 +173,15 @@ const messageController = {
     .then(notices => {
       var results = []
       noticePromise = new Promise((resolve, reject) => {
-        for (let n of notices ) {
-          User.findByPk(n.notifierId).then(user => {
-            if (n.notifierId) {
-              n['Notifier'] = user.dataValues
-              results.push(n)
+        for (let notice of notices ) {
+          User.findByPk(notice.notifierId).then(user => {
+            if (notice.notifierId) {
+              notice['Notifier'] = user.dataValues
+              results.push(notice)
               resolve(results)
             }
             else {
-              results.push(n)
+              results.push(notice)
             }  
           })
         }

@@ -37,13 +37,14 @@
         </button>
         {{/if}}
       </div>
+      <input type="hidden" class="followingId" value="{{userId}}">
       <div class="user-icon">
         {{#if isFollowed}}
           <input type="hidden" class="followingId" value="{{userId}}">
-          <button onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+          <button id="follow-{{userId}}" onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
         {{else}}
           <input type="hidden" class="followingId" value="{{userId}}">
-          <button onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+          <button id="follow-{{userId}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
         {{/if}}
         </div>
       {{/ifCond}}
@@ -59,10 +60,10 @@
       </a>
       <span>{{introduction}}</span>
       <div>
-        <a href="/users/{{user.id}}/followings">
+        <a href="/users/{{userId}}/followings">
           <span class="follow-font">{{followingsCount}}位 跟隨中</span>
         </a>
-        <a href="/users/{{user.id}}/followers">
+        <a href="/users/{{userId}}/followers">
           <span id="follower-count" class="follow-font">{{followersCount}}</span><span class="follow-font">位 跟隨者</span>
         </a>
       </div>
