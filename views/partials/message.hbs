@@ -92,7 +92,6 @@
           </div>
           <div id="reply-comments">
           {{#each this.ReplyComments}}
-          <div>
             <div class="flex-container mb-2" id="replyComment-{{this.id}}">
               <div>
                 <a href="/users/{{this.User.id}}/tweets">
@@ -107,14 +106,14 @@
                       •••
                     </a>
                     <div class="dropdown-menu" aria-labelledby="more">
-                      <button data-toggle="modal" data-target="#er{{this.id}}" class="dropdown-item">修改此留言</button>
+                      <button data-toggle="modal" data-target="#erc{{this.id}}" class="dropdown-item">修改此留言</button>
                       <button data-toggle="modal" data-target="#cr{{this.id}}" class="dropdown-item">刪除此留言</button>
                     </div>
                   </div>
                 {{/ifCond}}
                 <a class="a-black" href="/users/{{this.User.id}}/tweets"><strong>{{this.User.name}}</strong></a>
-                <font class="reply-font">@{{this.User.account}} • {{moment this.updatedAt}}</font>
-                <p>
+                <font class="reply-font">@{{this.User.account}} • <span id="replyComment-time-{{this.id}}">{{moment this.updatedAt}}</span></font>
+                <p id="replyComment-description-{{this.id}}">
                   {{this.comment}}
                 </p>
                 <font lass="reply-to">回覆給</font>
@@ -125,7 +124,6 @@
             {{> delete}}
             <!-- pop up edit reply comment message -->
             {{> edit}}
-          </div>
           {{/each}}
           </div>
           <div class="flex-container">

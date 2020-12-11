@@ -34,7 +34,7 @@
         <input type="hidden" class="type" value="replyComment">
         <input type="hidden" class="replyCommentId" value="{{this.id}}">
         <input type="hidden" class="replyId" value="{{../this.id}}">
-        <button onclick="remove(this)" type="button" class="btn btn-delete" data-dismiss="modal">刪除</button>
+        <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
         {{!-- <form action="/replies/{{this.id}}?_method=DELETE" method="POST">
             <button type="submit" class="btn btn-delete">刪除</button>
         </form> --}}
@@ -57,7 +57,7 @@
       <div class="modal-footer">
         <input type="hidden" class="type" value="tweet">
         <input type="hidden" class="tweetId" value="{{tweet.id}}">
-        <button onclick="remove(this)" type="button" class="btn btn-delete" data-dismiss="modal">刪除</button>
+        <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
         {{!-- <form action="/tweets/{{tweet.id}}?_method=DELETE" method="POST">
             <button type="submit" class="btn btn-delete">刪除</button>
         </form> --}}
@@ -80,7 +80,7 @@
       <div class="modal-footer">
         <input type="hidden" class="type" value="reply">
         <input type="hidden" class="replyId" value="{{this.id}}">
-        <button onclick="remove(this)" type="button" class="btn btn-delete" data-dismiss="modal">刪除</button>
+        <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
         {{!-- <form action="/tweets/{{this.id}}/replies?_method=DELETE" method="POST">
             <button type="submit" class="btn btn-delete">刪除</button>
         </form> --}}

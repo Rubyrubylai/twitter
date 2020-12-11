@@ -29,7 +29,7 @@
       </div>
       <div class="tweet-desc">
         <p id="tweet-description-{{tweet.id}}">{{tweet.description}}</p>
-        <font class="text-muted">{{date tweet.updatedAt}}</font>
+        <font class="text-muted" id="tweet-time-{{tweet.id}}">{{date tweet.updatedAt}}</font>
       </div>
     </li>
     <li class="list-group-item">
@@ -82,7 +82,7 @@
               </div>
             {{/ifCond}}
             <a href="/users/{{this.User.id}}/tweets" class="a-black"><strong>{{this.User.name}}</strong></a>
-            <font class="text-muted">@{{this.User.account}} • {{moment this.updatedAt}}</font>
+            <font class="text-muted">@{{this.User.account}} • <span id="reply-time-{{this.id}}">{{moment this.updatedAt}}</span></font>
             <br>
             <font class="text-muted reply">回覆</font>
             <a href="/users/{{../tweet.User.id}}/tweets" class="a-coral">@{{../tweet.User.name}}</a>

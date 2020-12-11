@@ -130,7 +130,7 @@ const tweetController = {
         }))
 
         tweetReplies = tweetReplies.sort((a, b) => {
-          return b.createdAt - a.createdAt
+          return a.updatedAt - b.updatedAt
         })
 
         //Top 10 followers

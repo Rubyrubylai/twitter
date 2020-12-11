@@ -99,8 +99,9 @@ module.exports = (app, passport, io) => {
 
   //Reply
   // app.post('/replies/:replyId', authenticated, replyController.postReply)
-  app.delete('/replyComments/:replyId', authenticated, replyController.deleteReply)
   app.put('/replyComments/:replyId', authenticated, replyController.editReply)
+  app.delete('/replyComments/:replyId', authenticated, replyController.deleteReply)
+  
 
   //follow
   // app.post('/followships', authenticated, userController.postFollowing)

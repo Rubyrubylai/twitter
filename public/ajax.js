@@ -137,6 +137,8 @@ function remove(obj) {
   if (type === 'tweet') {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweet = $(`#tweet-${tweetId}`)
+    console.log('--------------tweet')
+    console.log(tweetId)
     $.ajax({
       method: 'DELETE',
       url: `/tweets/${tweetId}`,
@@ -160,7 +162,7 @@ function remove(obj) {
       data: { replyId },
       dataType: 'text',
       success: function() {
-        reply.parent().children().remove()
+        reply.remove()
         $('#reply-count').text(replyCount-1)
         $(`.modal`).modal('hide')
         $('body').removeClass('modal-open')
@@ -173,18 +175,15 @@ function remove(obj) {
     // const replyId = $('.replyId').val()
     const replyComment = $(`#replyComment-${replyCommentId}`)
     // const replyCommentCount = $(`replyComment-count-${replyId}`).text()
-    
-    console.log(replyCommentId)
-    console.log($(`replyComment-count-${replyCommentId}`))
     $.ajax({
       method: 'DELETE',
       url: `/replyComments/${replyCommentId}`,
       data: { replyCommentId },
       dataType: 'text',
       success: function() {
-        replyComment.parent().children().remove()
+        replyComment.remove()
         // $(`replyComment-count-${replyId}`).text(replyCommentCount-1)
-        $(`.modal`).modal('hide')
+        $(`.modal-open`).modal('hide')
         $('body').removeClass('modal-open')
         $('.modal-backdrop').remove()
       }
@@ -197,11 +196,17 @@ function remove(obj) {
 
 function edit(obj) {
   const type = $(obj).siblings('.type').val()
+  var updatedTime = moment(new Date()).fromNow()
   
   if (type === 'tweet') {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweetDesc = $(`#tweet-description-${tweetId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+    const tweetsTime = $(`#tweets-time-${tweetId}`)
+    const tweetTime = $(`#tweet-time-${tweetId}`)
+    var updatedTweetTime = new Date()
+    var date = getDate(updatedTweetTime)
+
     if (!updatedDesc) {
       return false
     }
@@ -216,6 +221,8 @@ function edit(obj) {
         dataType: 'text',
         success: function() {
           tweetDesc.text(`${updatedDesc}`)
+          tweetsTime.text(`updated ${updatedTime}`)
+          tweetTime.text(`updated ${date}`)
           $(`.modal`).modal('hide')
           $('body').removeClass('modal-open')
           $('.modal-backdrop').remove()
@@ -230,6 +237,7 @@ function edit(obj) {
     const replyId = $(obj).siblings('.replyId').val()
     const replyDesc = $(`#reply-description-${replyId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+    const replyTime = $(`#reply-time-${replyId}`)
     if (!updatedDesc) {
       return false
     }
@@ -244,7 +252,37 @@ function edit(obj) {
         dataType: 'text',
         success: function() {
           replyDesc.text(`${updatedDesc}`)
+          replyTime.text(`updated ${updatedTime}`)
           $(`.modal`).modal('hide')
+          $('body').removeClass('modal-open')
+          $('.modal-backdrop').remove()
+        },
+        error: function() {
+          console.error(err)
+        }
+      })
+    }
+  } else if (type === 'replyComment') {   
+    const replyCommentId = $(obj).siblings('.replyCommentId').val()
+    const replyCommentDesc = $(`#replyComment-description-${replyCommentId}`)
+    const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+    const replyCommentTime = $(`#replyComment-time-${replyCommentId}`)
+    if (!updatedDesc) {
+      return false
+    }
+    if (updatedDesc.length > 100) {
+      return false
+    }
+    else {
+      $.ajax({
+        method: 'PUT',
+        url: `/replyComments/${replyCommentId}`,
+        data: { replyCommentId, updatedDesc },
+        dataType: 'text',
+        success: function() {
+          replyCommentDesc.text(`${updatedDesc}`)
+          replyCommentTime.text(`updated ${updatedTime}`)
+          $(`.modal-open`).modal('hide')
           $('body').removeClass('modal-open')
           $('.modal-backdrop').remove()
         },
@@ -256,4 +294,20 @@ function edit(obj) {
   }
   
   return false
+}
+
+function getDate(a) {
+  let Y = a.getFullYear()
+  let M = a.getMonth() + 1
+  let D = a.getDate()
+  let h = a.getHours()
+  let m = a.getMinutes()
+  let t
+  if (h >= 12) {
+    t = '下午'
+    h = h - 12
+  } else {
+    t = '上午'
+  }
+  return t + h + ':' + m + ' • ' + Y + '年' + M + '月' + D + '日'
 }

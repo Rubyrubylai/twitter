@@ -27,7 +27,7 @@
 </div>
 
 <!-- pop up edit tweet message in tweet page -->
-<div class="modal fade" id="et{{tweet.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="et{{tweet.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -83,13 +83,16 @@
 </div>
 
 <!-- pop up edit reply comment message in tweet page -->
-<div class="modal fade" id="er{{this.id}}" aria-hidden="true">
+<div class="modal fade modal-open" id="erc{{this.id}}" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4>編輯留言</h4>
       </div>
-      <form action="/replies/{{this.id}}?_method=PUT" method="POST">
+      <input type="hidden" class="type" value="replyComment">
+      <input type="hidden" class="replyCommentId" value="{{this.id}}">
+      <form onsubmit="edit(this); return false;">
+      {{!-- <form action="/replies/{{this.id}}?_method=PUT" method="POST"> --}}
       <div class="modal-body flex-container">
         <div>
           <img src="{{this.User.avatar}}" alt="user avatar" class="user-avatar">
