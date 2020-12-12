@@ -70,13 +70,13 @@ module.exports = (io) => {
                 time: time(new Date())
               })
               
-              let public = true
-              io.emit('alert', {
-                userId,
-                //count,
-                public,
-                publicChat
-              })
+              // let public = true
+              // io.emit('alert', {
+              //   userId,
+              //   //count,
+              //   public,
+              //   publicChat
+              // })
             }
           })
          
@@ -117,10 +117,10 @@ module.exports = (io) => {
                 message: msg,
                 time: time(new Date())
               })
-              // io.emit('alert', {
-              //   count,
-              //   receiveId
-              // })
+              io.emit('alert', {
+                count,
+                receiveId
+              })
             } 
           })
           
@@ -359,7 +359,7 @@ module.exports = (io) => {
                 notifierId: userId
               }).then(notice => { 
                 const id = followingId
-                io.emit('follow', { noticeDescription, avatar, id }) 
+                io.emit('follow', { noticeDescription, avatar, id, userId }) 
               })
               countNotice(followingId)
             }

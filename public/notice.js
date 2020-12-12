@@ -476,7 +476,7 @@ function notice(data, followship) {
   newNode.className = 'notice'
   if (followship) {
     newNode.innerHTML = `
-    <a href="/tweets/${data.id}/replies">
+    <a href="/users/${data.userId}/tweets">
       <div class="flex-container">
       <img src="${data.avatar}" alt="user avatar" class="user-avatar">
         <div class="desc flex-container">

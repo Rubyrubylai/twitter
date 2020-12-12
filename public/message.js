@@ -55,21 +55,21 @@ socket.on('alert', (data) => {
 })
 
 //read private
-$('#chat-form').click(() => {
-  $('#private-icon').html(`
-  <h6><i class="fas fa-envelope fa-lg nav-icon"></i>私人訊息</h6>
-  `)
-  socket.emit('read', { userId, receiveId })
-})
+// $('#chat-form').click(() => {
+//   $('#private-icon').html(`
+//   <h6><i class="fas fa-envelope fa-lg nav-icon"></i>私人訊息</h6>
+//   `)
+//   socket.emit('read', { userId, receiveId })
+// })
 
 //read public
-$('#public-icon').click(() => {
-  $('#public-icon').html(`
-    <h6><i class="fas fa-comments nav-icon"></i>公開聊天室</h6>
-  `)
-  let public = true
-  socket.emit('read', { userId, receiveId, public })
-})
+// $('#public-icon').click(() => {
+//   $('#public-icon').html(`
+//     <h6><i class="fas fa-comments nav-icon"></i>公開聊天室</h6>
+//   `)
+//   let public = true
+//   socket.emit('read', { userId, receiveId, public })
+// })
 
 if ($('.selector').val() === 'public') {
 //online user
