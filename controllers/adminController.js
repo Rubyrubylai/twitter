@@ -1,5 +1,5 @@
 const db = require('../models')
-const { User, Tweet, Like, Reply, Followship } = db
+const { User, Tweet, Like } = db
 
 
 const adminControllers = {
@@ -11,12 +11,11 @@ const adminControllers = {
       include: [{ model: User }]
     })
       .then(tweets => {
-        // console.log(tweets)
         tweets = tweets.map(tweet => ({
           ...tweet,
           description: tweet.description.substring(0, 200),
         }))
-        // console.log(tweets[0].User.avatar)
+
         return res.render('admin/tweets', { tweets })
       })
   },
@@ -42,8 +41,6 @@ const adminControllers = {
         { model: User, as: 'follower' },
       ],
     }).then(users => {
-      // console.log(users)
-      // console.log(users[0].Tweets.length)
       users = users.sort((a, b) => b.Tweets.length - a.Tweets.length)
       res.render('admin/users', { users })
     })

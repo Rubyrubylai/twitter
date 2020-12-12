@@ -86,89 +86,49 @@
   </div>
   
   {{#each data}}
-  {{#if this.TweetId}}
-  <div class="row border-bottom">
-    <div class="d-flex p-2">
-      <a href="/users/{{this.id}}/tweets">
-        <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
-      </a>
-      <div class="col">
-        <a class="a-black" href="/users/{{this.id}}/tweets">
-          <span class="bold">{{this.name}}</span>
+  {{#ifCond this.id null}}
+  {{else}}
+    {{#if this.TweetId}}
+    <div class="row border-bottom">
+      <div class="d-flex p-2">
+        <a href="/users/{{this.id}}/tweets">
+          <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
         </a>
-        <a class="a-black" href="/users/{{this.id}}/tweets">
-         <span class="user-font">@{{this.account}}</span>
-        </a>
-        <span>・{{moment this.updatedAt}}</span><br>
-        <span>
-          <small>
-            {{this.description}}<br>
-            <span class="d-flex flex-row ">
-              <a href="/tweets/{{this.TweetId}}/replies">
-                <i class="far fa-comment mr-3 user-font"> {{this.replyCount}}</i>
-              </a>
-              <div class="flex-container">
-              {{#if this.isLiked}}
+        <div class="col">
+          <a class="a-black" href="/users/{{this.id}}/tweets">
+            <span class="bold">{{this.name}}</span>
+          </a>
+          <a class="a-black" href="/users/{{this.id}}/tweets">
+          <span class="user-font">@{{this.account}}</span>
+          </a>
+          <span>・{{moment this.updatedAt}}</span><br>
+          <span>
+            <small>
+              {{this.description}}<br>
+              <span class="d-flex flex-row ">
+                <a href="/tweets/{{this.TweetId}}/replies">
+                  <i class="far fa-comment mr-3 user-font"> {{this.replyCount}}</i>
+                </a>
                 <input type="hidden" class="tweetId" value="{{this.TweetId}}">
                 <input type="hidden" class="tweetUserId" value="{{this.id}}">
                 <input type="hidden" class="likesCount" value="{{this.likeCount}}">
                 <input type="hidden" class="type" value="tweet">
-                <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
-                <div class="count"> {{this.likeCount}}</div>
-              {{else}}
-                <input type="hidden" class="tweetId" value="{{this.TweetId}}">
-                <input type="hidden" class="tweetUserId" value="{{this.id}}">
-                <input type="hidden" class="likesCount" value="{{this.likeCount}}">
-                <input type="hidden" class="type" value="tweet">
-                <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart"></i></button>
+                <div class="flex-container">
+                {{#if this.isLiked}}
+                  <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
+                {{else}}
+                  <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart"></i></button> 
+                {{/if}}
                 <div class="count">{{this.likeCount}}</div>
-              {{/if}}
-              </div>
-            </span>
-          </small>
-        </span>
+                </div>
+              </span>
+            </small>
+          </span>
+        </div>
       </div>
     </div>
-  </div>
-  {{/if}}
-  {{!-- {{#if this.ReplyId}}
-  <div class="row border-bottom">
-    <div class="d-flex p-2">
-      <a href="/users/{{this.id}}/tweets">
-        <img class="mr-3 user_avatar_s" src="{{ this.avatar }}" alt="Avatar">
-      </a>
-      <div class="col">
-        <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
-          <span class="bold">{{this.name}}</span>
-        </a>
-        <a href="/users/{{this.id}}/tweets" style="color:black; text-decoration:none;">
-         <span style="color: grey">@{{this.account}}</span>
-        </a>
-        <span>・{{moment this.updatedAt}}</span><br>
-        <span>
-          <small>
-            {{this.description}}<br>
-            <span class="d-flex flex-row ">
-              <a href="/tweets/{{this.ReplyId}}/replies">
-                <i class="far fa-comment mr-3" style="color: grey;"> {{this.replyCount}}</i>
-              </a>
-              {{#if this.isLiked}}
-              <form action="/tweets/{{this.ReplyId}}/unlike" method="POST">
-                <button type="submit" class="btn-push"><i class="fas fa-heart"
-                    style="color:rgb(224, 36, 94);">{{this.likeCount}}</i></button>
-              </form>
-              {{else}}
-              <form action="/tweets/{{this.ReplyId}}/like" method="POST">
-                <button type="submit" class="btn-push"><i class="far fa-heart" style="color: grey;">{{this.likeCount}}</i></button>
-              </form>
-              {{/if}}
-            </span>
-          </small>
-        </span>
-      </div>
-    </div>
-  </div>
-  {{/if}} --}}
+    {{/if}}
+  {{/ifCond}}
   {{/each}}
   
 </div>

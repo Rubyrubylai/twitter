@@ -21,7 +21,6 @@ socket.on('alertNotice', (data) => {
 
 //read notice
 $('#notice-icon').click(() => {
-  console.log('-------------------')
   $('#notice-icon').html(`
   <h6><i class="fas fa-bell fa-lg nav-icon"></i>通知</h6>
   `
@@ -33,25 +32,20 @@ $('#notice-icon').click(() => {
 
 //alert private and public message
 socket.on('alert', (data) => {
-  // console.log('---------------')
   // var publicChat = data.publicChat
   // let unreadCount = 0
   // publicChat = publicChat.forEach(p => {
-  //   //console.log(p.unread & p.UserId !== userId )
   //   if (p.unread === 1 & p.UserId !== userId) {
-      
   //     unreadCount += 1
-  //     //console.log()
   //   }
   // })
   // unreadCount += 1
-  // console.log(unreadCount)
   // if (data.public && data.userId !== userId) {
   //   $('#public-icon').html(`
   //     <h6><i class="fas fa-comments nav-icon"><div class="red-dot-public"></div></i>公開聊天室 (${unreadCount})</h6>
   //   `)
   // }
-  //console.log($('#private-icon'))  
+
   //the alert will only show on the receiver page
   if (data.receiveId === userId) {
     $('#private-icon').html(`

@@ -117,24 +117,18 @@
                 <a href="/tweets/{{this.tweetId}}/replies">
                   <i class="far fa-comment mr-3 follow-font"> {{this.replyCommentsCount}}</i>
                 </a>
+                <input type="hidden" class="tweetId" value="{{this.tweetId}}">
+                <input type="hidden" class="replyId" value="{{this.id}}">
+                <input type="hidden" class="replyUserId" value="{{this.UserId}}">
+                <input type="hidden" class="likesCount" value="{{this.replyLikeCount}}">
+                <input type="hidden" class="type" value="reply">
                 <div>
                 {{#if this.isLikedReply}}
-                  <input type="hidden" class="tweetId" value="{{this.tweetId}}">
-                  <input type="hidden" class="replyId" value="{{this.id}}">
-                  <input type="hidden" class="replyUserId" value="{{this.UserId}}">
-                  <input type="hidden" class="likesCount" value="{{this.replyLikeCount}}">
-                  <input type="hidden" class="type" value="reply">
                   <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
-                  <div class="count">{{this.replyLikeCount}}</div>
                 {{else}}
-                  <input type="hidden" class="tweetId" value="{{../tweet.id}}">
-                  <input type="hidden" class="replyId" value="{{this.id}}">
-                  <input type="hidden" class="replyUserId" value="{{this.UserId}}">
-                  <input type="hidden" class="likesCount" value="{{this.replyLikeCount}}">
-                  <input type="hidden" class="type" value="reply">
                   <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
-                  <div class="count">{{this.replyLikeCount}}</div>
                 {{/if}}
+                  <div class="count">{{this.replyLikeCount}}</div>
                 </div>
               </span>
             </small>

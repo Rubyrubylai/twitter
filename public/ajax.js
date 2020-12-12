@@ -153,11 +153,10 @@ function remove(obj) {
   }
   else if (type === 'replyComment') {
     const replyCommentId = $(obj).siblings('.replyCommentId').val()
-    const replyId = $(obj).siblings('.replyId').val()
     const replyComment = $(`#replyComment-${replyCommentId}`)
-    const replyCommentCount = $(`#replyComment-count-${replyId}`)
-    console.log(replyCommentCount)
-    // const replyCommentCount = $(`replyComment-count-${replyId}`).text()
+    const replyId = $(obj).siblings('.replyId').val()
+    // const replyCommentCount = $(`#replyComment-count-${replyId}`)
+    // console.log(replyCommentCount)
     $.ajax({
       method: 'DELETE',
       url: `/replyComments/${replyCommentId}`,
@@ -165,8 +164,7 @@ function remove(obj) {
       dataType: 'text',
       success: function() {
         replyComment.remove()
-        // $(`replyComment-count-${replyId}`).text(replyCommentCount-1)
-        replyCommentCount.text(Number(replyCommentCount.text())-1)
+        // replyCommentCount.text(Number(replyCommentCount.text())-1)
         $(`.modal-open`).modal('hide')
         $('body').removeClass('modal-open')
         $('.modal-backdrop').remove()
@@ -186,8 +184,6 @@ function edit(obj) {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweetDesc = $(`#tweet-description-${tweetId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
-
-    
 
     //tweets page
     const tweetsTime = $(`#tweets-time-${tweetId}`)
@@ -211,7 +207,7 @@ function edit(obj) {
         success: function() {
           tweetDesc.text(`${updatedDesc}`)
           tweetsTime.text(`updated ${updatedTime}`)
-          tweetTime.text(`updated ${date}`)
+          tweetTime.text(`${date} updated`)
           $(`.modal`).modal('hide')
           $('body').removeClass('modal-open')
           $('.modal-backdrop').remove()

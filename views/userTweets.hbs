@@ -104,22 +104,17 @@
                 <a href="/tweets/{{this.tweetId}}/replies">
                   <i class="far fa-comment mr-3 user-font"> {{this.replyCount}}</i>
                 </a>
+                <input type="hidden" class="tweetId" value="{{this.tweetId}}">
+                <input type="hidden" class="tweetUserId" value="{{this.id}}">
+                <input type="hidden" class="likesCount" value="{{this.likeCount}}">
+                <input type="hidden" class="type" value="tweet">
                 <div class="flex-container">
                 {{#if this.isLiked}}
-                  <input type="hidden" class="tweetId" value="{{this.tweetId}}">
-                  <input type="hidden" class="tweetUserId" value="{{this.id}}">
-                  <input type="hidden" class="likesCount" value="{{this.likeCount}}">
-                  <input type="hidden" class="type" value="tweet">
                   <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
-                  <div class="count"> {{this.likeCount}}</div>
                 {{else}}
-                  <input type="hidden" class="tweetId" value="{{this.tweetId}}">
-                  <input type="hidden" class="tweetUserId" value="{{this.id}}">
-                  <input type="hidden" class="likesCount" value="{{this.likeCount}}">
-                  <input type="hidden" class="type" value="tweet">
                   <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart"></i></button>
-                  <div class="count">{{this.likeCount}}</div>
                 {{/if}}
+                  <div class="count">{{this.likeCount}}</div>
                 </div>
               </span>
             </small>

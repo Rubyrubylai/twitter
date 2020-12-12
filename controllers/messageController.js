@@ -7,9 +7,10 @@ const Tweet = db.Tweet
 const Like = db.Like
 const Reply = db.Reply
 const ReplyComment = db.ReplyComment
-const Followship = db.Followship
 const Subscribeship = db.Subscribeship
 const { Op } = require('sequelize')
+
+const helpers = require('../_helpers')
 
 const messageController = {
   getMessage: (req, res) => {
@@ -29,7 +30,7 @@ const messageController = {
     PrivateChat.update({ unread: false }, { 
       where: {
         UserId: req.params.userId,
-        receiveId: req.user.id
+        receiveId: helpers.getUser(req).id
       }
     })
     .then(p => {
@@ -38,8 +39,8 @@ const messageController = {
         nest: true,
         where: {
           [Op.or]: [
-            { UserId: req.user.id },
-            { receiveId: req.user.id },
+            { UserId: helpers.getUser(req).id },
+            { receiveId: helpers.getUser(req).id },
           ]
         },
         include: [{ model: User, as: 'Receiver' },
@@ -67,9 +68,9 @@ const messageController = {
         PrivateChat.findAll({ where: {
           [Op.or] : [{
             UserId: req.params.userId,
-            receiveId: req.user.id
+            receiveId: helpers.getUser(req).id
           }, {
-            UserId: req.user.id,
+            UserId: helpers.getUser(req).id,
             receiveId: req.params.userId
             }]
           },
@@ -92,8 +93,8 @@ const messageController = {
       nest: true,
       where: {
         [Op.or]: [
-          { UserId: req.user.id },
-          { receiveId: req.user.id },
+          { UserId: helpers.getUser(req).id },
+          { receiveId: helpers.getUser(req).id },
         ]
       },
       include: [{ model: User, as: 'Receiver' },
@@ -101,7 +102,7 @@ const messageController = {
     }).then(privateChat => {
       
       const unreadMessage = privateChat.filter(p => {
-        return p.receiveId === req.user.id && p.unread === 1
+        return p.receiveId === helpers.getUser(req).id && p.unread === 1
       })
       const privateCount = unreadMessage.length
 
@@ -113,7 +114,7 @@ const messageController = {
           [Op.and]: [{
             unread: true,
             [Op.not]: [
-              { UserId: req.user.id },
+              { UserId: helpers.getUser(req).id },
             ]
           }]
         }
@@ -127,7 +128,7 @@ const messageController = {
           nest: true,
           where: {
             [Op.and]: [
-              { UserId: req.user.id },
+              { UserId: helpers.getUser(req).id },
               { unread: true },
             ]
           }
@@ -151,7 +152,7 @@ const messageController = {
       raw: true,
       nest: true,
       where: {
-        UserId: req.user.id
+        UserId: helpers.getUser(req).id
       },
       include: [
       { model: Tweet, 
@@ -198,7 +199,7 @@ const messageController = {
 
   deleteSubscribed: (req, res) => {
     Subscribeship.destroy({ where: {
-        subscriberId: req.user.id,
+        subscriberId: helpers.getUser(req).id,
         subscribedId: req.body.subscribedId
       }
     })

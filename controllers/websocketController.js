@@ -15,8 +15,6 @@ const { Op } = require('sequelize')
 let onlineUsers = []
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log('a user connected')
-
     // announce user online
     User.findOne({
       where: {
@@ -44,7 +42,6 @@ module.exports = (io) => {
         socket.on('disconnect', () => {
           onlineUsers = onlineUsers.filter((item) => item.id !== user.id)
           io.emit('offline', { id: user.id })
-          console.log('user disconnected')
         })
     
         // listen for chat message
@@ -55,7 +52,6 @@ module.exports = (io) => {
         
           })
           .then(publicChat => {
-            console.log(publicChat)
             //let count = publicChat.length
             if (msg) {
               //count ++
@@ -73,8 +69,6 @@ module.exports = (io) => {
                 message: msg,
                 time: time(new Date())
               })
-              console.log('----------')
-              //console.log(count)
               
               let public = true
               io.emit('alert', {
@@ -123,13 +117,10 @@ module.exports = (io) => {
                 message: msg,
                 time: time(new Date())
               })
-              console.log('alert--------------')
-              console.log(count)
-              console.log(receiveId)
-              io.emit('alert', {
-                count,
-                receiveId
-              })
+              // io.emit('alert', {
+              //   count,
+              //   receiveId
+              // })
             } 
           })
           
@@ -150,7 +141,6 @@ module.exports = (io) => {
 
         //read notice
         socket.on('readNotice', ({ userId }) => {
-          console.log('-------------------------------read notice')
           Notice.update({ unread: false }, { 
             where: {
               UserId: userId,
@@ -217,7 +207,6 @@ module.exports = (io) => {
               }
             })
             .then(subscribeship => {
-              
               const noticeDescription = `${username}發布了新貼文`
               const description = tweet.description
               var results = []
@@ -234,7 +223,6 @@ module.exports = (io) => {
                   countNotice(items.subscriberId)
                 }
               })
-              
               return Promise.all(results).then(() => {
                 const id = tweet.id
                 socket.to(userId).emit('tweet', { noticeDescription, avatar, id, description })
@@ -292,8 +280,7 @@ module.exports = (io) => {
                     const description = reply.comment
                     const id = tweetId
                     io.emit('like', { noticeDescription, avatar, id, description, replyUserId, replyId })
-                  })
-                  
+                  })  
                 })
                 countNotice(replyUserId)
               } 
@@ -304,7 +291,6 @@ module.exports = (io) => {
         //when receive others reply
         socket.on('reply', (data) => {
           const { userId, comment, tweetId, tweetUserId, tweetUserName, time, account } = data
-
           Reply.create({
             UserId: userId,
             TweetId: tweetId,
@@ -319,9 +305,7 @@ module.exports = (io) => {
                 unread: true,
                 ReplyId: reply.id
               }).then(notice => {
-                
                 const id = tweetId
-                
                 io.emit('reply', { noticeDescription, avatar, id, tweetUserId, description})
               })
               countNotice(tweetUserId)
@@ -335,7 +319,6 @@ module.exports = (io) => {
         //when receive others reply comments
         socket.on('replyComment', (data) => {
           const { comment, tweetId, replyId, replyUserId, name, account, time, replyUserName } = data
-
           ReplyComment.create({
             UserId: userId,
             ReplyId: replyId,
@@ -360,7 +343,6 @@ module.exports = (io) => {
           })
         })
 
-
          //follow
          socket.on('follow', (followingId) => {
           Followship.create({
@@ -383,7 +365,7 @@ module.exports = (io) => {
             }
           })
         })
-        
+
       }
     }) 
   })

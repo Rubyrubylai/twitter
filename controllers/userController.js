@@ -102,16 +102,6 @@ const userController = {
     return res.redirect('/signin')
   },
 
-  // likeTweet: (req, res) => {
-  //   Like.create({
-  //     UserId: helpers.getUser(req).id,
-  //     TweetId: req.params.tweetId
-  //   })
-  //     .then(like => {
-  //       return res.redirect('back')
-  //     })
-  // },
-
   dislikeTweet: (req, res) => {
     Like.findOne({
       where: {
@@ -135,16 +125,6 @@ const userController = {
     })
   },
 
-  // likeReply: (req, res) => {
-  //   Like.create({
-  //     UserId: helpers.getUser(req).id,
-  //     ReplyId: req.params.replyId
-  //   })
-  //     .then(like => {
-  //       return res.redirect('back')
-  //     })
-  // },
-
   dislikeReply: (req, res) => {
     Like.findOne({
       where: {
@@ -153,8 +133,6 @@ const userController = {
       }
     })
       .then(like => {
-        console.log('--------------like')
-          console.log(like)
         Notice.destroy({
           where: {
             UserId: req.body.replyUserId,
@@ -162,7 +140,6 @@ const userController = {
           }
         })
         .then(notice => {
-          
           like.destroy()
           .then(like => {
             return res.send('dislike reply')
@@ -172,22 +149,6 @@ const userController = {
       })
   },
 
-  // postFollowing: (req, res) => {
-  //   if (Number(req.body.id) === Number(helpers.getUser(req).id)) {
-  //     return res.render('tweets')
-  //     //return res.redirect('back')
-  //   }
-  //   else {
-  //     Followship.create({
-  //       followerId: helpers.getUser(req).id,
-  //       followingId: req.body.id
-  //     })
-  //       .then(followship => {
-  //         return res.redirect('back')
-  //       })
-  //   }
-  // },
-
   deleteFollowing: (req, res) => {
     Followship.findOne({
       where: {
@@ -195,20 +156,20 @@ const userController = {
         followingId: req.body.followingId
       }
     })
-      .then(followship => {
-        Notice.destroy({
-          where: {
-            UserId: req.body.followingId,
-            notifierId: helpers.getUser(req).id
-          }
-        })
-        .then(notice => {
-          followship.destroy()
-          .then(followship => {
-            return res.send('delete followship')
-          })
+    .then(followship => {
+      Notice.destroy({
+        where: {
+          UserId: req.body.followingId,
+          notifierId: helpers.getUser(req).id
+        }
+      })
+      .then(notice => {
+        followship.destroy()
+        .then(followship => {
+          return res.send('delete followship')
         })
       })
+    })
   },
 
   adminLoginPage: (req, res) => {
@@ -240,7 +201,7 @@ const userController = {
     const loginUser = helpers.getUser(req)
     return User.findByPk(loginUser.id).then(user => {
       return res.render('settings', {
-        user: user.toJSON(), loginUser
+        user: user.toJSON()
       })
     })
   },
@@ -375,7 +336,6 @@ const userController = {
           followersCount: user.toJSON().follower.length,
           tweetsCount: tweets.length,
           tweetFollowings,
-          loginUser,
           users,
           isFollowed,
           isSubscribed
@@ -466,7 +426,6 @@ const userController = {
           followersCount: user.toJSON().follower.length,
           tweetsCount: user.toJSON().Tweets.length,
           tweetFollowings,
-          loginUser,
           users,
           isFollowed,
           isSubscribed
@@ -493,14 +452,14 @@ const userController = {
       
       const data = user.Likes.map(r => ({
         ...r.dataValues,
-        id: r.dataValues.Tweet ? r.dataValues.Tweet.User.id : r.dataValues.Reply.User.id,
-        avatar: r.dataValues.Tweet ? r.dataValues.Tweet.User.avatar : r.dataValues.Reply.User.avatar,
-        account: r.dataValues.Tweet ? r.dataValues.Tweet.User.account : r.dataValues.Reply.User.account,
-        name: r.dataValues.Tweet ? r.dataValues.Tweet.User.name : r.dataValues.Reply.User.name,
-        description: r.dataValues.Tweet ? r.dataValues.Tweet.description.substring(0, 160) : r.dataValues.Reply.comment.substring(0, 160),
-        updatedAt: r.dataValues.Tweet ? r.dataValues.Tweet.updatedAt : r.dataValues.Reply.updatedAt,
-        replyCount: r.dataValues.Tweet ? r.dataValues.Tweet.Replies.length : r.dataValues.Reply.ReplyComments.length,
-        likeCount: r.dataValues.Tweet ? r.dataValues.Tweet.Likes.length : r.dataValues.Reply.Likes.length,
+        id: r.dataValues.Tweet ? r.dataValues.Tweet.User.id : null,
+        avatar: r.dataValues.Tweet ? r.dataValues.Tweet.User.avatar : null,
+        account: r.dataValues.Tweet ? r.dataValues.Tweet.User.account : null,
+        name: r.dataValues.Tweet ? r.dataValues.Tweet.User.name :null,
+        description: r.dataValues.Tweet ? r.dataValues.Tweet.description.substring(0, 160) : null,
+        updatedAt: r.dataValues.Tweet ? r.dataValues.Tweet.updatedAt : null,
+        replyCount: r.dataValues.Tweet ? r.dataValues.Tweet.Replies.length : null,
+        likeCount: r.dataValues.Tweet ? r.dataValues.Tweet.Likes.length : null,
 
         isLiked: loginUser.Likes.map(l => l.TweetId).includes(r.TweetId)
       }))
@@ -547,7 +506,6 @@ const userController = {
           followersCount: user.toJSON().follower.length,
           tweetsCount: user.toJSON().Tweets.length,
           tweetFollowings,
-          loginUser,
           users,
           isFollowed,
           isSubscribed
@@ -615,7 +573,6 @@ const userController = {
           data,
           name: name,
           tweetsCount: tweetsCount,
-          loginUser
         })
       })
     })
@@ -678,8 +635,7 @@ const userController = {
           userId,
           data,
           name: name,
-          tweetsCount: tweetsCount,
-          loginUser
+          tweetsCount: tweetsCount
         })
       })
     })
@@ -742,7 +698,6 @@ const userController = {
         }).then((user) => {
           req.flash('success_messages', '用戶資料更新成功')
           return res.redirect('/users/' + id + '/tweets')
-          // return res.redirect('/')
         })
       } catch (err) {
         console.log('Error:', err)

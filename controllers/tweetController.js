@@ -6,7 +6,7 @@ const Reply = db.Reply
 const ReplyComment = db.ReplyComment
 
 let more = 10
-const helpers = require('../_helpers');
+const helpers = require('../_helpers')
 
 const tweetController = {
   getTweets: (req, res) => {
@@ -68,37 +68,15 @@ const tweetController = {
           }
           users = users.slice(0, more)
 
-          return res.render('tweets', { tweetFollowings, loginUser, users })
+          console.log(tweetFollowings)
+
+          return res.render('tweets', { tweetFollowings, users })
         })
     })
 
   },
 
-  // postTweets: (req, res) => {
-  //   const { description } = req.body
-  //   if (!description) {
-  //     req.flash('error_messages', '貼文不得為空白')
-  //     return res.redirect('/tweets')
-  //   }
-  //   if (description.length > 140) {
-  //     req.flash('error_messages', '貼文字數不得超過140字')
-  //     return res.redirect('/tweets')
-  //   }
-  //   else {
-  //     socket.to(helpers.getUser(req).id).emit('notice', {
-  //       userId: helpers.getUser(req).id
-  //     })
-  //     Tweet.create({
-  //       description,
-  //       UserId: helpers.getUser(req).id
-  //     })
-  //       .then(tweet => {
-  //         return res.redirect('/tweets')
-  //       })
-  //   }
-  // },
-
-  getReply: (req, res) => {
+    getReply: (req, res) => {
     Tweet.findByPk(req.params.tweetId,
       {
         include: [
@@ -162,7 +140,7 @@ const tweetController = {
 
             const now = new Date()
 
-            return res.render('tweet', { tweet, loginUser, isLikedTweet, tweetReplies, users, now })
+            return res.render('tweet', { tweet, isLikedTweet, tweetReplies, users, now })
           })
         }
         else {
@@ -175,28 +153,6 @@ const tweetController = {
     return res.render('delete', { message: '此則留言已被作者刪除'})
   },
 
-  // postReply: (req, res) => {
-  //   const { comment } = req.body
-  //   if (!comment) {
-  //     req.flash('error_messages', '留言不得為空白')
-  //     return res.redirect(`/tweets/${req.params.tweetId}/replies`)
-  //   }
-  //   if (comment.length > 100) {
-  //     req.flash('error_messages', '留言字數不得超過100字')
-  //     return res.redirect('back')
-  //   }
-  //   else {
-  //     Reply.create({
-  //       UserId: helpers.getUser(req).id,
-  //       TweetId: req.params.tweetId,
-  //       comment
-  //     })
-  //       .then(reply => {
-  //         return res.redirect(`/tweets/${reply.TweetId}/replies`)
-  //       })
-  //   }
-  // },
-
   deleteTweet: (req, res) => {
     Tweet.findByPk(req.body.tweetId)
       .then(tweet => {
@@ -208,8 +164,6 @@ const tweetController = {
   },
 
   deleteReply: (req, res) => {
-    console.log('------------------delete')
-    console.log(req.body.replyId)
     Reply.findByPk(req.body.replyId)
       .then(reply => {
         reply.destroy()
@@ -220,57 +174,27 @@ const tweetController = {
   },
 
   editTweet: (req, res) => {
-    
     Tweet.findByPk(req.body.tweetId)
       .then(tweet => {
-        console.log(req.body.tweetId)
-        console.log(req.body.updatedDesc)
-        // const { description } = req.body
-        // if (!description) {
-        //   req.flash('error_messages', '貼文不得為空白')
-        //   return res.redirect('back')
-        // }
-        // if (description.length > 140) {
-        //   req.flash('error_messages', '貼文字數不得超過140字')
-        //   return res.redirect('back')
-        // }
-        // else {
-          tweet.update({
-            description: req.body.updatedDesc
-          })
-            .then(tweet => {
-              // req.flash('success_messages', '已成功更新貼文')
-              // return res.redirect('back')
-              return res.send('update tweet')
-            })
-        }
-      // }
-      )
+        tweet.update({
+          description: req.body.updatedDesc
+        })
+        .then(tweet => {
+          return res.send('update tweet')
+        })
+      })
   },
 
   editReply: (req, res) => {
     Reply.findByPk(req.body.replyId)
-      .then(reply => {
-        // const { comment } = req.body
-        // if (!comment) {
-        //   req.flash('error_messages', '留言不得為空白')
-        //   return res.redirect('back')
-        // }
-        // if (comment.length > 100) {
-        //   req.flash('error_messages', '留言字數不得超過100字')
-        //   return res.redirect('back')
-        // }
-        // else {
-          reply.update({
-            comment: req.body.updatedDesc
-          })
-            .then(reply => {
-              // req.flash('success_messages', '已成功更新留言')
-              // return res.redirect('back')
-              return res.send('edit reply')
-            })
-        // }
+    .then(reply => {
+      reply.update({
+        comment: req.body.updatedDesc
       })
+      .then(reply => {
+        return res.send('edit reply')
+      })
+    })
   }
 }
 

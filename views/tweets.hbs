@@ -42,7 +42,11 @@
               </div>
             {{/ifCond}}
             <a href="/users/{{this.user.id}}/tweets" class="a-black"><strong>{{this.user.name}}</strong></a>
+            {{#ifTime this.updatedAt this.createdAt}}
             <font class="text-muted">@{{this.user.account}} • <span id="tweets-time-{{this.id}}">{{moment this.updatedAt}}</span></font>
+            {{else}}
+            <font class="text-muted">@{{this.user.account}} • <span id="reply-time-{{this.id}}">updated {{moment this.updatedAt}}</span></font>
+            {{/ifTime}}
             <p id="tweet-description-{{this.id}}">{{this.description}}</p>
             <div>
               <a href="/tweets/{{this.id}}/replies" class="tweet-icon"><i class="far fa-comment"></i></a>

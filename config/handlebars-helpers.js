@@ -39,5 +39,12 @@ module.exports = {
       t = '上午'
     }
     return t + h + ':' + m
+  },
+
+  ifTime: function (a, b, options) {
+    if (a.getTime() === b.getTime()) {
+      return options.fn(this)
+    }
+    return options.inverse(this)
   }
 }

@@ -11,9 +11,9 @@ xhr.onload = function() {
   if (privateCount >= 1) {
     display(privateCount)
   }
-  if (publicCount >= 1) {
-    displayPublic(publicCount)
-  }
+  // if (publicCount >= 1) {
+  //   displayPublic(publicCount)
+  // }
   if (noticeCount >= 1) {
     displayNotice(noticeCount)
   }
@@ -27,11 +27,11 @@ function display(privateCount) {
     `)
 }
 
-function displayPublic(publicCount) {
-  $('#private-icon').html(`
-    <h6><i class="fas fa-envelope fa-lg nav-icon"><div class="red-dot-private"></div></i>私人訊息 (${publicCount})</h6>
-  `)
-}
+// function displayPublic(publicCount) {
+//   $('#private-icon').html(`
+//     <h6><i class="fas fa-envelope fa-lg nav-icon"><div class="red-dot-private"></div></i>私人訊息 (${publicCount})</h6>
+//   `)
+// }
 
 function displayNotice(noticeCount) {
   $('#notice-icon').html(`
