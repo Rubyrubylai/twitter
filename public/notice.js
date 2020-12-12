@@ -87,7 +87,8 @@ function reply(obj) {
   const account =$(obj).siblings('.account').val()
   const tweetUserName = $(obj).siblings('.tweetUserName').val()
   const time = $(obj).siblings('.time').val()
-  
+  const replyCount = Number($('#reply-count').text())
+
   if (comment.length === 0) {
     return false
   }
@@ -114,7 +115,8 @@ function reply(obj) {
     </div>
     `)
     
-    
+    $('#reply-count').text(replyCount+1)
+
     socket.emit('reply', { comment, userId, tweetId, tweetUserId, tweetUserName, time, account })
     $(obj).siblings('.comment').val('')
   }
@@ -274,7 +276,6 @@ function replyComment(obj) {
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const replyId = Number($(obj).siblings('.replyId').val())
   const replyUserId = Number($(obj).siblings('.replyUserId').val())
-  const avatar = $(obj).siblings('.avatar').val()
   const name = $(obj).siblings('.name').val()
   const account = $(obj).siblings('.account').val()
   const replyUserName = $(obj).siblings('.replyUserName').val()
@@ -293,11 +294,9 @@ function replyComment(obj) {
 }
 
 socket.on('replyCommentMessage', ({ avatar, replyCommentId, data }) => {
-  console.log('---------------replyComment')
-  console.log(avatar)
-  console.log(replyCommentId)
-  console.log(data)
-  console.log($(`#reply-comments-${data.replyId}`))
+  const replyCommentCount = $(`#replyComment-count-${data.replyId}`)
+  replyCommentCount.text(Number(replyCommentCount.text())+1)
+
   $(`#reply-comments-${data.replyId}`).append(`
   <div class="flex-container mb-2" id="replyComment-${replyCommentId}">
     <div>

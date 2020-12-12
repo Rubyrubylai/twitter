@@ -153,9 +153,10 @@ function remove(obj) {
   }
   else if (type === 'replyComment') {
     const replyCommentId = $(obj).siblings('.replyCommentId').val()
-    // const replyId = $('.replyId').val()
+    const replyId = $(obj).siblings('.replyId').val()
     const replyComment = $(`#replyComment-${replyCommentId}`)
-    console.log(replyComment)
+    const replyCommentCount = $(`#replyComment-count-${replyId}`)
+    console.log(replyCommentCount)
     // const replyCommentCount = $(`replyComment-count-${replyId}`).text()
     $.ajax({
       method: 'DELETE',
@@ -165,6 +166,7 @@ function remove(obj) {
       success: function() {
         replyComment.remove()
         // $(`replyComment-count-${replyId}`).text(replyCommentCount-1)
+        replyCommentCount.text(Number(replyCommentCount.text())-1)
         $(`.modal-open`).modal('hide')
         $('body').removeClass('modal-open')
         $('.modal-backdrop').remove()
