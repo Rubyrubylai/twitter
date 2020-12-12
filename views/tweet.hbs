@@ -39,20 +39,14 @@
     <li class="list-group-item">
       <div class="flex-container tweets">
       <button data-toggle="modal" data-target="#s{{tweet.id}}" class="tweet-icon"><i class="far fa-comment fa-lg"></i></button>
+      <input type="hidden" class="tweetId" value="{{tweet.id}}">
+      <input type="hidden" class="tweetUserId" value="{{tweet.User.id}}">
+      <input type="hidden" class="type" value="tweet">
+      <input type="hidden" class="type2" value="tweetLike">     
       <div>
-        {{#if isLikedTweet}}
-          <input type="hidden" class="tweetId" value="{{tweet.id}}">
-          <input type="hidden" class="tweetUserId" value="{{tweet.User.id}}">
-          <input type="hidden" class="likesCount" value="{{tweet.Likes.length}}">
-          <input type="hidden" class="type" value="tweet">
-          <input type="hidden" class="type2" value="tweetLike">
+        {{#if isLikedTweet}}  
           <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart fa-lg like-icon"></i></button>
-        {{else}}
-          <input type="hidden" class="tweetId" value="{{tweet.id}}">
-          <input type="hidden" class="tweetUserId" value="{{tweet.User.id}}">
-          <input type="hidden" class="likesCount" value="{{tweet.Likes.length}}">
-          <input type="hidden" class="type" value="tweet">
-          <input type="hidden" class="type2" value="tweetLike">
+        {{else}}    
           <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart fa-lg"></i></button>
         {{/if}}
       </div>
@@ -91,27 +85,17 @@
               <button data-toggle="modal" data-target="#r{{this.id}}" class="tweet-icon"><i class="far fa-comment"></i></button>
               <div id="replyComment-count-{{this.id}}" class="comments-count">{{this.ReplyComments.length}}</div>
             </div>
-            <div>
-              <div class="flex-container">
+            <input type="hidden" class="tweetId" value="{{../tweet.id}}">
+            <input type="hidden" class="replyId" value="{{this.id}}">
+            <input type="hidden" class="replyUserId" value="{{this.User.id}}">
+            <input type="hidden" class="type" value="reply">
+            <div class="flex-container">
             {{#if this.isLikedReply}}
-              <input type="hidden" class="tweetId" value="{{../tweet.id}}">
-              <input type="hidden" class="replyId" value="{{this.id}}">
-              <input type="hidden" class="replyUserId" value="{{this.User.id}}">
-              <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
-              <input type="hidden" class="type" value="reply">
               <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
-              <div class="count">{{this.Likes.length}}</div>
             {{else}}
-              <input type="hidden" class="tweetId" value="{{../tweet.id}}">
-              <input type="hidden" class="replyId" value="{{this.id}}">
-              <input type="hidden" class="replyUserId" value="{{this.User.id}}">
-              <input type="hidden" class="likesCount" value="{{this.Likes.length}}">
-              <input type="hidden" class="type" value="reply">
               <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
-              <div class="count">{{this.Likes.length}}</div>
-              
             {{/if}}
-            </div>
+              <div class="count">{{this.Likes.length}}</div>
             </div>
           </div>
         </div>

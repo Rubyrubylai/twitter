@@ -48,25 +48,21 @@
               <a href="/tweets/{{this.id}}/replies" class="tweet-icon"><i class="far fa-comment"></i></a>
               <div class="comment-count"> {{this.repliesCount}}</div>
             </div>
-            
+            <input type="hidden" class="tweetId" value="{{this.id}}">
+            <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
+            <input type="hidden" class="likesCount" value="{{this.likesCount}}">
+            <input type="hidden" class="type" value="tweet">
             {{#if this.isLiked}}
-              <div class="flex-container">
-                <input type="hidden" class="tweetId" value="{{this.id}}">
-                <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
-                <input type="hidden" class="likesCount" value="{{this.likesCount}}">
-                <input type="hidden" class="type" value="tweet">
-                <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
-                <div class="count"> {{this.likesCount}}</div>
-              </div>
+            <div class="flex-container">
+              <button onclick="dislike(this)" class="tweet-icon"><i class="fas fa-heart like-icon"></i></button>
+              <div class="count"> {{this.likesCount}}</div>
+            </div>
             {{else}}
-              <div class="flex-container">
-                <input type="hidden" class="tweetId" value="{{this.id}}">
-                <input type="hidden" class="tweetUserId" value="{{this.user.id}}">
-                <input type="hidden" class="likesCount" value="{{this.likesCount}}">
-                <input type="hidden" class="type" value="tweet">
-                <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart"></i></button>
-                <div class="count">{{this.likesCount}}</div>
-              </div>
+            <div class="flex-container">
+              
+              <button onclick="like(this)" class="tweet-icon" name="icon"><i class="far fa-heart"></i></button>
+              <div class="count">{{this.likesCount}}</div>
+            </div>
             {{/if}}
             
           </div>

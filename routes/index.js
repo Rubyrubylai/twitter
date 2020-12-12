@@ -82,7 +82,7 @@ module.exports = (app, passport, io) => {
   // app.post('/tweets/:tweetId/like', authenticated, userController.likeTweet)
   app.delete('/tweets/like', authenticated, userController.dislikeTweet)
   // app.post('/like/:replyId/replies', authenticated, userController.likeReply)
-  app.post('/replies/like', authenticated, userController.dislikeReply)
+  app.delete('/replies/like', authenticated, userController.dislikeReply)
 
   //tweet page
   app.get('/tweets', authenticated, tweetController.getTweets)

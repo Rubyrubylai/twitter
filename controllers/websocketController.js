@@ -303,13 +303,14 @@ module.exports = (io) => {
 
         //when receive others reply
         socket.on('reply', (data) => {
-          const { userId, comment, tweetId, tweetUserId } = data
+          const { userId, comment, tweetId, tweetUserId, tweetUserName, time, account } = data
 
           Reply.create({
             UserId: userId,
             TweetId: tweetId,
             comment
           }).then(reply => {
+            const description = reply.comment
             if (userId !== tweetUserId) {
               const noticeDescription = `${user.name}回覆你的貼文`
               Notice.create({
@@ -318,24 +319,29 @@ module.exports = (io) => {
                 unread: true,
                 ReplyId: reply.id
               }).then(notice => {
-                const description = reply.comment
+                
                 const id = tweetId
-                io.emit('reply', { noticeDescription, avatar, id, tweetUserId, description })
+                
+                io.emit('reply', { noticeDescription, avatar, id, tweetUserId, description})
               })
               countNotice(tweetUserId)
-            }          
+            }
+            const replyId = reply.id
+            const username = user.name
+            io.emit('replyMessage', { replyId, avatar, username, description, data })          
           })
         })
 
         //when receive others reply comments
         socket.on('replyComment', (data) => {
-          const { comment, tweetId, replyId, replyUserId } = data
+          const { comment, tweetId, replyId, replyUserId, name, account, time, replyUserName } = data
 
           ReplyComment.create({
             UserId: userId,
             ReplyId: replyId,
             comment
           }).then(replyComment => {
+            const description = replyComment.comment
             if (userId !== replyUserId) {
               const noticeDescription = `${user.name}回覆你的留言`
               Notice.create({
@@ -344,12 +350,13 @@ module.exports = (io) => {
                 unread: true,
                 ReplyCommentId: replyComment.id
               }).then(notice => {
-                const description = replyComment.comment
                 const id = tweetId
                 io.emit('replyComment', { noticeDescription, avatar, id, replyUserId, description })
               })
               countNotice(replyUserId)
-            }       
+            }
+            const replyCommentId = replyComment.id
+            io.emit('replyCommentMessage', { avatar, replyCommentId, data })    
           })
         })
 

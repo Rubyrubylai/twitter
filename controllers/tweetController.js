@@ -208,6 +208,8 @@ const tweetController = {
   },
 
   deleteReply: (req, res) => {
+    console.log('------------------delete')
+    console.log(req.body.replyId)
     Reply.findByPk(req.body.replyId)
       .then(reply => {
         reply.destroy()
@@ -218,7 +220,7 @@ const tweetController = {
   },
 
   editTweet: (req, res) => {
-    console.log('------------------edit')
+    
     Tweet.findByPk(req.body.tweetId)
       .then(tweet => {
         console.log(req.body.tweetId)

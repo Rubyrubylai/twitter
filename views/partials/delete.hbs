@@ -9,11 +9,9 @@
         確定要刪除這則貼文?
       </div>
       <div class="modal-footer">
-        {{!-- <form action="/tweets/{{this.id}}?_method=DELETE" method="POST"> --}}
         <input type="hidden" class="type" value="tweet">
         <input type="hidden" class="tweetId" value="{{this.id}}">
         <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-        {{!-- </form> --}}
         <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
     </div>
     </div>
@@ -35,9 +33,6 @@
         <input type="hidden" class="replyCommentId" value="{{this.id}}">
         <input type="hidden" class="replyId" value="{{../this.id}}">
         <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-        {{!-- <form action="/replies/{{this.id}}?_method=DELETE" method="POST">
-            <button type="submit" class="btn btn-delete">刪除</button>
-        </form> --}}
         <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
     </div>
     </div>
@@ -58,9 +53,6 @@
         <input type="hidden" class="type" value="tweet">
         <input type="hidden" class="tweetId" value="{{tweet.id}}">
         <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-        {{!-- <form action="/tweets/{{tweet.id}}?_method=DELETE" method="POST">
-            <button type="submit" class="btn btn-delete">刪除</button>
-        </form> --}}
         <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
     </div>
     </div>
@@ -81,9 +73,6 @@
         <input type="hidden" class="type" value="reply">
         <input type="hidden" class="replyId" value="{{this.id}}">
         <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-        {{!-- <form action="/tweets/{{this.id}}/replies?_method=DELETE" method="POST">
-            <button type="submit" class="btn btn-delete">刪除</button>
-        </form> --}}
         <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
     </div>
     </div>

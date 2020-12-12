@@ -1,12 +1,14 @@
 function dislike(obj) {
   const form = $(obj).parent()
-  const type = $(obj).siblings('.type').val()
-  const type2 = $(obj).siblings('.type2').val()
-  const tweetId = $(obj).siblings('.tweetId').val()
-  const tweetUserId = $(obj).siblings('.tweetUserId').val()
-  const replyId = $(obj).siblings('.replyId').val()
-  const replyUserId = $(obj).siblings('.replyUserId').val()
-  const likesCount = $(obj).siblings('.likesCount').val() - 1
+  const type = $(obj).parent().siblings('.type').val()
+  const type2 = $(obj).parent().siblings('.type2').val()
+  const tweetId = $(obj).parent().siblings('.tweetId').val()
+  const tweetUserId = $(obj).parent().siblings('.tweetUserId').val()
+  const replyId = $(obj).parent().siblings('.replyId').val()
+  const replyUserId = $(obj).parent().siblings('.replyUserId').val()
+  const likesCount = Number($(obj).siblings('.count').text()) - 1
+  const tweetLikesCount = Number($('#tweet-like').text()) - 1
+
   if (type === 'tweet') {
     $.ajax({
       method: 'DELETE',
@@ -14,23 +16,14 @@ function dislike(obj) {
       data: { tweetId, tweetUserId },
       dataType: 'text',
       success: function(response) {
-        form.html(`
-        <div class="like-form">
-          <input type="hidden" class="tweetId" value="${tweetId}">
-          <input type="hidden" class="tweetUserId" value="${tweetUserId}">
-          <input type="hidden" class="likesCount" value="${likesCount}">
-          <input type="hidden" class="type" value="tweet">
-        </div>
-        `)
         if (type2 === 'tweetLike') {
-          form.children().append(`
-            <input type="hidden" class="type2" value="tweetLike">
+          form.html(`
             <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart fa-lg"></i></button>
           `)
-          $('#tweet-like').text(likesCount)
+          $('#tweet-like').text(tweetLikesCount)
         }
         else {
-          form.children().append(`
+          form.html(`
             <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
             <div class="count">${likesCount}</div> 
           `)
@@ -49,34 +42,15 @@ function dislike(obj) {
       dataType: 'text',
       success: function(response) {
         form.html(`
-        <div class="flex-container">
-          <input type="hidden" class="tweetId" value="${tweetId}">
-          <input type="hidden" class="replyId" value="${replyId}">
-          <input type="hidden" class="replyUserId" value="${replyUserId}">
-          <input type="hidden" class="likesCount" value="${likesCount}">
-          <input type="hidden" class="type" value="reply">
-        </div>
+          <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
+          <div class="count">${likesCount}</div> 
         `)
-        if (type2 === 'tweetLike') {
-          form.children().append(`
-            <input type="hidden" class="type2" value="tweetLike">
-            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart fa-lg"></i></button>
-          `)
-          $('#tweet-like').text(likesCount)
-        }
-        else {
-          form.children().append(`
-            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
-            <div class="count">${likesCount}</div> 
-          `)
-        }
       },
       error: function() {
         console.error(err)
       }
     })
   }
-  
   return false
 }
 
@@ -181,6 +155,7 @@ function remove(obj) {
     const replyCommentId = $(obj).siblings('.replyCommentId').val()
     // const replyId = $('.replyId').val()
     const replyComment = $(`#replyComment-${replyCommentId}`)
+    console.log(replyComment)
     // const replyCommentCount = $(`replyComment-count-${replyId}`).text()
     $.ajax({
       method: 'DELETE',
@@ -209,6 +184,9 @@ function edit(obj) {
     const tweetId = $(obj).siblings('.tweetId').val()
     const tweetDesc = $(`#tweet-description-${tweetId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
+
+    
+
     //tweets page
     const tweetsTime = $(`#tweets-time-${tweetId}`)
     //tweet page
@@ -247,6 +225,7 @@ function edit(obj) {
     const replyDesc = $(`#reply-description-${replyId}`)
     const updatedDesc = $(obj).children().children(":nth-child(2)").children().val()
     const replyTime = $(`#reply-time-${replyId}`)
+
     if (!updatedDesc) {
       return false
     }
