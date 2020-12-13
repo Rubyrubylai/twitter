@@ -79,35 +79,27 @@ module.exports = (app, passport, io) => {
   app.get('/admin/logout', userController.adminLogout)
 
   //Like
-  // app.post('/tweets/:tweetId/like', authenticated, userController.likeTweet)
   app.delete('/tweets/like', authenticated, userController.dislikeTweet)
-  // app.post('/like/:replyId/replies', authenticated, userController.likeReply)
   app.delete('/replies/like', authenticated, userController.dislikeReply)
 
   //tweet page
   app.get('/tweets', authenticated, tweetController.getTweets)
-  // app.post('/tweets', authenticated, tweetController.postTweets)
+  app.put('/tweets/:tweetId', authenticated, tweetController.editTweet)
   app.delete('/tweets/:tweetId', authenticated, tweetController.deleteTweet)
+
   app.get('/tweets//replies', authenticated, tweetController.getNoReply)
   app.get('/tweets/:tweetId/replies', authenticated, tweetController.getReply)
-  // app.post('/tweets/:tweetId/replies', authenticated, tweetController.postReply)
-  
   app.delete('/replies/:replyId', authenticated, tweetController.deleteReply)
-  app.put('/tweets/:tweetId', authenticated, tweetController.editTweet)
   app.put('/replies/:replyId', authenticated, tweetController.editReply)
 
+  //reply comment
+  app.put('/replyComments/:replyCommentId', authenticated, replyController.editReply)
+  app.delete('/replyComments/:replyCommentId', authenticated, replyController.deleteReply)
   
-
-  //Reply
-  // app.post('/replies/:replyId', authenticated, replyController.postReply)
-  app.put('/replyComments/:replyId', authenticated, replyController.editReply)
-  app.delete('/replyComments/:replyId', authenticated, replyController.deleteReply)
-  
-
   //follow
-  // app.post('/followships', authenticated, userController.postFollowing)
   app.delete('/followships', authenticated, userController.deleteFollowing)
 
+  //user
   app.get('/users/settings', authenticated, userController.getUserSettings)
   app.put('/users/settings/:id', authenticated, userController.putUserSettings)
 
@@ -123,8 +115,8 @@ module.exports = (app, passport, io) => {
   app.post('/api/users/:userId', apiAuthenticated, userController.apiPostUserInfo)
   app.post('/api/signin', userController.apiSignIn)
 
+  //message
   app.get('/message', authenticated, messageController.getMessage)
-  // app.get('/privateMessage', authenticated, messageController.getPrivateMessages)
   app.get('/message/:userId', authenticated, messageController.getPrivateMessage)
   app.get('/count', authenticated, messageController.getCount)
   app.get('/notice', authenticated, messageController.getNotice)

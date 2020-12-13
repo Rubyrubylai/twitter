@@ -68,8 +68,6 @@ const tweetController = {
           }
           users = users.slice(0, more)
 
-          console.log(tweetFollowings)
-
           return res.render('tweets', { tweetFollowings, users })
         })
     })
