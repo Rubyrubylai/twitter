@@ -41,10 +41,7 @@ const tweetController = {
         })
       })
 
-
-
       return res.render('tweets', { tweetFollowings })
-
     })
 
   },
@@ -84,38 +81,10 @@ const tweetController = {
           return a.updatedAt - b.updatedAt
         })
 
-        //Top 10 followers
-        User.findAll({
-          include: [{ model: User, as: 'follower' }]
-        })
-          .then(users => {
-            users = users.map(user => ({
-              ...user.dataValues,
-              isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
-            }))
-
-            users.forEach((user, index, arr) => {
-              if (user.role === "admin") {
-                arr.splice(index, 1);
-              }
-            })
-
-            //sort by the amount of the followers
-            users.sort((a, b) => {
-              return b.follower.length - a.follower.length
-            })
-
-            //more followers
-            if (req.query.more) {
-              more = more + 10
-            }
-            users = users.slice(0, more)
-
-            const now = new Date()
-
-            return res.render('tweet', { tweet, isLikedTweet, tweetReplies, users, now })
-          })
+          const now = new Date()
+          return res.render('tweet', { tweet, isLikedTweet, tweetReplies, now })
         }
+        
         else {
           return res.render('delete', { message: '此則貼文已被作者刪除'})
         }
