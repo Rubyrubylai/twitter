@@ -15,6 +15,7 @@ const { Op } = require('sequelize')
 let onlineUsers = []
 module.exports = (io) => {
   io.on('connection', (socket) => {
+    
     // announce user online
     User.findOne({
       where: {
