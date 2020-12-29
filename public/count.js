@@ -1,25 +1,17 @@
-const xhr = new XMLHttpRequest()
-xhr.open('get','/count')
-
-// xhr.setRequestHeader('Content-type','application/json;charset=utf-8')
-
-xhr.onload = function() {
-  const data = JSON.parse(xhr.responseText)
-  const privateCount = data.privateCount
+$.get('/count', function(data) {
   // const publicCount = data.publicCount
+  const privateCount = data.privateCount
   const noticeCount = data.noticeCount
-  if (privateCount >= 1) {
-    displayPrivate(privateCount)
-  }
   // if (publicCount >= 1) {
   //   displayPublic(publicCount)
   // }
+  if (privateCount >= 1) {
+    displayPrivate(privateCount)
+  }
   if (noticeCount >= 1) {
     displayNotice(noticeCount)
   }
-}
-
-xhr.send()
+})
 
 // function displayPublic(publicCount) {
 //   $('private-icon').html(`
@@ -37,4 +29,39 @@ function displayNotice(noticeCount) {
   $('#notice-icon').html(`
   <h6><i class="fas fa-bell fa-lg nav-icon"><div class="red-dot-notice"></div></i>通知 (${noticeCount})</h6>
   `)
+}
+
+
+$.ajax({
+  url:'/topFollowing',
+  method: 'GET',
+  success: function (data) {
+
+    printData(data)
+  }
+})
+
+var source = $('#template').html()
+console.log(source)
+var templateMissions = Handlebars.compile(source)
+
+
+function printData(datas) {
+  for (let data of datas) {
+
+    var dataStamp = {
+      id: data.id,
+      avatar: data.avatar,
+      name: data.name,
+      account: data.account,
+      introduction: data.introduction
+    }
+    
+    //console.log(dataStamp)
+    var template = templateMissions(dataStamp)
+    //console.log(template)
+    
+    $('.append').append(template)
+
+  }
 }

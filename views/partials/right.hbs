@@ -1,44 +1,13 @@
+
+
 <div class="col-4">
   <ul class="list-group mt-3 ml-3">
     <li class="list-group-item top-follow-list">
       <strong>跟隨誰</strong>
     </li>
-    {{#each users}}
-      {{#ifCond ../user.id this.id}}
-      {{else}}
-      <li class="list-group-item top-follow-list">
-        <div class="flex-container">
-          {{!-- <div class="p-3">Avatar</div> --}}
-          <div class="mr-2">
-            <a href="/users/{{this.id}}/tweets">
-              <img src="{{this.avatar}}" alt="user avatar" class="user-avatar">
-            </a>
-          </div>
-          <div >
-            <a class="a-black" href="/users/{{this.id}}/tweets"><strong>{{this.name}}</strong><br></a>
-            <span class="text-muted">@{{this.account}}</span>
-          </div>
-          <input type="hidden" class="followingId" value="{{this.id}}">
-          <input type="hidden" class="name" value="{{this.name}}">
-          <input type="hidden" class="avatar" value="{{this.avatar}}">
-          <input type="hidden" class="account" value="{{this.account}}">
-          <input type="hidden" class="introduction" value="{{this.introduction}}">
-          <input type="hidden" class="userId" value="{{../user.id}}">
-          <input type="hidden" class="username" value="{{../user.name}}">
-          <input type="hidden" class="userAvatar" value="{{../user.avatar}}">
-          <input type="hidden" class="userAccount" value="{{../user.account}}">
-          <input type="hidden" class="userIntroduction" value="{{../user.introduction}}">
-          <div class="align-self-center ml-auto">
-            {{#if this.isFollowing}}
-              <button id="right-follow-{{this.id}}"onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-            {{else}}
-              <button id="right-follow-{{this.id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-            {{/if}}   
-          </div>
-        </div>
-      </li>
-      {{/ifCond}}
-    {{/each}}
+    <div class="append">
+
+    </div>
     <li class="list-group-item top-follow-list">
       {{#if tweetFollowings}}
         <a href="/tweets?more=10" class="a-coral">顯示更多</a>
@@ -48,3 +17,36 @@
     </li>
   </ul>
 </div>
+
+<script id="template" type="text/x-handlebars-template">
+  <li class="list-group-item top-follow-list">
+    <div class="flex-container">
+      <div class="mr-2">
+        <a href="/users/{{id}}/tweets">
+          <img src="{{avatar}}" alt="user avatar" class="user-avatar">
+        </a>
+      </div>
+      <div >
+        <a class="a-black" href="/users/{{id}}/tweets"><strong>{{name}}</strong><br></a>
+        <span class="text-muted">@{{account}}</span>
+      </div>
+      <input type="hidden" class="followingId" value="{{id}}">
+      <input type="hidden" class="name" value="{{name}}">
+      <input type="hidden" class="avatar" value="{{avatar}}">
+      <input type="hidden" class="account" value="{{account}}">
+      <input type="hidden" class="introduction" value="{{introduction}}">
+      <input type="hidden" class="userId" value="{{../user.id}}">
+      <input type="hidden" class="username" value="{{../user.name}}">
+      <input type="hidden" class="userAvatar" value="{{../user.avatar}}">
+      <input type="hidden" class="userAccount" value="{{../user.account}}">
+      <input type="hidden" class="userIntroduction" value="{{../user.introduction}}">
+      <div class="align-self-center ml-auto">
+        {{#if this.isFollowing}}
+          <button id="right-follow-{{id}}"onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+        {{else}}
+          <button id="right-follow-{{id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+        {{/if}}   
+      </div>
+    </div>
+  </li>
+</script>

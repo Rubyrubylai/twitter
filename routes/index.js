@@ -98,6 +98,7 @@ module.exports = (app, passport, io) => {
   
   //follow
   app.delete('/followships', authenticated, userController.deleteFollowing)
+  app.get('/topFollowing', authenticated, userController.topFollowing)
 
   //user
   app.get('/users/settings', authenticated, userController.getUserSettings)

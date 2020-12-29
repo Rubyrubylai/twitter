@@ -41,35 +41,10 @@ const tweetController = {
         })
       })
 
-      //Top 10 followers
-      User.findAll({
-        include: [{ model: User, as: 'follower' }]
-      })
-        .then(users => {
-          users = users.map(user => ({
-            ...user.dataValues,
-            isFollowing: user.follower.map(follower => follower.id).includes(loginUser.id)
-          }))
 
-          users.forEach((user, index, arr) => {
-            if (user.role === "admin") {
-              arr.splice(index, 1);
-            }
-          })
 
-          //sort by the amount of the followers
-          users.sort((a, b) => {
-            return b.follower.length - a.follower.length
-          })
+      return res.render('tweets', { tweetFollowings })
 
-          //more followers
-          if (req.query.more) {
-            more = more + 10
-          }
-          users = users.slice(0, more)
-
-          return res.render('tweets', { tweetFollowings, users })
-        })
     })
 
   },
