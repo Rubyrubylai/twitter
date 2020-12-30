@@ -41,11 +41,11 @@ $.ajax({
 })
 
 function printData(datas) {
-  var source = $('#template').html()
-  var templateMissions = Handlebars.compile(source)
+  let source = $('#template').html()
+  let templateMissions = Handlebars.compile(source)
 
   for (let user of datas.users) {
-    var dataStamp = {
+    let dataStamp = {
       id: user.id,
       avatar: user.avatar,
       name: user.name,
@@ -61,7 +61,7 @@ function printData(datas) {
 
     // will not appear user himself
     if (user.id !== datas.logInUser.id) {
-      var template = templateMissions(dataStamp)
+      let template = templateMissions(dataStamp)
       $('#append').append(template)
     }
   }

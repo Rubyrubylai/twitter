@@ -79,7 +79,7 @@ socket.on('like', (data) => {
 
 //post a tweetReply
 function reply(obj) {
-  var comment = $(obj).siblings('.comment').val()
+  const comment = $(obj).siblings('.comment').val()
   const tweetId = Number($(obj).siblings('.tweetId').val())
   const tweetUserId = Number($(obj).siblings('.tweetUserId').val())
   const avatar =$(obj).siblings('.avatar').val()
@@ -96,24 +96,19 @@ function reply(obj) {
     return false
   }
   else {
-    $('#tweet-replies').append(`
-    <div class="flex-container mb-2">
-      <div>
-        <a href="/users/${userId}/tweets">
-          <img class="user-avatar" src="${avatar}" alt="user avatar">
-        </a>
-      </div>
-      <div>
-        <a class="a-black" href="/users/${userId}/tweets"><strong>${name}</strong></a>
-        <font class="reply-font">@${account} • ${time}</font>
-        <p>
-        ${comment}
-        </p>
-        <font class="reply-to-font">回覆給</font>
-        <font class="reply-to-account">@${tweetUserName}</font>
-      </div>
-    </div>
-    `)
+    let source = $('#template-tweet').html()
+    let templateMissions = Handlebars.compile(source)
+    let dataStamp = {
+      userId,
+      avatar,
+      name,
+      account,
+      time,
+      comment,
+      tweetUserName
+    }
+    let template = templateMissions(dataStamp)
+    $('#tweet-replies').append(template)
     
     $('#reply-count').text(replyCount+1)
 
@@ -123,145 +118,19 @@ function reply(obj) {
 }
 
 socket.on('replyMessage', ({ replyId, avatar, username, description, data }) => {
-  var updatedTime = moment(new Date()).fromNow()
-  $('.tweeReply-form').append(`
-    <li class="list-group-item" id="reply-${replyId}">
-    <div class="flex-container">
-      <div>
-        <a href="/users/${userId}/tweets">
-          <img class="user-avatar" src="${avatar}" alt="user avatar">
-        </a>
-      </div>
-      <div>
-          <div class="dropdown more">
-            <a class="a-custom" role="button" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="false">
-              •••
-            </a>
-            <div class="dropdown-menu" aria-labelledby="more">
-              <button data-toggle="modal" data-target="#er${replyId}" class="dropdown-item">修改此留言</button>
-              <button data-toggle="modal" data-target="#tr${replyId}" class="dropdown-item">刪除此留言</button>
-            </div>
-          </div>
-        <a href="/users/${userId}/tweets" class="a-black"><strong>${username}</strong></a>
-        <font class="text-muted">@${data.account} • <span id="reply-time-${replyId}">${data.time}</span></font>
-        <br>
-        <font class="text-muted reply">回覆</font>
-        <a href="/users/${data.tweetUserId}/tweets" class="a-coral">@${data.tweetUserName}</a>
-        <p id="reply-description-${replyId}">${description}</p>
-        <div>
-          <button data-toggle="modal" data-target="#r${replyId}" class="tweet-icon"><i class="far fa-comment"></i></button>
-          <div id="replyComment-count-${replyId}" class="comments-count">0</div>
-        </div>
-          <input type="hidden" class="tweetId" value="${data.id}">
-          <input type="hidden" class="replyId" value="${replyId}">
-          <input type="hidden" class="replyUserId" value="${userId}">
-          <input type="hidden" class="likesCount" value="0">
-          <input type="hidden" class="type" value="reply">
-          <div class="flex-container">
-            <button onclick="like(this)" class="tweet-icon"><i class="far fa-heart"></i></button>
-          <div class="count">0</div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="modal fade modal-open" id="er${replyId}" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4>編輯留言</h4>
-          </div>
-          <input type="hidden" class="type" value="reply">
-          <input type="hidden" class="replyId" value="${replyId}">
-          <form onsubmit="edit(this); return false;">
-            <div class="modal-body flex-container">
-              <div>
-                <img src="${avatar}" alt="user avatar" class="user-avatar">
-              </div>
-              <div class="post-tweet">  
-                <textarea placeholder="留言..." class="form-control description" name="comment" rows="3">${description}</textarea>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-edit">儲存</button>
-              <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade modal-open" id="tr${replyId}" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4>刪除留言?</h4>
-          </div>
-          <div class="modal-body">
-            確定要刪除這則留言?
-          </div>
-          <div class="modal-footer">
-            <input type="hidden" class="type" value="reply">
-            <input type="hidden" class="replyId" value="${replyId}">
-            <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-            <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
-        </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="modal fade" aria-hidden="true" id="r${replyId}">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="flex-container mb-2">
-              <div>
-                <a href="/users/${userId}/tweets">
-                  <img class="mr-3 user-avatar" src="${avatar}" alt="user avatar">
-                </a>
-              </div>
-              <div>
-                <a class="a-black" href="/users/${userId}/tweets"><strong>${username}</strong></a>
-                <font class="reply-font">@${data.account} • ${data.time}</font>
-                <p>
-                  ${description}
-                </p>
-              </div>
-            </div>
-            <div id="reply-comments-${replyId}">
-
-            </div>
-            <div class="flex-container">
-              <div>
-                <img src="${avatar}" alt="user avatar" class="user-avatar">
-              </div>
-              <div class="post-tweet">
-                <div id="reply-comment-form">
-                  <textarea placeholder="推你的回覆" class="form-control comment" id="reply-comment" rows="3"
-                    ></textarea>
-                  <input type="hidden" class="tweetId" value="${data.tweetId}">
-                  <input type="hidden" class="replyId" value="${replyId}">
-                  <input type="hidden" class="replyUserId" value="${userId}">
-                  <input type="hidden" class="avatar" value="${avatar}">
-                  <input type="hidden" class="name" value="${username}">
-                  <input type="hidden" class="account" value="${data.account}">
-                  <input type="hidden" class="replyUserName" value="${username}">
-                  <input type="hidden" class="time" value="${updatedTime}">
-                  <button  onclick="replyComment(this)" class="btn btn-reply" type="button">留言</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    `)
+  const updatedTime = moment(new Date()).fromNow()
+  let source = $('#template-reply').html()
+  let templateMissions = Handlebars.compile(source)
+  let dataStamp = {
+    replyId,
+    avatar,
+    username,
+    description,
+    data,
+    updatedTime,
+  }
+  let template = templateMissions(dataStamp)
+  $('.tweeReply-form').append(template)
 })
 
 socket.on('reply', (data) => {  
@@ -297,82 +166,15 @@ socket.on('replyCommentMessage', ({ avatar, replyCommentId, data }) => {
   const replyCommentCount = $(`#replyComment-count-${data.replyId}`)
   replyCommentCount.text(Number(replyCommentCount.text())+1)
 
-  $(`#reply-comments-${data.replyId}`).append(`
-  <div class="flex-container mb-2" id="replyComment-${replyCommentId}">
-    <div>
-      <a href="/users/${userId}/tweets">
-        <img class="user-avatar" src="${avatar}" alt="user avatar">
-      </a>
-    </div>
-    <div>
-      <div class="dropdown more">
-        <a class="a-black" role="button" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
-          •••
-        </a>
-        <div class="dropdown-menu" aria-labelledby="more">
-          <button data-toggle="modal" data-target="#erc${replyCommentId}" class="dropdown-item">修改此留言</button>
-          <button data-toggle="modal" data-target="#cr${replyCommentId}" class="dropdown-item">刪除此留言</button>
-        </div>
-      </div>
-      <a href="/users/${userId}/tweets
-      " class="a-black"><strong>${data.name}</strong></a>
-      <font color="grey">@${data.account} • <span id="replyComment-time-${replyCommentId}"> ${data.time}</span></font>
-      <p id="replyComment-description-${replyCommentId}">
-      ${data.comment}
-      </p>
-      <font color="grey" size="2px">回覆給</font>
-      <font color="coral" size="2px">@${data.replyUserName}</font>
-    </div>
-  </div>
-
-  <div class="modal fade modal-open" id="erc${replyCommentId}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4>編輯留言</h4>
-        </div>
-        <input type="hidden" class="type" value="replyComment">
-        <input type="hidden" class="replyCommentId" value="${replyCommentId}">
-        <form onsubmit="edit(this); return false;">
-        <div class="modal-body flex-container">
-          <div>
-            <img src="${avatar}" alt="user avatar" class="user-avatar">
-          </div>
-          <div class="post-tweet">
-            <textarea placeholder="留言..." class="form-control description" name="comment" rows="3">${data.comment}</textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-edit">儲存</button>
-          <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal fade modal-open" id="cr${replyCommentId}" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4>刪除留言?</h4>
-        </div>
-        <div class="modal-body">
-          確定要刪除這則留言?
-        </div>
-        <div class="modal-footer">
-          <input type="hidden" class="type" value="replyComment">
-          <input type="hidden" class="replyCommentId" value="${replyCommentId}">
-          <input type="hidden" class="replyId" value="${data.replyId}">
-          <button onclick="remove(this)" type="button" class="btn btn-delete">刪除</button>
-          <button type="button" class="btn btn-cancel" data-dismiss="modal">取消</button>
-      </div>
-      </div>
-    </div>
-  </div>
-
-  `)
+  let source = $('#template-replyComment').html()
+  let templateMissions = Handlebars.compile(source)
+  let dataStamp = {
+    avatar,
+    replyCommentId,
+    data
+  }
+  let template = templateMissions(dataStamp)
+  $(`#reply-comments-${data.replyId}`).append(template)
 })
 
 socket.on('replyComment', (data) => {  
@@ -394,7 +196,7 @@ function follow(obj) {
   const userAvatar = $(obj).parent().siblings('.userAvatar').val()
   const userAccount = $(obj).parent().siblings('.userAccount').val()
   const userIntroduction = $(obj).parent().siblings('.userIntroduction').val()
-  var userForm = $(`.user-sheet`)
+  const userForm = $(`.user-sheet`)
   const rightForm = $(`#right-follow-${followingId}`)
 
   rightForm.parent().html(`
@@ -445,7 +247,6 @@ function follow(obj) {
           </a>
           <span><small>${userIntroduction}<br></small></span>
         </div>
-        
       </div>
     </div>
     `)
@@ -472,7 +273,7 @@ socket.on('follow', (data) => {
 
 function notice(data, followship) {
   const noticeList = document.getElementById('notice-list')
-  var newNode = document.createElement('div')
+  let newNode = document.createElement('div')
   newNode.className = 'notice'
   if (followship) {
     newNode.innerHTML = `

@@ -57,7 +57,7 @@ function dislike(obj) {
 function unfollow(obj) {
   const type = $('.type').val()
   const followingId = Number($(obj).parent().siblings('.followingId').val())
-  var userForm = $(`#follow-${followingId}`)
+  let userForm = $(`#follow-${followingId}`)
   const rightForm = $(`#right-follow-${followingId}`)
 
   $.ajax({
@@ -178,7 +178,7 @@ function remove(obj) {
 
 function edit(obj) {
   const type = $(obj).siblings('.type').val()
-  var updatedTime = moment(new Date()).fromNow()
+  const updatedTime = moment(new Date()).fromNow()
   
   if (type === 'tweet') {
     const tweetId = $(obj).siblings('.tweetId').val()
@@ -189,8 +189,8 @@ function edit(obj) {
     const tweetsTime = $(`#tweets-time-${tweetId}`)
     //tweet page
     const tweetTime = $(`#tweet-time-${tweetId}`)
-    var updatedTweetTime = new Date()
-    var date = getDate(updatedTweetTime)
+    const updatedTweetTime = new Date()
+    let date = getDate(updatedTweetTime)
 
     if (!updatedDesc) {
       return false

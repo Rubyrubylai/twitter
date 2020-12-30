@@ -82,7 +82,7 @@ if ($('.selector').val() === 'public') {
   })
 
   socket.on('offline', (data) => {
-    var user = document.getElementById(`user-${data.id}`).parentNode
+    let user = document.getElementById(`user-${data.id}`).parentNode
     userList.removeChild(user)
   })
 }
