@@ -309,7 +309,6 @@ const userController = {
         followingsCount: user.toJSON().following.length,
         followersCount: user.toJSON().follower.length,
         tweetsCount: tweets.length,
-        tweetFollowings,
         isFollowed,
         isSubscribed
       })
@@ -372,7 +371,6 @@ const userController = {
         followingsCount: user.toJSON().following.length,
         followersCount: user.toJSON().follower.length,
         tweetsCount: user.toJSON().Tweets.length,
-        tweetFollowings,
         isFollowed,
         isSubscribed
       })
@@ -412,6 +410,8 @@ const userController = {
       const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
+      let likes = true
+
       return res.render('userLikes', {
         data,
         userId: user.toJSON().id,
@@ -423,8 +423,7 @@ const userController = {
         followingsCount: user.toJSON().following.length,
         followersCount: user.toJSON().follower.length,
         tweetsCount: user.toJSON().Tweets.length,
-        tweetFollowings,
-
+        likes,
         isFollowed,
         isSubscribed
       })
@@ -458,11 +457,14 @@ const userController = {
       // 排序
       data = data.sort((a, b) => a.followshipCreatedAt - b.followshipCreatedAt)
 
+      let followers = true
+
       return res.render('userFollowers', {
         userId,
         data,
         name: name,
         tweetsCount: tweetsCount,
+        followers
       })
     })
   },
@@ -493,11 +495,14 @@ const userController = {
       // 排序
       data = data.sort((a, b) => a.followshipCreatedAt - b.followshipCreatedAt)
 
+      let followings = true
+
       return res.render('userFollowings', {
         userId,
         data,
         name: name,
-        tweetsCount: tweetsCount
+        tweetsCount: tweetsCount,
+        followings
       })
     })
   },

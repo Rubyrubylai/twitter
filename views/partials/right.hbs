@@ -9,8 +9,20 @@
     <li class="list-group-item top-follow-list">
       {{#if tweetFollowings}}
         <a href="/tweets?more=10" class="a-coral">顯示更多</a>
+      {{else if tweetReplies}}
+        <a href="/tweets/{{tweet.id}}/replies?more=10" class="a-coral">顯示更多</a>        
+      {{else if tweets}}
+        <a href="/users/{{userId}}/tweets?more=10" class="a-coral">顯示更多</a>
+      {{else if replies}}
+        <a href="/users/{{userId}}/replies?more=10" class="a-coral">顯示更多</a>
+      {{else if likes}}
+        <a href="/users/{{userId}}/likes?more=10" class="a-coral">顯示更多</a>
+      {{else if followers}}
+        <a href="/users/{{userId}}/followers?more=10" class="a-coral">顯示更多</a>
+      {{else if followings}}
+        <a href="/users/{{userId}}/followings?more=10" class="a-coral">顯示更多</a>
       {{else}}
-        <a href="/tweets/{{tweet.id}}/replies?more=10" class="a-coral">顯示更多</a>
+        <a href="/notice?more=10" class="a-coral">顯示更多</a>
       {{/if}}
     </li>
   </ul>
@@ -20,30 +32,30 @@
   <li class="list-group-item top-follow-list">
     <div class="flex-container">
       <div class="mr-2">
-        <a href="/users/{{id}}/tweets">
-          <img src="{{avatar}}" alt="user avatar" class="user-avatar">
+        <a href="/users/\{{id}}/tweets">
+          <img src="\{{avatar}}" alt="user avatar" class="user-avatar">
         </a>
       </div>
       <div >
-        <a class="a-black" href="/users/{{id}}/tweets"><strong>{{name}}</strong><br></a>
-        <span class="text-muted">@{{account}}</span>
+        <a class="a-black" href="/users/\{{id}}/tweets"><strong>\{{name}}</strong><br></a>
+        <span class="text-muted">@\{{account}}</span>
       </div>
-      <input type="hidden" class="followingId" value="{{id}}">
-      <input type="hidden" class="name" value="{{name}}">
-      <input type="hidden" class="avatar" value="{{avatar}}">
-      <input type="hidden" class="account" value="{{account}}">
-      <input type="hidden" class="introduction" value="{{introduction}}">
-      <input type="hidden" class="userId" value="{{../user.id}}">
-      <input type="hidden" class="username" value="{{../user.name}}">
-      <input type="hidden" class="userAvatar" value="{{../user.avatar}}">
-      <input type="hidden" class="userAccount" value="{{../user.account}}">
-      <input type="hidden" class="userIntroduction" value="{{../user.introduction}}">
+      <input type="hidden" class="followingId" value="\{{id}}">
+      <input type="hidden" class="name" value="\{{name}}">
+      <input type="hidden" class="avatar" value="\{{avatar}}">
+      <input type="hidden" class="account" value="\{{account}}">
+      <input type="hidden" class="introduction" value="\{{introduction}}">
+      <input type="hidden" class="userId" value="\{{userId}}">
+      <input type="hidden" class="username" value="\{{username}}">
+      <input type="hidden" class="userAvatar" value="\{{userAvatar}}">
+      <input type="hidden" class="userAccount" value="\{{userAccount}}">
+      <input type="hidden" class="userIntroduction" value="\{{userIntroduction}}">
       <div class="align-self-center ml-auto">
-        {{#if this.isFollowing}}
-          <button id="right-follow-{{id}}"onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
-        {{else}}
-          <button id="right-follow-{{id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
-        {{/if}}   
+        \{{#if isFollowing}}
+          <button id="right-follow-\{{id}}"onclick="unfollow(this)" type="submit" class="btn btn-outline-twitter-active rounded-pill">正在跟隨</button>
+        \{{else}}
+          <button id="right-follow-\{{id}}" onclick="follow(this)" type="button" class="btn btn-outline-twitter rounded-pill">跟隨</button>
+        \{{/if}}   
       </div>
     </div>
   </li>

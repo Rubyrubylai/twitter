@@ -9,7 +9,6 @@ const Reply = db.Reply
 const ReplyComment = db.ReplyComment
 const Subscribeship = db.Subscribeship
 const { Op } = require('sequelize')
-let more = 10
 
 const helpers = require('../_helpers')
 
