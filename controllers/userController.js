@@ -40,7 +40,7 @@ const userController = {
   },
 
   registerPage: (req, res) => {
-    return res.render('register', { layout: 'mainLogin' })
+    return res.render('user/register', { layout: 'mainLogin' })
   },
 
   register: (req, res) => {
@@ -78,7 +78,7 @@ const userController = {
   },
 
   loginPage: (req, res) => {
-    return res.render('login', { layout: 'mainLogin' })
+    return res.render('user/login', { layout: 'mainLogin' })
   },
 
   login: (req, res) => {
@@ -88,7 +88,7 @@ const userController = {
 
   emailLoginPage: (req, res) => {
     const params = req.params.type
-    return res.render('login', { params, layout: 'mainLogin' })
+    return res.render('user/login', { params, layout: 'mainLogin' })
   },
 
   emailLogin: (req, res) => {
@@ -200,7 +200,7 @@ const userController = {
   getUserSettings: (req, res) => {
     const loginUser = helpers.getUser(req)
     return User.findByPk(loginUser.id).then(user => {
-      return res.render('settings', {
+      return res.render('user/settings', {
         user: user.toJSON()
       })
     })
@@ -298,7 +298,7 @@ const userController = {
       const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
-      return res.render('userTweets', {
+      return res.render('user/userTweets', {
         tweets,
         userId: user.toJSON().id,
         cover: user.toJSON().cover,
@@ -360,7 +360,7 @@ const userController = {
       const isFollowed = user.follower.map(follower => follower.id).includes(loginUser.id)
       const isSubscribed = user.subscriber.map(user => user.id).includes(loginUser.id)
 
-      return res.render('userReplies', {
+      return res.render('user/userReplies', {
         replies,
         userId: user.toJSON().id,
         cover: user.toJSON().cover,
@@ -412,7 +412,7 @@ const userController = {
 
       let likes = true
 
-      return res.render('userLikes', {
+      return res.render('user/userLikes', {
         data,
         userId: user.toJSON().id,
         cover: user.toJSON().cover,
@@ -432,7 +432,6 @@ const userController = {
 
   getUserFollowers: (req, res) => {
     const reqUserId = req.params.userId
-    const loginUser = helpers.getUser(req)
     return User.findByPk(reqUserId, {
       include: [
         Tweet,
@@ -459,7 +458,7 @@ const userController = {
 
       let followers = true
 
-      return res.render('userFollowers', {
+      return res.render('user/userFollowers', {
         userId,
         data,
         name: name,
@@ -471,7 +470,6 @@ const userController = {
 
   getUserFollowings: (req, res) => {
     const reqUserId = req.params.userId
-    const loginUser = helpers.getUser(req)
     return User.findByPk(reqUserId, {
       include: [
         Tweet,
@@ -497,7 +495,7 @@ const userController = {
 
       let followings = true
 
-      return res.render('userFollowings', {
+      return res.render('user/userFollowings', {
         userId,
         data,
         name: name,
@@ -581,7 +579,7 @@ const userController = {
       return res.redirect('/users/' + loginId + '/tweets')
     }
     return User.findByPk(id).then(user => {
-      return res.render('userInfo', {
+      return res.render('user/userInfo', {
         ...user.toJSON()
       })
     })

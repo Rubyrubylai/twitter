@@ -159,7 +159,7 @@ function remove(obj) {
     // console.log(replyCommentCount)
     $.ajax({
       method: 'DELETE',
-      url: `/replyComments/${replyCommentId}`,
+      url: `/replies/replyComments/${replyCommentId}`,
       data: { replyCommentId },
       dataType: 'text',
       success: function() {
@@ -262,7 +262,7 @@ function edit(obj) {
     else {
       $.ajax({
         method: 'PUT',
-        url: `/replyComments/${replyCommentId}`,
+        url: `/replies/replyComments/${replyCommentId}`,
         data: { replyCommentId, updatedDesc },
         dataType: 'text',
         success: function() {
